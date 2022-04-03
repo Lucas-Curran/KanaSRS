@@ -1,21 +1,19 @@
 package com.example.jwriter
 
-import android.graphics.Color
+import android.R.attr.*
+import android.graphics.Typeface
 import android.os.Bundle
-import android.widget.SeekBar
+import android.view.View
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.highlight.Highlight
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.github.mikephil.charting.utils.ColorTemplate
+import androidx.core.content.ContextCompat
+import com.google.android.material.tabs.TabLayout
+import com.skydoves.progressview.ProgressView
+import com.skydoves.progressview.progressView
+import kotlin.random.Random
 
 
 /*
@@ -24,18 +22,31 @@ Eventually include graphs, possibly over an interval of time
 */
 
 
-class StatsActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, OnChartValueSelectedListener {
+class StatsActivity : AppCompatActivity() {
 
-    private lateinit var accuracyTextView: TextView
-    private lateinit var accuracyBarChart: BarChart
     private var score: Int = 0
+    private lateinit var progressLinearLayout: LinearLayout
+    private lateinit var tabLayout: TabLayout
+    private lateinit var hiraganaProgressViews: ArrayList<ProgressView>
+    private lateinit var katakanaProgressViews: ArrayList<ProgressView>
+    private lateinit var progressScrollView: ScrollView
+
+    object TabConstants {
+         const val OVERALL = 0
+         const val HIRAGANA = 1
+         const val KATAKANA = 2
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stats)
 
-        accuracyTextView = findViewById(R.id.accuracyTextView)
-        accuracyBarChart = findViewById(R.id.accuracyBarChart)
+        hiraganaProgressViews = ArrayList()
+        katakanaProgressViews = ArrayList()
+
+        progressLinearLayout = findViewById(R.id.progressLinearLayout)
+        tabLayout = findViewById(R.id.statsTabLayout)
+        progressScrollView = findViewById(R.id.progressScrollView)
 
         loadUserStats()
     }
@@ -44,94 +55,105 @@ class StatsActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener, OnCh
      * Loads the user's stats
      */
     private fun loadUserStats() {
+
+        loadBars(MainActivity.hiraganaList, hiragana = true)
+        loadBars(MainActivity.katakanaList, hiragana = false)
+
         score = JWriterDatabase.getInstance(this)?.userDao()?.getAccuracy()!!
-        accuracyTextView.text = "Total Accuracy: $score"
-        accuracyBarChart.setMaxVisibleValueCount(40)
-        accuracyBarChart.setDrawBarShadow(false)
-        accuracyBarChart.setDrawGridBackground(false)
-        accuracyBarChart.setDrawValueAboveBar(true)
-        accuracyBarChart.isHighlightFullBarEnabled = true
-        // change the position of the y-labels
-        // change the position of the y-labels
-        val leftAxis: YAxis = accuracyBarChart.axisLeft
-        leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
-        accuracyBarChart.axisRight.isEnabled = false
 
-        // chart.setDrawXLabels(false);
-        // chart.setDrawYLabels(false);
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
-        // setting data;
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab != null) {
+                    when(tab.position) {
+                        TabConstants.OVERALL ->
+                            overallTab()
+                        TabConstants.HIRAGANA ->
+                            hiraganaTab()
+                        TabConstants.KATAKANA ->
+                            katakanaTab()
+                        else ->
+                            println("No tab")
+                    }
+                }
+            }
 
-        // chart.setDrawXLabels(false);
-        // chart.setDrawYLabels(false);
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                // Handle tab reselect
+            }
 
-        // setting data;
-        val legend = accuracyBarChart.legend
-        legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
-        legend.orientation = Legend.LegendOrientation.HORIZONTAL
-        legend.setDrawInside(false)
-        legend.formSize = 8f
-        legend.formToTextSpace = 4f
-        legend.xEntrySpace = 6f
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                // Handle tab unselect
+            }
+        })
 
-        val values = ArrayList<BarEntry>()
-        values.add(BarEntry(0F, floatArrayOf(score.toFloat(), 5F)))
+    }
 
-        val set1: BarDataSet
+    /**
+     * General statistics tab
+     */
+    private fun overallTab() {
+        progressLinearLayout.removeAllViewsInLayout()
+        val test = TextView(this)
+        test.text = "Score: " + JWriterDatabase.getInstance(this).userDao().getAccuracy()
+        progressLinearLayout.addView(test)
+    }
 
-        if (accuracyBarChart.data != null &&
-            accuracyBarChart.data.dataSetCount > 0
-        ) {
-            set1 = accuracyBarChart.getData().getDataSetByIndex(0) as BarDataSet
-            set1.values = values
-            accuracyBarChart.getData().notifyDataChanged()
-            accuracyBarChart.notifyDataSetChanged()
-        } else {
-            set1 = BarDataSet(values, "Statistics Vienna 2014")
-            set1.setDrawIcons(false)
-            set1.colors = getColors()
-            set1.stackLabels = arrayOf("Births", "Divorces", "Marriages")
-            val dataSets: ArrayList<IBarDataSet> = ArrayList()
-            dataSets.add(set1)
-            val data = BarData(dataSets)
-            //data.setValueFormatter(MyValueFormatter())
-            data.setValueTextColor(Color.WHITE)
-            accuracyBarChart.data = data
+    /**
+     * Hiragana progress tab
+     */
+    private fun hiraganaTab() {
+        //Remove current layout, loop through hiragana progress bars and add them to the scroll view
+        progressLinearLayout.removeAllViewsInLayout()
+        for (view in hiraganaProgressViews) {
+            progressLinearLayout.addView(view)
         }
-
-        accuracyBarChart.setFitBars(true)
-        accuracyBarChart.invalidate()
-
+        progressScrollView.fullScroll(ScrollView.FOCUS_UP)
     }
 
-    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-        //val values = ArrayList<BarEntry>()
-        //values.add(BarEntry(0F, floatArrayOf(score.toFloat(), 5F)))
-
-    }
-
-    override fun onStartTrackingTouch(p0: SeekBar?) {
-    }
-
-    override fun onStopTrackingTouch(p0: SeekBar?) {
-    }
-
-    override fun onValueSelected(e: Entry?, h: Highlight?) {
-    }
-
-    override fun onNothingSelected() {
-
-    }
-
-    private fun getColors(): MutableList<Int> {
-
-        // have as many colors as stack-values per entry
-        val colors = mutableListOf(3)
-        for (color in ColorTemplate.MATERIAL_COLORS) {
-            colors.add(color)
+    /**
+     * Katakana progress tab
+     */
+    private fun katakanaTab() {
+        //Remove current layout, loop through katakana progress bars and add them to the scroll view
+        progressLinearLayout.removeAllViewsInLayout()
+        for (view in katakanaProgressViews) {
+            progressLinearLayout.addView(view)
         }
-        return colors
+        progressScrollView.fullScroll(ScrollView.FOCUS_UP)
+    }
+
+    /**
+     * Adds the data for each kana into progress view array list
+     * @param barList string array of labels attached to each bar
+     * @param hiragana whether the bar is hiragana labels
+     */
+    private fun loadBars(barList: Array<String>, hiragana: Boolean) {
+        for (letter in barList) {
+            val myProgressView = progressView(this) {
+                setSize(300, 35)
+                setProgress(Random.nextDouble(0.0, 100.0).toFloat())
+                setMin(0f)
+                setMax(100f)
+                setRadius(12f)
+                setDuration(1200L)
+                setAutoAnimate(true)
+                setLabelColorInner(ContextCompat.getColor(applicationContext, R.color.white))
+                setLabelColorOuter(ContextCompat.getColor(applicationContext, R.color.black))
+                setLabelText(letter)
+                setLabelSize(13f)
+                setLabelSpace(10f)
+                setLabelTypeface(Typeface.BOLD)
+            }
+
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            params.setMargins(10, 15, 10, 15)
+            myProgressView.layoutParams = params
+            if (hiragana) hiraganaProgressViews.add(myProgressView) else katakanaProgressViews.add(myProgressView)
+        }
     }
 
 }
