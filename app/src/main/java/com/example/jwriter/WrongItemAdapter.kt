@@ -18,14 +18,12 @@ class WrongItemAdapter(private val englishName: ArrayList<String>
      * (custom ViewHolder).
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val englishLetter: TextView
-        val japaneseLetter: TextView
-        val actualEnglishLetter: TextView
+        val englishLetter: TextView = view.findViewById(R.id.englishLetter)
+        val japaneseLetter: TextView = view.findViewById(R.id.japaneseLetter)
+        val actualEnglishLetter: TextView = view.findViewById(R.id.actualAnswer)
+
         init {
             // Define click listener for the ViewHolder's View.
-            englishLetter = view.findViewById(R.id.englishLetter)
-            japaneseLetter = view.findViewById(R.id.japaneseLetter)
-            actualEnglishLetter = view.findViewById(R.id.actualAnswer)
             view.setOnClickListener {
                 println("hi")
             }
