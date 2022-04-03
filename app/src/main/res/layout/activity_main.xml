@@ -24,13 +24,15 @@
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/responseEditText"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
         android:singleLine="true"
         android:maxLength="3"
         android:textAlignment="center"
         android:textColor="@color/white"
+        android:textSize="30sp"
+        android:hint="Answer"
         android:background="@drawable/input_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,9 +43,9 @@
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Submit"
         android:layout_marginTop="15dp"
         android:background="@drawable/custom_button"
+        android:text="Submit"
         app:backgroundTint="#4599ff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,6 +64,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/responseEditText" />
+
+    <TextView
+        android:id="@+id/correctAnswerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Correct answer is A"
+        android:visibility="invisible"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/responseImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/submitButton" />
 
     <ImageView
         android:id="@+id/responseImageView"
