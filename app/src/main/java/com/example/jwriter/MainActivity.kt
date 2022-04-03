@@ -5,18 +5,30 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.text.bold
 import androidx.core.view.isVisible
+import androidx.core.view.marginTop
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.skydoves.progressview.textForm
 
-
+/**
+ *
+ * Activity view that holds kana review sessions
+ *
+ * @author Lucas Curran
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var responseImage: ImageView
@@ -33,8 +45,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var restartButton: Button
     private lateinit var backToMenuButton: Button
     private lateinit var itemsWrongRecyclerView: RecyclerView
+    private lateinit var correctAnswerTextView: TextView
+    private lateinit var emptyRecyclerViewText: TextView
+
+    //Index kana keeps track of the index of the kana list
+    //To debug, set it higher, end of list is 45
     private var indexKana = 44
+
+    //Number correct out of total answered
     private var score = 0
+    private var totalAnswered = 0
+
+    //Japanese wrong answers is
     private val japaneseWrongAnswers = arrayListOf<String>()
     private val englishWrongAnswers = arrayListOf<String>()
 
@@ -42,7 +64,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        kanaList = hiraganaList
+        //need to clone the list or it will mess up its order when shuffling
+        kanaList = hiraganaList.clone()
         kanaList.shuffle()
 
         kanaConverter = KanaConverter(false)
@@ -56,14 +79,12 @@ class MainActivity : AppCompatActivity() {
         userScoreText = findViewById(R.id.userScoreTextView)
         restartButton = findViewById(R.id.restartButton)
         backToMenuButton = findViewById(R.id.backToMenuButton)
+        correctAnswerTextView = findViewById(R.id.correctAnswerTextView)
+        emptyRecyclerViewText = findViewById(R.id.empty_view)
 
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         itemsWrongRecyclerView = findViewById(R.id.itemsWrongRecyclerView)
         itemsWrongRecyclerView.layoutManager = layoutManager
-
-        for (answer in japaneseWrongAnswers) {
-            englishWrongAnswers.add(kanaConverter._hiraganaToRomaji(answer))
-        }
 
         itemsWrongRecyclerView.adapter = WrongItemAdapter(englishWrongAnswers, japaneseWrongAnswers)
 
@@ -94,6 +115,7 @@ class MainActivity : AppCompatActivity() {
 
         moveOnButton = findViewById(R.id.moveOnButton)
         moveOnButton.setOnClickListener {
+            correctAnswerTextView.visibility = View.INVISIBLE
             moveToNext()
         }
 
@@ -107,6 +129,8 @@ class MainActivity : AppCompatActivity() {
     private fun moveToNext() {
 
         indexKana++
+        totalAnswered++
+        submitButton.isEnabled = false
         userResponseEditText.isEnabled = false
 
         if (moveOnButton.isVisible) {
@@ -129,6 +153,7 @@ class MainActivity : AppCompatActivity() {
             letterTextView.animate().translationXBy(rootLayout.width.toFloat() + letterTextView.width / 2).withEndAction {
                 letterTextView.animate().translationXBy(-(letterTextView.width).toFloat()).duration = 500
                 userResponseEditText.isEnabled = true
+                submitButton.isEnabled = true
                 userResponseEditText.requestFocus()
                 val imm: InputMethodManager =
                     getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -142,7 +167,7 @@ class MainActivity : AppCompatActivity() {
      * Update the users stats on accuracy
      */
     private fun updateStats() {
-        //Access SQL table and change appropiate stats
+        //Access Room sql table and change appropiate stats
     }
 
     /**
@@ -156,6 +181,14 @@ class MainActivity : AppCompatActivity() {
         itemsWrongRecyclerView.adapter?.notifyItemInserted(japaneseWrongAnswers.size-1)
 
         responseImage.visibility = View.VISIBLE
+
+        val correctString = SpannableStringBuilder()
+            .append("The correct answer is ")
+            .bold { append(kanaConverter._hiraganaToRomaji(letterTextView.text.toString())) }
+
+        correctAnswerTextView.text = correctString
+        correctAnswerTextView.visibility = View.VISIBLE
+
         //Set image as x, and start animation
         responseImage.alpha = 1F
         responseImage.setImageResource(R.drawable.animated_incorrect)
@@ -181,21 +214,42 @@ class MainActivity : AppCompatActivity() {
         moveToNext()
     }
 
+    /**
+     * Function called when the user finishes the set of kana
+     */
     private fun completedSet() {
 
-        val user = JWriterDatabase.getInstance(this)?.userDao()?.getUsers()?.get(0)
-        user?.totalAccuracy = user?.totalAccuracy?.plus(score)!!
-        JWriterDatabase.getInstance(this)?.userDao()?.updateAccuracy(user)
+        //Since there is only one user in the database, get index 0 of users
+        val user = JWriterDatabase.getInstance(this).userDao().getUsers()[0]
+        user.totalAccuracy = user.totalAccuracy.plus(score)
+        JWriterDatabase.getInstance(this).userDao().updateAccuracy(user)
 
+        // If no wrong answers,
+        // make wrong answer recycler invisible,
+        // show perfect score label
+        // and then reconfigure constraints on buttons
+        if (japaneseWrongAnswers.isEmpty()) {
+            itemsWrongRecyclerView.visibility = View.GONE
+            emptyRecyclerViewText.visibility = View.VISIBLE
+            val restartParams = restartButton.layoutParams as ConstraintLayout.LayoutParams
+            restartParams.topToBottom = emptyRecyclerViewText.id
+            restartButton.requestLayout()
+        }
+
+        //Animate all the on screen views to the bottom
         animateHelper(letterTextView, 100) {
             letterTextView.visibility = View.INVISIBLE
         }
+
         animateHelper(userResponseEditText, 200) {
             userResponseEditText.visibility = View.INVISIBLE
         }
+
         animateHelper(submitButton, 300) {
             submitButton.visibility = View.INVISIBLE
         }
+
+        //After last view is off screen, begin animating end screen results to screen
         animateHelper(responseImage, 400) {
             responseImage.visibility = View.INVISIBLE
 
@@ -203,11 +257,20 @@ class MainActivity : AppCompatActivity() {
 
             scoreText.x = (-layout.width).toFloat()
             scoreText.animate().translationXBy(layout.width.toFloat() * 1.5F - scoreText.width / 2).setStartDelay(200).duration = 1000
-            userScoreText.text = "$score/${hiraganaList.size}"
+            userScoreText.text = "$score/$totalAnswered"
             userScoreText.x = (layout.width).toFloat() * 2
             userScoreText.animate().translationXBy(-layout.width.toFloat() * 1.5F - userScoreText.width / 2).setStartDelay(400).duration = 1000
-            itemsWrongRecyclerView.x = (-layout.width).toFloat()
-            itemsWrongRecyclerView.animate().translationXBy(layout.width.toFloat() * 1.5F - restartButton.width).setStartDelay(600).duration = 1000
+            if (itemsWrongRecyclerView.isVisible) {
+                itemsWrongRecyclerView.x = (-layout.width).toFloat()
+                itemsWrongRecyclerView.animate()
+                    .translationXBy(layout.width.toFloat() * 1.5F - itemsWrongRecyclerView.width / 2)
+                    .setStartDelay(600).duration = 1000
+            } else if (emptyRecyclerViewText.isVisible) {
+                emptyRecyclerViewText.x = (-layout.width).toFloat()
+                emptyRecyclerViewText.animate()
+                    .translationXBy(layout.width.toFloat() * 1.5F - emptyRecyclerViewText.width / 2)
+                    .setStartDelay(600).duration = 1000
+            }
             restartButton.x = (layout.width).toFloat() * 2
             restartButton.animate().translationXBy(-layout.width.toFloat() * 1.5F - restartButton.width / 2).setStartDelay(800).duration = 1000
             backToMenuButton.x = (-layout.width).toFloat()
@@ -219,6 +282,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Helper function for end screen animation
+     */
     private fun animateHelper(view: View, delay: Long, action: () -> Unit) {
         view.animate().translationYBy(-300F).withEndAction {
             view.animate().translationYBy(rootLayout.height.toFloat()).withEndAction {
