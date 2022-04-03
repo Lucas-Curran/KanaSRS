@@ -220,9 +220,9 @@ class MainActivity : AppCompatActivity() {
     private fun completedSet() {
 
         //Since there is only one user in the database, get index 0 of users
-        val user = JWriterDatabase.getInstance(this).userDao().getUsers()[0]
+        val user = JWriterDatabase.getInstance(this).userDao().getUser()
         user.totalAccuracy = user.totalAccuracy.plus(score)
-        JWriterDatabase.getInstance(this).userDao().updateAccuracy(user)
+        JWriterDatabase.getInstance(this).userDao().updateUser(user)
 
         // If no wrong answers,
         // make wrong answer recycler invisible,

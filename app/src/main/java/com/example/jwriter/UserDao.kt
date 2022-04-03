@@ -6,16 +6,16 @@ import androidx.room.*
 interface UserDao {
 
     @Query("SELECT * FROM user")
-    fun getUsers(): List<User>
+    fun getUser(): User
 
     @Query ("SELECT total_accuracy FROM user")
     fun getAccuracy(): Int
 
     @Insert
-    fun insertAll(vararg users: User)
+    fun insertAll(vararg user: User)
 
     @Update
-    fun updateAccuracy(user: User): Int
+    fun updateUser(user: User)
 
     @Delete
     fun delete(user: User)
