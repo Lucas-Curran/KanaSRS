@@ -29,15 +29,5 @@ class MenuActivity : AppCompatActivity() {
         settingsButton.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
-
-        val db = JWriterDatabase.getInstance(this)
-
-        if (db?.userDao()?.getUsers()?.isNotEmpty() == true) {
-
-        } else {
-            val newUser = User(0)
-            db?.userDao()?.insertAll(newUser)
-        }
-
     }
 }
