@@ -33,7 +33,6 @@ abstract class JWriterDatabase : RoomDatabase() {
                         Executors.newSingleThreadExecutor().execute {
                             instance?.let {
                                 val newUser = User(0)
-                                println("User: $newUser")
                                 it.userDao().insertAll(newUser)
                             }
                         }
