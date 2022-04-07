@@ -29,7 +29,7 @@ import com.skydoves.progressview.textForm
  *
  * @author Lucas Curran
  */
-class MainActivity : AppCompatActivity() {
+class ReviewActivity : AppCompatActivity() {
 
     private lateinit var responseImage: ImageView
     private lateinit var letterTextView: TextView
@@ -237,60 +237,34 @@ class MainActivity : AppCompatActivity() {
         }
 
         //Animate all the on screen views to the bottom
-        animateHelper(letterTextView, 100) {
+        AnimUtilities.animateEnd(letterTextView, rootLayout, 100) {
             letterTextView.visibility = View.INVISIBLE
         }
-
-        animateHelper(userResponseEditText, 200) {
+        AnimUtilities.animateEnd(userResponseEditText, rootLayout, 200) {
             userResponseEditText.visibility = View.INVISIBLE
         }
-
-        animateHelper(submitButton, 300) {
+        AnimUtilities.animateEnd(submitButton, rootLayout, 300) {
             submitButton.visibility = View.INVISIBLE
         }
 
         //After last view is off screen, begin animating end screen results to screen
-        animateHelper(responseImage, 400) {
+        AnimUtilities.animateEnd(responseImage, rootLayout, 400) {
             responseImage.visibility = View.INVISIBLE
-
             layout.visibility = View.VISIBLE
-
-            scoreText.x = (-layout.width).toFloat()
-            scoreText.animate().translationXBy(layout.width.toFloat() * 1.5F - scoreText.width / 2).setStartDelay(200).duration = 1000
             userScoreText.text = "$score/$totalAnswered"
-            userScoreText.x = (layout.width).toFloat() * 2
-            userScoreText.animate().translationXBy(-layout.width.toFloat() * 1.5F - userScoreText.width / 2).setStartDelay(400).duration = 1000
-            if (itemsWrongRecyclerView.isVisible) {
-                itemsWrongRecyclerView.x = (-layout.width).toFloat()
-                itemsWrongRecyclerView.animate()
-                    .translationXBy(layout.width.toFloat() * 1.5F - itemsWrongRecyclerView.width / 2)
-                    .setStartDelay(600).duration = 1000
-            } else if (emptyRecyclerViewText.isVisible) {
-                emptyRecyclerViewText.x = (-layout.width).toFloat()
-                emptyRecyclerViewText.animate()
-                    .translationXBy(layout.width.toFloat() * 1.5F - emptyRecyclerViewText.width / 2)
-                    .setStartDelay(600).duration = 1000
-            }
-            restartButton.x = (layout.width).toFloat() * 2
-            restartButton.animate().translationXBy(-layout.width.toFloat() * 1.5F - restartButton.width / 2).setStartDelay(800).duration = 1000
-            backToMenuButton.x = (-layout.width).toFloat()
-            backToMenuButton.animate().translationXBy(layout.width.toFloat() * 1.5F - backToMenuButton.width / 2).setStartDelay(1000).duration = 1000
+
+            AnimUtilities.animateFromLeft(scoreText, layout, startDelay = 200)
+            AnimUtilities.animateFromRight(userScoreText, layout, startDelay = 400)
+            if (itemsWrongRecyclerView.isVisible) AnimUtilities.animateFromLeft(itemsWrongRecyclerView, layout, startDelay = 600)
+            else AnimUtilities.animateFromLeft(emptyRecyclerViewText, layout, startDelay = 600)
+            AnimUtilities.animateFromRight(restartButton, layout, startDelay = 800)
+            AnimUtilities.animateFromLeft(backToMenuButton, layout, startDelay = 1000)
 
             backToMenuButton.setOnClickListener {
                 startActivity(Intent(this, MenuActivity::class.java))
             }
-        }
-    }
 
-    /**
-     * Helper function for end screen animation
-     */
-    private fun animateHelper(view: View, delay: Long, action: () -> Unit) {
-        view.animate().translationYBy(-300F).withEndAction {
-            view.animate().translationYBy(rootLayout.height.toFloat()).withEndAction {
-                action()
-            }.duration = 1000
-        }.setStartDelay(delay).duration = 1000
+        }
     }
 
     //size of 45 (0-45) since there are 46 characters

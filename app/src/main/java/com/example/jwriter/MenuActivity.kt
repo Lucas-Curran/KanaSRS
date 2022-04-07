@@ -19,7 +19,7 @@ class MenuActivity : AppCompatActivity() {
 
         beginButton = findViewById(R.id.beginButton)
         beginButton.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, ReviewActivity::class.java))
         }
 
         statsButton = findViewById(R.id.statsButton)

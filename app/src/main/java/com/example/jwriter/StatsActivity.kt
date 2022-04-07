@@ -1,10 +1,7 @@
 package com.example.jwriter
 
-import android.R.attr.*
 import android.graphics.Typeface
 import android.os.Bundle
-import android.view.View
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
@@ -56,10 +53,10 @@ class StatsActivity : AppCompatActivity() {
      */
     private fun loadUserStats() {
 
-        loadBars(MainActivity.hiraganaList, hiragana = true)
-        loadBars(MainActivity.katakanaList, hiragana = false)
+        loadBars(ReviewActivity.hiraganaList, hiragana = true)
+        loadBars(ReviewActivity.katakanaList, hiragana = false)
 
-        score = JWriterDatabase.getInstance(this)?.userDao()?.getAccuracy()!!
+        score = JWriterDatabase.getInstance(this).userDao().getAccuracy()
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
