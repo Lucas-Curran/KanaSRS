@@ -50,7 +50,7 @@ class ReviewActivity : AppCompatActivity() {
 
     //Index kana keeps track of the index of the kana list
     //To debug, set it higher, end of list is 45
-    private var indexKana = 44
+    private var indexKana = 35
 
     //Number correct out of total answered
     private var score = 0

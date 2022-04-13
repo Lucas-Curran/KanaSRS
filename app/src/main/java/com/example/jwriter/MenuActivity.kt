@@ -2,13 +2,21 @@ package com.example.jwriter
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
+import android.graphics.ColorFilter
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 class MenuActivity : AppCompatActivity() {
@@ -24,6 +32,7 @@ class MenuActivity : AppCompatActivity() {
         setContentView(R.layout.activity_menu)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.overflowIcon?.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(R.color.white, BlendModeCompat.SRC_ATOP)
         setSupportActionBar(toolbar)
 
         beginButton = findViewById(R.id.beginButton)
