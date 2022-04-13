@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/faq"
+        android:title="FAQ"
+        android:icon="@android:drawable/ic_menu_help"
+        app:showAsAction="collapseActionView|withText"/>
+    <item
+        android:id="@+id/report"
+        android:title="Report"
+        android:icon="@android:drawable/ic_dialog_alert"
+        app:showAsAction="collapseActionView|withText"/>
+</menu>
