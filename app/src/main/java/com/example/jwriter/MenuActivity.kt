@@ -19,10 +19,23 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var statsButton: Button
     private lateinit var settingsButton: Button
     private lateinit var lessonButton: Button
+    private var numItemsToReview: Int = 0
+    private var kanaToReview = ArrayList<Kana>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+
+        for (kana in JWriterDatabase.getInstance(this).kanaDao().getKana()) {
+            //Check if there is a review time, and if so, check if the current time has passed the stored review time
+            // Review time is calculated during review answers
+            if (kana.reviewTime != null) {
+                if (kana.reviewTime!! < System.currentTimeMillis()) {
+                    numItemsToReview++
+                    kanaToReview.add(kana)
+                }
+            }
+        }
 
         setContentView(R.layout.activity_menu)
 
