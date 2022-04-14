@@ -64,6 +64,48 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/summary"
+                    style="@style/Widget.MaterialComponents.Button.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/summary_stroke"
+                    android:enabled="false" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/summary"
+                    android:layout_alignEnd="@id/summary"
+                    android:gravity="center"
+                    android:paddingTop="20dp"
+                    android:text="Summary"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/summary"
+                    android:layout_alignEnd="@id/summary"
+                    android:gravity="center"
+                    android:paddingTop="60dp"
+                    android:text="Time to next review"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:textSize="20dp" />
+
+            </RelativeLayout>
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/lessonButton"
                 style="@style/Widget.MaterialComponents.Button.Icon"
@@ -79,20 +121,43 @@
                 android:textSize="20sp"
                 app:backgroundTint="@color/pink" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/reviewButton"
-                style="@style/Widget.MaterialComponents.Button.Icon"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_margin="15dp"
-                android:background="@drawable/custom_button"
-                android:drawableTop="@drawable/ic_review"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:paddingTop="40dp"
-                android:paddingBottom="40dp"
-                android:text="ひらがな・カタカナ\nReview"
-                android:textSize="20sp"
-                app:backgroundTint="#4599ff" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/numItemsTextView"
+                    android:layout_width="26dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@id/reviewButton"
+                    android:layout_alignBottom="@id/reviewButton"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/white"
+                    android:background="@drawable/items_review_background"
+                    android:elevation="50dp"
+                    android:gravity="center"
+                    android:text="5" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/reviewButton"
+                    style="@style/Widget.MaterialComponents.Button.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/custom_button"
+                    android:drawableTop="@drawable/ic_review"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:paddingTop="40dp"
+                    android:paddingBottom="40dp"
+                    android:text="ひらがな・カタカナ\nReview"
+                    android:textSize="20sp"
+                    app:backgroundTint="#4599ff" />
+
+
+            </RelativeLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/statsButton"
@@ -161,7 +226,6 @@
                 app:progressView_colorProgress="#ED1C24"
                 app:progressView_colorBackground="@color/white"
                 app:progressView_progress="46"/>
-
 
         </LinearLayout>
     </ScrollView>

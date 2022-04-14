@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.BlendModeColorFilterCompat
@@ -38,6 +39,9 @@ class MenuActivity : AppCompatActivity() {
         }
 
         setContentView(R.layout.activity_menu)
+
+        val numReviewTextView = findViewById<TextView>(R.id.numItemsTextView)
+        numReviewTextView.text = numItemsToReview.toString()
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.overflowIcon?.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(R.color.white, BlendModeCompat.SRC_ATOP)
