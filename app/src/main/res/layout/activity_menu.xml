@@ -64,7 +64,21 @@
         android:orientation="vertical">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/beginButton"
+            android:id="@+id/lessonButton"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/custom_button"
+            android:drawableTop="@drawable/ic_learn"
+            android:paddingTop="40dp"
+            android:paddingBottom="40dp"
+            android:text="Learn"
+            android:textSize="20sp"
+            app:backgroundTint="@color/pink" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/reviewButton"
             style="@style/Widget.MaterialComponents.Button.Icon"
             android:layout_width="match_parent"
             android:layout_height="200dp"
