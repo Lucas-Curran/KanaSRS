@@ -45,7 +45,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!--    Contains all of the buttons inside -->
+    <!--    Contains all of the buttons and menu layout inside scroll -->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -65,7 +65,22 @@
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/beginButton"
+                android:id="@+id/lessonButton"
+                style="@style/Widget.MaterialComponents.Button.Icon"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_margin="15dp"
+                android:background="@drawable/custom_button"
+                android:drawableTop="@drawable/ic_learn"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:paddingTop="40dp"
+                android:paddingBottom="40dp"
+                android:text="Learn"
+                android:textSize="20sp"
+                app:backgroundTint="@color/pink" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/reviewButton"
                 style="@style/Widget.MaterialComponents.Button.Icon"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -108,6 +123,46 @@
                 android:text="Settings"
                 android:textSize="20sp"
                 app:backgroundTint="#AAAAAA" />
+
+            <com.skydoves.progressview.ProgressView
+                android:id="@+id/hiraganaProgressView"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:progressView_labelText="Hiragana (0/46)"
+                app:progressView_labelTypeface="bold"
+                app:progressView_min="0"
+                app:progressView_max="46"
+                app:progressView_labelSize="16sp"
+                app:progressView_borderWidth="3dp"
+                app:progressView_labelColorInner="@color/white"
+                app:progressView_colorProgress="#ED1C24"
+                app:progressView_borderColor="#eeeeee"
+                app:progressView_colorBackground="@color/white"
+                app:progressView_progress="0"/>
+
+            <com.skydoves.progressview.ProgressView
+                android:id="@+id/katakanaProgressView"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:progressView_labelText="Katakana (0/46)"
+                app:progressView_labelTypeface="bold"
+                app:progressView_min="0"
+                app:progressView_max="46"
+                app:progressView_labelSize="16sp"
+                app:progressView_borderWidth="3dp"
+                app:progressView_labelColorInner="@color/white"
+                app:progressView_borderColor="#eeeeee"
+                app:progressView_colorProgress="#ED1C24"
+                app:progressView_colorBackground="@color/white"
+                app:progressView_progress="46"/>
+
+
         </LinearLayout>
     </ScrollView>
 
