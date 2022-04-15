@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
@@ -20,6 +21,7 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var statsButton: Button
     private lateinit var settingsButton: Button
     private lateinit var lessonButton: Button
+    private lateinit var logo: ImageView
     private var numItemsToReview: Int = 0
     private var kanaToReview = ArrayList<Kana>()
 
@@ -49,7 +51,7 @@ class MenuActivity : AppCompatActivity() {
 
         lessonButton = findViewById(R.id.lessonButton)
         lessonButton.setOnClickListener {
-
+            startActivity(Intent(this, LessonActivity::class.java))
         }
 
         beginButton = findViewById(R.id.reviewButton)
@@ -81,7 +83,15 @@ class MenuActivity : AppCompatActivity() {
         when(item.itemId) {
             R.id.report -> println("report")
             R.id.faq -> println("faq")
+            R.id.refresh -> refreshActivity()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun refreshActivity() {
+        finish()
+        overridePendingTransition(0, 0)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
     }
 }
