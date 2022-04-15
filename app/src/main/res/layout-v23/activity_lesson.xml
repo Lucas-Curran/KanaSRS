@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/kanaTextView"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="300dp"
         android:gravity="center"
         android:text="あ"
         android:textColor="@color/white"
@@ -20,18 +20,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/englishTextView"
+    <LinearLayout
+        android:id="@+id/lessonLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#666666"
-        android:gravity="center"
-        android:textSize="30sp"
-        android:textColor="@color/white"
-        android:text="A"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kanaTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/kanaTextView">
+
+        <TextView
+            android:id="@+id/englishTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:background="@color/pink"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="A"
+            android:textColor="@color/white"
+            android:textSize="60sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/kanaTextView" />
+
+        <ImageButton
+            android:id="@+id/nextLessonItem"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:background="#4599ff"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_right_arrow"
+            app:layout_constraintStart_toEndOf="@+id/englishTextView"
+            app:layout_constraintTop_toBottomOf="@+id/kanaTextView"
+            app:tint="@color/white" />
+
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/infoLayout"
@@ -40,7 +63,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/englishTextView"
+        app:layout_constraintTop_toBottomOf="@+id/lessonLinearLayout"
         android:background="@drawable/lesson_box"
         android:layout_margin="10dp">
 
@@ -56,25 +79,13 @@
 
         <WebView
             android:id="@+id/strokeWebView"
-            android:layout_width="300dp"
-            android:layout_height="200dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_below="@+id/mnemonicTextView"
             android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="10dp" />
-
-        <ImageButton
-            android:id="@+id/nextLessonItem"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_right_arrow"
-            app:tint="@color/white"/>
+            android:layout_margin="10dp" />
 
     </RelativeLayout>
 
