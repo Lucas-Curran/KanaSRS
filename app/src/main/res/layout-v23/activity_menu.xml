@@ -34,6 +34,7 @@
                 app:titleTextColor="@color/white" />
 
             <ImageView
+                android:id="@+id/toolbarLogo"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/jwriter_logo"
@@ -81,28 +82,90 @@
                     android:enabled="false" />
 
                 <TextView
+                    android:id="@+id/summaryTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignStart="@id/summary"
+                    android:layout_alignTop="@id/summary"
                     android:layout_alignEnd="@id/summary"
+                    android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:paddingTop="20dp"
+
                     android:text="Summary"
-                    android:textStyle="bold"
                     android:textColor="@color/white"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/divider1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/summaryTitle"
+                    android:layout_alignStart="@id/summary"
+                    android:layout_alignEnd="@id/summary"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginEnd="30dp"
+                    android:background="#AAAAAA" />
 
                 <TextView
+                    android:id="@+id/nextReviewText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/divider1"
                     android:layout_alignStart="@id/summary"
                     android:layout_alignEnd="@id/summary"
-                    android:gravity="center"
-                    android:paddingTop="60dp"
-                    android:text="Time to next review"
-                    android:textStyle="bold"
+                    android:layout_marginTop="10dp"
+                    android:gravity="start"
+                    android:layout_marginStart="10dp"
+                    android:text="Time to next review: 4 hours"
                     android:textColor="@color/white"
-                    android:textSize="20dp" />
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <com.skydoves.progressview.ProgressView
+                    android:id="@+id/hiraganaProgressView"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_below="@id/nextReviewText"
+                    android:layout_alignStart="@id/summary"
+                    android:layout_alignEnd="@id/summary"
+                    android:layout_marginTop="15dp"
+                    app:progressView_labelText="Hiragana (0/46)"
+                    app:progressView_labelTypeface="bold"
+                    app:progressView_min="0"
+                    app:progressView_max="46"
+                    app:progressView_labelSize="16sp"
+                    app:progressView_borderWidth="3dp"
+                    app:progressView_labelColorInner="@color/white"
+                    app:progressView_colorProgress="#ED1C24"
+                    app:progressView_borderColor="#eeeeee"
+                    app:progressView_colorBackground="@color/white"
+                    app:progressView_progress="0"/>
+
+                <com.skydoves.progressview.ProgressView
+                    android:id="@+id/katakanaProgressView"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_below="@id/hiraganaProgressView"
+                    android:layout_alignStart="@id/summary"
+                    android:layout_alignEnd="@id/summary"
+                    android:layout_marginTop="15dp"
+                    app:progressView_labelText="Katakana (0/46)"
+                    app:progressView_labelTypeface="bold"
+                    app:progressView_min="0"
+                    app:progressView_max="46"
+                    app:progressView_labelSize="16sp"
+                    app:progressView_borderWidth="3dp"
+                    app:progressView_labelColorInner="@color/white"
+                    app:progressView_borderColor="#eeeeee"
+                    app:progressView_colorProgress="#ED1C24"
+                    app:progressView_colorBackground="@color/white"
+                    app:progressView_progress="46"/>
 
             </RelativeLayout>
 
@@ -188,44 +251,6 @@
                 android:text="Settings"
                 android:textSize="20sp"
                 app:backgroundTint="#AAAAAA" />
-
-            <com.skydoves.progressview.ProgressView
-                android:id="@+id/hiraganaProgressView"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:progressView_labelText="Hiragana (0/46)"
-                app:progressView_labelTypeface="bold"
-                app:progressView_min="0"
-                app:progressView_max="46"
-                app:progressView_labelSize="16sp"
-                app:progressView_borderWidth="3dp"
-                app:progressView_labelColorInner="@color/white"
-                app:progressView_colorProgress="#ED1C24"
-                app:progressView_borderColor="#eeeeee"
-                app:progressView_colorBackground="@color/white"
-                app:progressView_progress="0"/>
-
-            <com.skydoves.progressview.ProgressView
-                android:id="@+id/katakanaProgressView"
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:progressView_labelText="Katakana (0/46)"
-                app:progressView_labelTypeface="bold"
-                app:progressView_min="0"
-                app:progressView_max="46"
-                app:progressView_labelSize="16sp"
-                app:progressView_borderWidth="3dp"
-                app:progressView_labelColorInner="@color/white"
-                app:progressView_borderColor="#eeeeee"
-                app:progressView_colorProgress="#ED1C24"
-                app:progressView_colorBackground="@color/white"
-                app:progressView_progress="46"/>
 
         </LinearLayout>
     </ScrollView>
