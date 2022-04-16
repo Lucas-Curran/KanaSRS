@@ -64,7 +64,7 @@
             android:layout_marginBottom="10dp" />
 
         <ImageButton
-            android:id="@+id/nextLessonItem"
+            android:id="@+id/nextItemButton"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"

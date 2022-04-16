@@ -7,18 +7,32 @@
     android:background="@color/cardview_dark_background"
     tools:context=".LessonActivity">
 
-    <TextView
-        android:id="@+id/kanaTextView"
+    <ViewAnimator
+        android:id="@+id/viewAnimator"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:gravity="center"
-        android:text="あ"
-        android:textColor="@color/white"
-        android:textSize="200sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/kanaTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="あ"
+            android:textColor="@color/white"
+            android:textSize="200sp"
+            android:textStyle="bold" />
+
+        <WebView
+            android:id="@+id/strokeWebView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:background="@drawable/square_outline"/>
+
+    </ViewAnimator>
 
     <LinearLayout
         android:id="@+id/lessonLinearLayout"
@@ -27,7 +41,19 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kanaTextView">
+        app:layout_constraintTop_toBottomOf="@+id/viewAnimator">
+
+        <ImageButton
+            android:id="@+id/previousItemButton"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:background="#4599ff"
+            android:src="@drawable/ic_left_arrow"
+            android:foreground="?attr/selectableItemBackground"
+            app:layout_constraintStart_toEndOf="@+id/englishTextView"
+            app:layout_constraintTop_toBottomOf="@+id/kanaTextView"
+            app:tint="@color/white" />
 
         <TextView
             android:id="@+id/englishTextView"
@@ -35,20 +61,21 @@
             android:layout_height="100dp"
             android:background="@color/pink"
             android:gravity="center"
-            android:layout_weight="1"
+            android:layout_weight="6"
             android:text="A"
+            android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="60sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/kanaTextView" />
 
         <ImageButton
-            android:id="@+id/nextLessonItem"
+            android:id="@+id/nextItemButton"
             android:layout_width="wrap_content"
             android:layout_height="100dp"
             android:layout_weight="1"
             android:background="#4599ff"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:foreground="?attr/selectableItemBackground"
             android:src="@drawable/ic_right_arrow"
             app:layout_constraintStart_toEndOf="@+id/englishTextView"
             app:layout_constraintTop_toBottomOf="@+id/kanaTextView"
@@ -77,15 +104,14 @@
             android:padding="10dp"
             android:text="To remember this letter, think of the center as forming an 'A'"/>
 
-        <WebView
-            android:id="@+id/strokeWebView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_below="@+id/mnemonicTextView"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mnemonicTextView"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="10dp" />
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/a_mnemonic" />
 
     </RelativeLayout>
 
