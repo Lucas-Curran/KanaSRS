@@ -8,7 +8,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import java.util.concurrent.Executors
 
 
-@Database(entities = [User::class, Kana::class], version = 1)
+// TODO: Give preset kana data a description column, gif link column, drawable int, mp3 int
+
+
+@Database(entities = [User::class, Kana::class], version = 2)
 abstract class JWriterDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao

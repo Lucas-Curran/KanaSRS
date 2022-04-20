@@ -267,6 +267,14 @@ class ReviewActivity : AppCompatActivity() {
         }
     }
 
+    private fun calculateNextReviewTime(kana: Kana) {
+        kana.level = kana.level?.minus(1)
+        val millisecondsInDay = 60 * 60 * 24 * 1000
+        val now = System.currentTimeMillis()
+        val nextPracticeDate = now + millisecondsInDay * kana.level!!
+        kana.reviewTime = nextPracticeDate
+    }
+
     //size of 45 (0-45) since there are 46 characters
     companion object KanaList {
         val hiraganaList = arrayOf(

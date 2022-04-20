@@ -1,121 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ViewAnimator xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootViewAnimator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cardview_dark_background"
     tools:context=".LessonActivity">
 
-    <ViewAnimator
-        android:id="@+id/viewAnimator"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <include layout="@layout/lesson_item"/>
 
-        <TextView
-            android:id="@+id/kanaTextView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="あ"
-            android:textColor="@color/white"
-            android:textSize="200sp"
-            android:textStyle="bold" />
-
-        <WebView
-            android:id="@+id/strokeWebView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="20dp"
-            android:background="@drawable/square_outline"/>
-
-    </ViewAnimator>
-
-    <LinearLayout
-        android:id="@+id/lessonLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewAnimator">
-
-        <ImageButton
-            android:id="@+id/previousItemButton"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:background="#4599ff"
-            android:src="@drawable/ic_left_arrow"
-            android:foreground="?attr/selectableItemBackground"
-            app:layout_constraintStart_toEndOf="@+id/englishTextView"
-            app:layout_constraintTop_toBottomOf="@+id/kanaTextView"
-            app:tint="@color/white" />
-
-        <TextView
-            android:id="@+id/englishTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:background="@color/pink"
-            android:gravity="center"
-            android:layout_weight="6"
-            android:text="A"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:textSize="60sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/kanaTextView" />
-
-        <ImageButton
-            android:id="@+id/nextItemButton"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:background="#4599ff"
-            android:foreground="?attr/selectableItemBackground"
-            android:src="@drawable/ic_right_arrow"
-            app:layout_constraintStart_toEndOf="@+id/englishTextView"
-            app:layout_constraintTop_toBottomOf="@+id/kanaTextView"
-            app:tint="@color/white" />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/infoLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lessonLinearLayout"
-        android:background="@drawable/lesson_box"
-        android:layout_margin="10dp">
-
-        <TextView
-            android:id="@+id/mnemonicTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/lesson_box"
-            android:layout_margin="10dp"
-            android:textColor="@color/white"
-            android:padding="10dp"
-            android:text="To remember this letter, think of the center as forming an 'A'"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/mnemonicTextView"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/a_mnemonic" />
-
-    </RelativeLayout>
-
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ViewAnimator>
