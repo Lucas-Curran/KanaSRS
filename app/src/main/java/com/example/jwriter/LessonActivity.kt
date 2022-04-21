@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.SystemClock
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
@@ -19,6 +21,7 @@ import androidx.core.view.get
 class LessonActivity : AppCompatActivity() {
 
     private lateinit var rootViewAnimator: ViewAnimator
+    var animationTime = 0L
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +35,8 @@ class LessonActivity : AppCompatActivity() {
         val animationOut = AnimationUtils.loadAnimation(this, R.anim.slide_out_left)
         val prevAnimIn = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
         val prevAnimOut = AnimationUtils.loadAnimation(this, R.anim.slide_out_right)
+
+        animationTime = animationIn.duration
 
         rootViewAnimator.inAnimation = animationIn
         rootViewAnimator.outAnimation = animationOut
@@ -54,13 +59,16 @@ class LessonActivity : AppCompatActivity() {
             tempKanaWebStroke.webViewClient = WebViewClient()
             tempKanaWebStroke.loadUrl("https://upload.wikimedia.org/wikipedia/commons/d/d8/Hiragana_%E3%81%82_stroke_order_animation.gif")
 
-            nextButton.setOnClickListener {
-                //nextButton.isEnabled = false
-                //previousButton.isEnabled = false
+            nextButton.setOnSingleClickListener {
                 if (tempViewAnimator.currentView == tempViewAnimator.getChildAt(tempViewAnimator.childCount-1)) {
                     rootViewAnimator.inAnimation = animationIn
                     rootViewAnimator.outAnimation = animationOut
                     rootViewAnimator.showNext()
+                    rootViewAnimator.postOnAnimationDelayed({
+                        tempViewAnimator.inAnimation = null
+                        tempViewAnimator.outAnimation = null
+                        tempViewAnimator.displayedChild = tempViewAnimator[0].id
+                    }, rootViewAnimator.inAnimation.duration)
                 } else {
                     tempViewAnimator.inAnimation = animationIn
                     tempViewAnimator.outAnimation = animationOut
@@ -68,10 +76,8 @@ class LessonActivity : AppCompatActivity() {
                 }
             }
 
-           previousButton.setOnClickListener {
-               //nextButton.isEnabled = false
-               //previousButton.isEnabled = false
-                if (tempViewAnimator.currentView == tempViewAnimator.getChildAt(tempViewAnimator.childCount)) {
+           previousButton.setOnSingleClickListener {
+                if (tempViewAnimator.currentView == tempViewAnimator.getChildAt(tempViewAnimator.childCount-1)) {
                     tempViewAnimator.inAnimation = prevAnimIn
                     tempViewAnimator.outAnimation = prevAnimOut
                     tempViewAnimator.showPrevious()
@@ -79,9 +85,33 @@ class LessonActivity : AppCompatActivity() {
                     rootViewAnimator.inAnimation = prevAnimIn
                     rootViewAnimator.outAnimation = prevAnimOut
                     rootViewAnimator.showPrevious()
+                    rootViewAnimator.postOnAnimationDelayed({
+                        tempViewAnimator.inAnimation = null
+                        tempViewAnimator.outAnimation = null
+                        tempViewAnimator.displayedChild = tempViewAnimator[0].id
+                    }, rootViewAnimator.outAnimation.duration)
                 }
             }
             rootViewAnimator.addView(newView)
         }
     }
+
+}
+
+class OnSingleClickListener(private val block: () -> Unit) : View.OnClickListener {
+
+    private var lastClickTime = 0L
+
+    override fun onClick(view: View) {
+        if (SystemClock.elapsedRealtime() - lastClickTime < 1000) {
+            return
+        }
+        lastClickTime = SystemClock.elapsedRealtime()
+
+        block()
+    }
+}
+
+fun View.setOnSingleClickListener(block: () -> Unit) {
+    setOnClickListener(OnSingleClickListener(block))
 }
