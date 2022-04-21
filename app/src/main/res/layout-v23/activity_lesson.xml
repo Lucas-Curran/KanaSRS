@@ -8,6 +8,4 @@
     android:background="@color/cardview_dark_background"
     tools:context=".LessonActivity">
 
-    <include layout="@layout/lesson_item"/>
-
 </ViewAnimator>
