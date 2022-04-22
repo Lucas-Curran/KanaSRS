@@ -22,6 +22,7 @@ class LessonActivity : AppCompatActivity() {
 
     private lateinit var rootViewAnimator: ViewAnimator
     var animationTime = 0L
+    private lateinit var kanaList: List<Kana>
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,10 +42,14 @@ class LessonActivity : AppCompatActivity() {
         rootViewAnimator.inAnimation = animationIn
         rootViewAnimator.outAnimation = animationOut
 
-        for (i in 1..5) {
+        kanaList = JWriterDatabase.getInstance(this).kanaDao().getUnlearnedKana()
+        val kanaConverter = KanaConverter(false)
+
+        for (kana in kanaList.subList(0, 5)) {
             val newView = layoutInflater.inflate(R.layout.lesson_item, null)
 
-            newView.findViewById<TextView>(R.id.kanaTextView).text = i.toString()
+            newView.findViewById<TextView>(R.id.kanaTextView).text = kana.letter
+            newView.findViewById<TextView>(R.id.englishTextView).text = kanaConverter._hiraganaToRomaji(kana.letter)
 
             val tempViewAnimator = newView.findViewById<ViewAnimator>(R.id.viewAnimator)
             val nextButton = newView.findViewById<ImageButton>(R.id.nextItemButton)
@@ -103,7 +108,7 @@ class OnSingleClickListener(private val block: () -> Unit) : View.OnClickListene
     private var lastClickTime = 0L
 
     override fun onClick(view: View) {
-        if (SystemClock.elapsedRealtime() - lastClickTime < 1000) {
+        if (SystemClock.elapsedRealtime() - lastClickTime < 600) {
             return
         }
         lastClickTime = SystemClock.elapsedRealtime()

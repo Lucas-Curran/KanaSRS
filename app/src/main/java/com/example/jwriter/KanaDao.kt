@@ -8,6 +8,9 @@ interface KanaDao {
     @Query("SELECT * FROM kana")
     fun getKana(): List<Kana>
 
+    @Query("SELECT * FROM kana WHERE hasLearned = 0")
+    fun getUnlearnedKana(): List<Kana>
+
     @Insert
     fun insertAll(vararg kana: Kana)
 

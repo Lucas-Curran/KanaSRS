@@ -21,7 +21,6 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var statsButton: Button
     private lateinit var settingsButton: Button
     private lateinit var lessonButton: Button
-    private lateinit var logo: ImageView
     private var numItemsToReview: Int = 0
     private var kanaToReview = ArrayList<Kana>()
 
