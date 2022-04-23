@@ -1,15 +1,12 @@
 package com.example.jwriter
 
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Bundle
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.view.KeyEvent
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -17,11 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.text.bold
 import androidx.core.view.isVisible
-import androidx.core.view.marginTop
-import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.skydoves.progressview.textForm
 
 /**
  *
@@ -62,7 +56,7 @@ class ReviewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_review)
 
         //need to clone the list or it will mess up its order when shuffling
         kanaList = hiraganaList.clone()
