@@ -8,4 +8,11 @@
     android:background="@color/cardview_dark_background"
     tools:context=".LessonActivity">
 
+    <ProgressBar
+        android:id="@+id/lessonProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyle"
+        android:layout_gravity="center" />
+
 </ViewAnimator>
