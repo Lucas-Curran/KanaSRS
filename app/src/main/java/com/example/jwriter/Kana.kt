@@ -13,6 +13,5 @@ data class Kana(
     @ColumnInfo(name = "isHiragana") val isHiragana: Boolean,
     @ColumnInfo(name = "hasLearned") var hasLearned: Boolean,
     @ColumnInfo(name = "gif") val gif: String,
-    @ColumnInfo(name = "drawable") val drawable: Int,
     @ColumnInfo(name = "description") val description: String
 )
