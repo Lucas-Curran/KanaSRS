@@ -27,6 +27,10 @@ class LessonActivity : AppCompatActivity() {
     private lateinit var kanaList: List<Kana>
     private lateinit var loadingBar: ProgressBar
 
+    private val FIRST_KANA = 0
+    private val KANA_LETTER_SCREEN = 0
+    private val KANA_GIF_SCREEN = 1
+
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -70,47 +74,47 @@ class LessonActivity : AppCompatActivity() {
                 val tempKanaWebStroke = newView.findViewById<WebView>(R.id.strokeWebView)
                 tempKanaWebStroke.settings.javaScriptEnabled = true
                 tempKanaWebStroke.webViewClient = WebViewClient()
-                tempKanaWebStroke.loadUrl("https://upload.wikimedia.org/wikipedia/commons/d/d8/Hiragana_%E3%81%82_stroke_order_animation.gif")
+                tempKanaWebStroke.loadUrl(kana.gif)
 
                 nextButton.setOnSingleClickListener {
 
-                    if (tempViewAnimator.currentView == tempViewAnimator.getChildAt(tempViewAnimator.childCount - 1)) {
-                        println(rootViewAnimator.displayedChild)
-                        rootViewAnimator.inAnimation = animationIn
-                        rootViewAnimator.outAnimation = animationOut
-                        if (rootViewAnimator.displayedChild == subList.lastIndex) {
-                            val view = layoutInflater.inflate(R.layout.lesson_completed_dialog, null)
-                            val builder = AlertDialog.Builder(this).setView(view).create()
-                            view.findViewById<MaterialButton>(R.id.restartLessonButton).setOnClickListener {
-                                rootViewAnimator.displayedChild = 0
-                                builder.dismiss()
-                            }
-                            view.findViewById<MaterialButton>(R.id.beginQuizButton).setOnClickListener {
-                                startActivity(Intent(this, ReviewActivity::class.java))
-                            }
-                            builder.show()
-                        } else {
-                            rootViewAnimator.showNext()
-                            rootViewAnimator.postOnAnimationDelayed({
-                                tempViewAnimator.inAnimation = null
-                                tempViewAnimator.outAnimation = null
-                                tempViewAnimator.displayedChild = tempViewAnimator[0].id
-                            }, rootViewAnimator.inAnimation.duration)
-                        }
-                    } else {
+                    //If displayed screen is not the kana web view, show the kana web view, else continue and flip to the next letter
+                    if (tempViewAnimator.displayedChild != KANA_GIF_SCREEN) {
                         tempViewAnimator.inAnimation = animationIn
                         tempViewAnimator.outAnimation = animationOut
                         tempViewAnimator.showNext()
+                        return@setOnSingleClickListener
+                    }
+
+                    rootViewAnimator.inAnimation = animationIn
+                    rootViewAnimator.outAnimation = animationOut
+                    if (rootViewAnimator.displayedChild == subList.lastIndex) {
+                        val view = layoutInflater.inflate(R.layout.lesson_completed_dialog, null)
+                        val builder = AlertDialog.Builder(this).setView(view).create()
+                        view.findViewById<MaterialButton>(R.id.restartLessonButton).setOnClickListener {
+                            rootViewAnimator.displayedChild = FIRST_KANA
+                            builder.dismiss()
+                        }
+                        view.findViewById<MaterialButton>(R.id.beginQuizButton).setOnClickListener {
+                            startActivity(Intent(this, ReviewActivity::class.java))
+                        }
+                        builder.show()
+                    } else {
+                        rootViewAnimator.showNext()
+                        rootViewAnimator.postOnAnimationDelayed({
+                            tempViewAnimator.inAnimation = null
+                            tempViewAnimator.outAnimation = null
+                            tempViewAnimator.displayedChild = KANA_LETTER_SCREEN
+                        }, rootViewAnimator.inAnimation.duration)
                     }
                 }
 
                 previousButton.setOnSingleClickListener {
-
-                    if (rootViewAnimator.displayedChild == 0 && tempViewAnimator.displayedChild == 0) {
+                    if (rootViewAnimator.displayedChild == FIRST_KANA && tempViewAnimator.displayedChild == KANA_LETTER_SCREEN) {
                         return@setOnSingleClickListener
                     }
 
-                    if (tempViewAnimator.currentView == tempViewAnimator.getChildAt(tempViewAnimator.childCount - 1)) {
+                    if (tempViewAnimator.displayedChild == KANA_GIF_SCREEN) {
                         tempViewAnimator.inAnimation = prevAnimIn
                         tempViewAnimator.outAnimation = prevAnimOut
                         tempViewAnimator.showPrevious()
@@ -121,7 +125,7 @@ class LessonActivity : AppCompatActivity() {
                         rootViewAnimator.postOnAnimationDelayed({
                             tempViewAnimator.inAnimation = null
                             tempViewAnimator.outAnimation = null
-                            tempViewAnimator.displayedChild = 0
+                            tempViewAnimator.displayedChild = KANA_LETTER_SCREEN
                         }, rootViewAnimator.outAnimation.duration)
                     }
                 }
@@ -141,11 +145,10 @@ class OnSingleClickListener(private val block: () -> Unit) : View.OnClickListene
     private var lastClickTime = 0L
 
     override fun onClick(view: View) {
-        if (SystemClock.elapsedRealtime() - lastClickTime < 600) {
+        if (SystemClock.elapsedRealtime() - lastClickTime < 500) {
             return
         }
         lastClickTime = SystemClock.elapsedRealtime()
-
         block()
     }
 }
