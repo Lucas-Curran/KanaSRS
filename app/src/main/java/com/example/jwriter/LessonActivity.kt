@@ -160,7 +160,10 @@ class LessonActivity : AppCompatActivity() {
                             builder.dismiss()
                         }
                         view.findViewById<MaterialButton>(R.id.beginQuizButton).setOnClickListener {
-                            startActivity(Intent(this, ReviewActivity::class.java))
+                            val intent = Intent(this, ReviewActivity::class.java)
+                            intent.putExtra("quiz", true)
+                            intent.putExtra("kana", subList.toTypedArray())
+                            startActivity(intent)
                         }
                         builder.show()
                     } else if (tempViewAnimator.displayedChild == KANA_GIF_SCREEN) {

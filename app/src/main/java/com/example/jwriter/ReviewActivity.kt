@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Bundle
+import android.os.Parcel
 import android.text.SpannableStringBuilder
 import android.view.KeyEvent
 import android.view.View
@@ -32,7 +33,7 @@ class ReviewActivity : AppCompatActivity() {
     private lateinit var moveOnButton: Button
     private lateinit var rootLayout: ConstraintLayout
     private lateinit var kanaConverter: KanaConverter
-    private lateinit var kanaList: Array<String>
+    private lateinit var kanaList: List<Kana>
     private lateinit var layout: ConstraintLayout
     private lateinit var scoreText: TextView
     private lateinit var userScoreText: TextView
@@ -44,7 +45,7 @@ class ReviewActivity : AppCompatActivity() {
 
     //Index kana keeps track of the index of the kana list
     //To debug, set it higher, end of list is 45
-    private var indexKana = 35
+    private var indexKana = 0
 
     //Number correct out of total answered
     private var score = 0
@@ -59,8 +60,14 @@ class ReviewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_review)
 
         //need to clone the list or it will mess up its order when shuffling
-        kanaList = hiraganaList.clone()
-        kanaList.shuffle()
+        if (intent.getBooleanExtra("quiz", false)) {
+            val parcelableList = intent.getParcelableArrayExtra("kana")
+            kanaList = (parcelableList?.asList() as List<Kana>).shuffled()
+            intent.removeExtra("quiz")
+            intent.removeExtra("kana")
+        } else {
+            kanaList = JWriterDatabase.getInstance(this).kanaDao().getKana().shuffled()
+        }
 
         kanaConverter = KanaConverter(false)
 
@@ -113,7 +120,7 @@ class ReviewActivity : AppCompatActivity() {
             moveToNext()
         }
 
-        letterTextView.text = kanaList[indexKana]
+        letterTextView.text = kanaList[indexKana].letter
 
     }
 
@@ -132,7 +139,7 @@ class ReviewActivity : AppCompatActivity() {
             submitButton.visibility = View.VISIBLE
         }
 
-        if (indexKana == hiraganaList.size) {
+        if (indexKana == kanaList.size) {
             completedSet()
             return
         }
@@ -142,7 +149,7 @@ class ReviewActivity : AppCompatActivity() {
         // and then overshoot by a little, and recorrect
         letterTextView.animate().translationXBy((rootLayout.width).toFloat()).withEndAction {
             letterTextView.x = (-rootLayout.width).toFloat() / 2
-            letterTextView.text = kanaList[indexKana]
+            letterTextView.text = kanaList[indexKana].letter
             responseImage.animate().alpha(0F).duration = 500
             letterTextView.animate().translationXBy(rootLayout.width.toFloat() + letterTextView.width / 2).withEndAction {
                 letterTextView.animate().translationXBy(-(letterTextView.width).toFloat()).duration = 500
