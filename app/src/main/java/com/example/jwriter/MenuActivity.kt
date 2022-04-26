@@ -2,26 +2,33 @@ package com.example.jwriter
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import java.lang.String.format
+import java.text.SimpleDateFormat
+import java.time.Duration
+import java.util.*
 
 class MenuActivity : AppCompatActivity() {
 
-    private lateinit var beginButton: Button
+    private lateinit var reviewButton: Button
     private lateinit var statsButton: Button
     private lateinit var settingsButton: Button
     private lateinit var lessonButton: Button
     private var numItemsToReview: Int = 0
+    private var mostRecentReview = Long.MAX_VALUE
     private var kanaToReview = ArrayList<Kana>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +42,11 @@ class MenuActivity : AppCompatActivity() {
                 if (kana.reviewTime!! < System.currentTimeMillis()) {
                     numItemsToReview++
                     kanaToReview.add(kana)
+                } else {
+                    val millisecondsUntilReview = kana.reviewTime!! - System.currentTimeMillis()
+                    if (millisecondsUntilReview < mostRecentReview) {
+                        mostRecentReview = millisecondsUntilReview
+                    }
                 }
             }
         }
@@ -43,6 +55,13 @@ class MenuActivity : AppCompatActivity() {
 
         val numReviewTextView = findViewById<TextView>(R.id.numItemsTextView)
         numReviewTextView.text = numItemsToReview.toString()
+
+        val nextReviewTime = findViewById<TextView>(R.id.nextReviewText)
+        if (mostRecentReview == Long.MAX_VALUE) {
+            nextReviewTime.text = "Time to next review: All good!"
+        } else {
+            nextReviewTime.text = "Time to next review: ${formatTime(mostRecentReview)}"
+        }
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.overflowIcon?.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(R.color.white, BlendModeCompat.SRC_ATOP)
@@ -53,9 +72,14 @@ class MenuActivity : AppCompatActivity() {
             startActivity(Intent(this, LessonActivity::class.java))
         }
 
-        beginButton = findViewById(R.id.reviewButton)
-        beginButton.setOnClickListener {
-            startActivity(Intent(this, ReviewActivity::class.java))
+        reviewButton = findViewById(R.id.reviewButton)
+        reviewButton.setOnClickListener {
+            if (numItemsToReview > 0) {
+                val intent = Intent(this, ReviewActivity::class.java)
+                intent.putExtra("review", true)
+                intent.putExtra("kana", kanaToReview)
+                startActivity(intent)
+            }
         }
 
         statsButton = findViewById(R.id.statsButton)
@@ -93,4 +117,17 @@ class MenuActivity : AppCompatActivity() {
         startActivity(intent)
         overridePendingTransition(0, 0)
     }
+
+    private fun formatTime(milliseconds: Long): String {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val duration = Duration.ofMillis(milliseconds)
+            val newSeconds = duration.seconds - duration.toMinutes() * 60
+            return duration.run {
+                "%02d:%02d:%02d".format(toHours(), toMinutes(), newSeconds)
+            }
+        } else {
+            return ""
+        }
+    }
+
 }
