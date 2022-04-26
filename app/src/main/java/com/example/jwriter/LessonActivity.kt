@@ -2,10 +2,13 @@ package com.example.jwriter
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.LayoutAnimationController
@@ -20,6 +23,8 @@ import androidx.core.view.children
 import androidx.core.view.get
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
+import com.github.jinatonic.confetti.CommonConfetti
+import com.github.jinatonic.confetti.Utils
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 import kotlin.concurrent.thread
@@ -37,9 +42,13 @@ class LessonActivity : AppCompatActivity() {
     private lateinit var  prevAnimIn: Animation
     private lateinit var  prevAnimOut: Animation
 
+    private lateinit var rootView: RelativeLayout
+
     private val FIRST_KANA = 0
     private val KANA_LETTER_SCREEN = 0
     private val KANA_GIF_SCREEN = 1
+
+    private lateinit var buttonList: ArrayList<ImageButton>
 
     private var resetQuiz = false
 
@@ -57,6 +66,10 @@ class LessonActivity : AppCompatActivity() {
         animationOut = AnimationUtils.loadAnimation(this, R.anim.slide_out_left)
         prevAnimIn = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
         prevAnimOut = AnimationUtils.loadAnimation(this, R.anim.slide_out_right)
+
+        rootView = findViewById(R.id.rootView)
+
+        buttonList = ArrayList()
 
         lessonTabLayout.addOnTabSelectedListener( object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -113,6 +126,9 @@ class LessonActivity : AppCompatActivity() {
                 val nextButton = newView.findViewById<ImageButton>(R.id.nextItemButton)
                 val previousButton = newView.findViewById<ImageButton>(R.id.previousItemButton)
 
+                buttonList.add(nextButton)
+                buttonList.add(previousButton)
+
                 setNextAnim(tempViewAnimator)
 
                 val tempKanaWebStroke = newView.findViewById<WebView>(R.id.strokeWebView)
@@ -142,23 +158,27 @@ class LessonActivity : AppCompatActivity() {
                 })
 
                 nextButton.setOnSingleClickListener {
-
-                    setNextAnim(rootViewAnimator)
+                    //If on the last item and gif screen, execute code to finish lesson
                     if (rootViewAnimator.displayedChild == subList.lastIndex && tempViewAnimator.displayedChild == KANA_GIF_SCREEN) {
                         val view = layoutInflater.inflate(R.layout.lesson_completed_dialog, null)
-                        val builder = AlertDialog.Builder(this).setView(view).create()
+                        val builder = AlertDialog.Builder(this, R.style.DialogTheme).setView(view).create()
+                        builder.setCancelable(false)
+                        //If restart button is clicked, set tab to first item
+                        //Setting reset quiz to true will remove animation from final item flipping back to letter, i.e. fix UI glitch
                         view.findViewById<MaterialButton>(R.id.restartLessonButton).setOnClickListener {
                             lessonTabLayout.getTabAt(0)?.select()
                             rootViewAnimator.postDelayed({
                                 resetQuiz = true
                                 itemTabLayout.selectTab(letterTab)
                             }, rootViewAnimator.inAnimation.duration)
+                            //Set the right button back to blue and having an arrow
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 nextButton.setImageResource(R.drawable.ic_right_arrow)
                                 nextButton.setBackgroundColor(resources.getColor(R.color.azure, theme))
                             }
                             builder.dismiss()
                         }
+                        //If begin button is clicked, go to review intent, but send quiz as true and send learned kana sublist
                         view.findViewById<MaterialButton>(R.id.beginQuizButton).setOnClickListener {
                             val intent = Intent(this, ReviewActivity::class.java)
                             intent.putExtra("quiz", true)
@@ -166,12 +186,20 @@ class LessonActivity : AppCompatActivity() {
                             startActivity(intent)
                         }
                         builder.show()
+                        startConfetti(rootView)
+
                     } else if (tempViewAnimator.displayedChild == KANA_GIF_SCREEN) {
+                        //If on gif screen, show next kana and switch current kana back to letter tab
+                        disableButtons()
                         lessonTabLayout.getTabAt(newTab.position+1)?.select()
                         rootViewAnimator.postDelayed({
                             itemTabLayout.selectTab(letterTab)
+                            enableButtons()
                         }, rootViewAnimator.inAnimation.duration)
                     } else {
+                        //In case of the else, it switches from letter tab to gif tab
+                        //However if on the last item, set the right arrow icon to a checkmark and set the background to lime,
+                            // to indicate end of lesson
                         if (rootViewAnimator.displayedChild == subList.lastIndex) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 nextButton.setImageResource(R.drawable.ic_checkmark)
@@ -211,6 +239,26 @@ class LessonActivity : AppCompatActivity() {
                     rootViewAnimator.removeView(loadingBar)
                 }
             }
+        }
+    }
+
+    private fun startConfetti(container: ViewGroup) {
+        CommonConfetti.rainingConfetti(
+            container, intArrayOf(
+                Color.BLACK, Color.BLUE, Color.CYAN, Color.YELLOW, Color.RED, Color.GREEN
+            )
+        ).oneShot().setVelocityY(600F, 100F).animate()
+    }
+
+    private fun disableButtons() {
+        for (button in buttonList) {
+            button.isEnabled = false
+        }
+    }
+
+    private fun enableButtons() {
+        for (button in buttonList) {
+            button.isEnabled = true
         }
     }
 
