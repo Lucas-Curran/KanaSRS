@@ -17,6 +17,7 @@ import androidx.core.text.bold
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.random.Random
 
 /**
  *
@@ -33,7 +34,7 @@ class ReviewActivity : AppCompatActivity() {
     private lateinit var moveOnButton: Button
     private lateinit var rootLayout: ConstraintLayout
     private lateinit var kanaConverter: KanaConverter
-    private lateinit var kanaList: List<Kana>
+    private lateinit var kanaList: MutableList<Kana>
     private lateinit var layout: ConstraintLayout
     private lateinit var scoreText: TextView
     private lateinit var userScoreText: TextView
@@ -55,18 +56,28 @@ class ReviewActivity : AppCompatActivity() {
     private val japaneseWrongAnswers = arrayListOf<String>()
     private val englishWrongAnswers = arrayListOf<String>()
 
+    private var quiz = false
+    private var review = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_review)
 
+
+
         //need to clone the list or it will mess up its order when shuffling
         if (intent.getBooleanExtra("quiz", false)) {
             val parcelableList = intent.getParcelableArrayExtra("kana")
-            kanaList = (parcelableList?.asList() as List<Kana>).shuffled()
+            kanaList = (parcelableList?.asList() as List<Kana>).shuffled().toMutableList()
             intent.removeExtra("quiz")
             intent.removeExtra("kana")
-        } else {
-            kanaList = JWriterDatabase.getInstance(this).kanaDao().getKana().shuffled()
+            quiz = true
+        } else if (intent.getBooleanExtra("review", false)){
+            val parcelableList = intent.getParcelableArrayListExtra<Kana>("kana")
+            kanaList = (parcelableList?.toList() as List<Kana>).shuffled().toMutableList()
+            intent.removeExtra("review")
+            intent.removeExtra("kana")
+            review = true
         }
 
         kanaConverter = KanaConverter(false)
@@ -120,7 +131,7 @@ class ReviewActivity : AppCompatActivity() {
             moveToNext()
         }
 
-        letterTextView.text = kanaList[indexKana].letter
+        letterTextView.text = kanaList[0].letter
 
     }
 
@@ -129,7 +140,6 @@ class ReviewActivity : AppCompatActivity() {
      */
     private fun moveToNext() {
 
-        indexKana++
         totalAnswered++
         submitButton.isEnabled = false
         userResponseEditText.isEnabled = false
@@ -139,7 +149,7 @@ class ReviewActivity : AppCompatActivity() {
             submitButton.visibility = View.VISIBLE
         }
 
-        if (indexKana == kanaList.size) {
+        if (kanaList.size == 0) {
             completedSet()
             return
         }
@@ -149,7 +159,7 @@ class ReviewActivity : AppCompatActivity() {
         // and then overshoot by a little, and recorrect
         letterTextView.animate().translationXBy((rootLayout.width).toFloat()).withEndAction {
             letterTextView.x = (-rootLayout.width).toFloat() / 2
-            letterTextView.text = kanaList[indexKana].letter
+            letterTextView.text = kanaList[0].letter
             responseImage.animate().alpha(0F).duration = 500
             letterTextView.animate().translationXBy(rootLayout.width.toFloat() + letterTextView.width / 2).withEndAction {
                 letterTextView.animate().translationXBy(-(letterTextView.width).toFloat()).duration = 500
@@ -175,6 +185,16 @@ class ReviewActivity : AppCompatActivity() {
      * Executes when user inputs incorrect answer
      */
     private fun incorrectAnswer() {
+
+        if (review) {
+            val kana = kanaList[0]
+            calculateNextReviewTime(kana = kana, correct = false)
+            if (kanaList.size > 1) {
+                kanaList.remove(kana)
+                val newKanaPosition = Random.nextInt(1, kanaList.size-1)
+                kanaList.add(newKanaPosition, kana)
+            }
+        }
 
         englishWrongAnswers.add(userResponseEditText.text.toString())
         japaneseWrongAnswers.add(letterTextView.text.toString())
@@ -204,6 +224,15 @@ class ReviewActivity : AppCompatActivity() {
      * Executes when user inputs correct answer
      */
     private fun correctAnswer() {
+
+        if (review) {
+            val kana = kanaList[0]
+            calculateNextReviewTime(kana = kana, correct = true)
+            kanaList.remove(kana)
+        }
+
+        indexKana++
+
         responseImage.visibility = View.VISIBLE
         score++
         //Set image as checkmark, and start animation
@@ -224,6 +253,12 @@ class ReviewActivity : AppCompatActivity() {
         val user = JWriterDatabase.getInstance(this).userDao().getUser()
         user.totalAccuracy = user.totalAccuracy.plus(score)
         JWriterDatabase.getInstance(this).userDao().updateUser(user)
+
+        if (quiz) {
+            for (kana in kanaList) {
+                learnKana(kana)
+            }
+        }
 
         // If no wrong answers,
         // make wrong answer recycler invisible,
@@ -268,12 +303,57 @@ class ReviewActivity : AppCompatActivity() {
         }
     }
 
-    private fun calculateNextReviewTime(kana: Kana) {
-        kana.level = kana.level?.minus(1)
+    private fun learnKana(kana: Kana) {
+        kana.hasLearned = true
+        kana.level = 1
+        val oneMinute = 1000 * 60
+        val now = System.currentTimeMillis()
+        val nextPracticeDate = now + oneMinute * kana.level!!
+        kana.reviewTime = nextPracticeDate
+        JWriterDatabase.getInstance(this).kanaDao().updateKana(kana)
+    }
+
+    private fun calculateNextReviewTime(kana: Kana, correct: Boolean) {
+        if (correct) {
+            if (kana.level!! < 6) {
+                kana.level = kana.level?.plus(1)
+            }
+        } else {
+            if (kana.level!! > 1) {
+                kana.level = kana.level?.minus(1)
+            }
+        }
         val millisecondsInDay = 60 * 60 * 24 * 1000
         val now = System.currentTimeMillis()
-        val nextPracticeDate = now + millisecondsInDay * kana.level!!
+        val nextPracticeDate = now + levelToTime(kana.level!!)
         kana.reviewTime = nextPracticeDate
+        JWriterDatabase.getInstance(this).kanaDao().updateKana(kana)
+    }
+
+    private fun levelToTime(level: Int): Long {
+        //For debugging
+        val oneMinute = 1000 * 60L
+        val millisecondsInHours = 1000L * 60 * 60
+        val millisecondsInDays = millisecondsInHours * 24
+//        return when(level) {
+//            1 -> (millisecondsInHours * 8) // Level 1 is 8 hours after review
+//            2 -> (millisecondsInDays * 1) // Level 2 is 1 day after review
+//            3 -> (millisecondsInDays * 3) // Level 3 is 2 days after review
+//            4 -> (millisecondsInDays * 7) // Level 4 is 7 days (1 week) after review
+//            5 -> (millisecondsInDays * 14) // Level 5 is 14 day (2 weeks) after review
+//            6 -> (millisecondsInDays * 30) // Level 6 is 30 days (1 month) after review
+//            else -> 0
+//        }
+        //For debugging
+        return when(level) {
+            1 -> oneMinute * 1
+            2 -> oneMinute * 2
+            3 -> oneMinute * 3
+            4 -> oneMinute * 4
+            5 -> oneMinute * 5
+            6 -> oneMinute * 6
+            else -> 0
+        }
     }
 
     //size of 45 (0-45) since there are 46 characters
