@@ -44,10 +44,6 @@ class ReviewActivity : AppCompatActivity() {
     private lateinit var correctAnswerTextView: TextView
     private lateinit var emptyRecyclerViewText: TextView
 
-    //Index kana keeps track of the index of the kana list
-    //To debug, set it higher, end of list is 45
-    private var indexKana = 0
-
     //Number correct out of total answered
     private var score = 0
     private var totalAnswered = 0
@@ -55,6 +51,8 @@ class ReviewActivity : AppCompatActivity() {
     //Japanese wrong answers is
     private val japaneseWrongAnswers = arrayListOf<String>()
     private val englishWrongAnswers = arrayListOf<String>()
+    private val correctQuizAnswers = arrayListOf<Kana>()
+    private val incorrectReviewAnswers = arrayListOf<Kana>()
 
     private var quiz = false
     private var review = false
@@ -175,20 +173,27 @@ class ReviewActivity : AppCompatActivity() {
     }
 
     /**
-     * Update the users stats on accuracy
-     */
-    private fun updateStats() {
-        //Access Room sql table and change appropiate stats
-    }
-
-    /**
      * Executes when user inputs incorrect answer
      */
     private fun incorrectAnswer() {
 
         if (review) {
             val kana = kanaList[0]
-            calculateNextReviewTime(kana = kana, correct = false)
+
+            if (!incorrectReviewAnswers.contains(kana)) {
+                incorrectReviewAnswers.add(kana)
+                calculateNextReviewTime(kana = kana, correct = false)
+            }
+
+            if (kanaList.size > 1) {
+                kanaList.remove(kana)
+                val newKanaPosition = Random.nextInt(1, kanaList.size-1)
+                kanaList.add(newKanaPosition, kana)
+            }
+        }
+
+        if (quiz) {
+            val kana = kanaList[0]
             if (kanaList.size > 1) {
                 kanaList.remove(kana)
                 val newKanaPosition = Random.nextInt(1, kanaList.size-1)
@@ -217,7 +222,6 @@ class ReviewActivity : AppCompatActivity() {
         submitButton.visibility = View.INVISIBLE
         moveOnButton.visibility = View.VISIBLE
         userResponseEditText.isEnabled = false
-        updateStats()
     }
 
     /**
@@ -231,7 +235,11 @@ class ReviewActivity : AppCompatActivity() {
             kanaList.remove(kana)
         }
 
-        indexKana++
+        if (quiz) {
+            val kana = kanaList[0]
+            kanaList.remove(kana)
+            correctQuizAnswers.add(kana)
+        }
 
         responseImage.visibility = View.VISIBLE
         score++
@@ -239,7 +247,6 @@ class ReviewActivity : AppCompatActivity() {
         responseImage.alpha = 1F
         responseImage.setImageResource(R.drawable.animated_check)
         (responseImage.drawable as Animatable).start()
-        updateStats()
         //when animation is done, move to next letter
         moveToNext()
     }
@@ -255,7 +262,7 @@ class ReviewActivity : AppCompatActivity() {
         JWriterDatabase.getInstance(this).userDao().updateUser(user)
 
         if (quiz) {
-            for (kana in kanaList) {
+            for (kana in correctQuizAnswers) {
                 learnKana(kana)
             }
         }
