@@ -175,20 +175,11 @@
                     android:layout_alignBottom="@+id/summary"
                     android:layout_marginBottom="8dp">
 
-                    <TextView
-                        android:id="@+id/showMoreTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Show more"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
-
                     <ImageView
+                        android:id="@+id/arrowImageView"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:layout_below="@id/showMoreTextView"
+                        android:layout_alignParentBottom="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentEnd="true"
                         android:src="@android:drawable/arrow_down_float" />

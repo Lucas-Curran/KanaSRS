@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -26,11 +27,14 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var settingsButton: Button
     private lateinit var lessonButton: Button
     private lateinit var showMoreLayout: RelativeLayout
+    private lateinit var showMoreArrow: ImageView
     private lateinit var summaryButton: Button
     private var showMore = true
+    private var moving = false
     private var numItemsToReview: Int = 0
     private var mostRecentReview = Long.MAX_VALUE
     private var kanaToReview = ArrayList<Kana>()
+    private var levelNames = arrayOf("")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,21 +75,30 @@ class MenuActivity : AppCompatActivity() {
 
         summaryButton = findViewById(R.id.summary)
         showMoreLayout = findViewById(R.id.showMoreRelativeLayout)
-        showMoreLayout.setOnClickListener {
-            if (showMore) {
+        showMoreArrow = findViewById(R.id.arrowImageView)
+        showMoreArrow.setOnClickListener {
+            if (showMore && !moving) {
+                moving = true
                 AnimUtilities.slideView(
                     summaryButton,
                     summaryButton.height,
-                    summaryButton.height + 300
-                )
-                showMore = false
-            } else {
+                    summaryButton.height + 500
+                ) {
+                    showMore = false
+                    moving = false
+                }
+                showMoreArrow.setImageResource(android.R.drawable.arrow_up_float)
+            } else if (!showMore && !moving) {
+                moving = true
                 AnimUtilities.slideView(
                     summaryButton,
                     summaryButton.height,
-                    summaryButton.height - 300
-                )
-                showMore = true
+                    summaryButton.height - 500
+                ) {
+                    moving = false
+                    showMore = true
+                }
+                showMoreArrow.setImageResource(android.R.drawable.arrow_down_float)
             }
         }
 

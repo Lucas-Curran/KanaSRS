@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.animation.doOnEnd
 
 /**
  * Utilities class for animations during program
@@ -32,7 +33,7 @@ class AnimUtilities {
         }
 
         @SuppressLint("Recycle")
-        fun slideView(view: View, currentHeight: Int, newHeight: Int) {
+        fun slideView(view: View, currentHeight: Int, newHeight: Int, onEnd: () -> Unit) {
             val slideAnimator = ValueAnimator.ofInt(currentHeight, newHeight).setDuration(500)
             slideAnimator.addUpdateListener {
                 val value = it.animatedValue as Int
@@ -42,6 +43,9 @@ class AnimUtilities {
             val animationSet = AnimatorSet()
             animationSet.interpolator = AccelerateDecelerateInterpolator()
             animationSet.play(slideAnimator)
+            animationSet.doOnEnd {
+                onEnd()
+            }
             animationSet.start()
         }
 
