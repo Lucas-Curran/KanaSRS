@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/cardview_dark_background"
     android:theme="@style/Theme.JWriter"
-    tools:context=".MenuActivity">
+    tools:context=".activity.MenuActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"

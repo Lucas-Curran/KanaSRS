@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/cardview_dark_background"
     android:theme="@style/Theme.JWriter"
-    tools:context=".MenuActivity">
+    tools:context=".activity.MenuActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -73,7 +73,7 @@
                     android:id="@+id/summary"
                     style="@style/Widget.MaterialComponents.Button.Icon"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="210dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="15dp"
@@ -115,9 +115,9 @@
                     android:layout_below="@+id/divider1"
                     android:layout_alignStart="@id/summary"
                     android:layout_alignEnd="@id/summary"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:gravity="start"
-                    android:layout_marginStart="10dp"
                     android:text="Time to next review: 4 hours"
                     android:textColor="@color/white"
                     android:textSize="14sp"
@@ -127,23 +127,23 @@
                     android:id="@+id/hiraganaProgressView"
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
                     android:layout_below="@id/nextReviewText"
                     android:layout_alignStart="@id/summary"
                     android:layout_alignEnd="@id/summary"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
+                    android:layout_marginEnd="10dp"
+                    app:progressView_borderColor="#eeeeee"
+                    app:progressView_borderWidth="3dp"
+                    app:progressView_colorBackground="@color/white"
+                    app:progressView_colorProgress="#ED1C24"
+                    app:progressView_labelColorInner="@color/white"
+                    app:progressView_labelSize="16sp"
                     app:progressView_labelText="Hiragana (0/46)"
                     app:progressView_labelTypeface="bold"
-                    app:progressView_min="0"
                     app:progressView_max="46"
-                    app:progressView_labelSize="16sp"
-                    app:progressView_borderWidth="3dp"
-                    app:progressView_labelColorInner="@color/white"
-                    app:progressView_colorProgress="#ED1C24"
-                    app:progressView_borderColor="#eeeeee"
-                    app:progressView_colorBackground="@color/white"
-                    app:progressView_progress="0"/>
+                    app:progressView_min="0"
+                    app:progressView_progress="0" />
 
                 <com.skydoves.progressview.ProgressView
                     android:id="@+id/katakanaProgressView"
@@ -166,6 +166,34 @@
                     app:progressView_max="46"
                     app:progressView_min="0"
                     app:progressView_progress="0" />
+
+                <RelativeLayout
+                    android:id="@+id/showMoreRelativeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/katakanaProgressView"
+                    android:layout_alignBottom="@+id/summary"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/showMoreTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Show more"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_below="@id/showMoreTextView"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentEnd="true"
+                        android:src="@android:drawable/arrow_down_float" />
+
+                </RelativeLayout>
 
             </RelativeLayout>
 

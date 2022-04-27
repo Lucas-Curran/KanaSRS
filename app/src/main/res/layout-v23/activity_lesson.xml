@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/cardview_dark_background"
     android:id="@+id/rootView"
-    tools:context=".LessonActivity">
+    tools:context=".activity.LessonActivity">
 
     <ViewAnimator
         android:id="@+id/rootViewAnimator"

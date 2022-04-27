@@ -1,10 +1,9 @@
-package com.example.jwriter
+package com.example.jwriter.activity
 
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Bundle
-import android.os.Parcel
 import android.text.SpannableStringBuilder
 import android.view.KeyEvent
 import android.view.View
@@ -17,6 +16,7 @@ import androidx.core.text.bold
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.jwriter.*
 import kotlin.random.Random
 
 /**
@@ -298,7 +298,11 @@ class ReviewActivity : AppCompatActivity() {
 
             AnimUtilities.animateFromLeft(scoreText, layout, startDelay = 200)
             AnimUtilities.animateFromRight(userScoreText, layout, startDelay = 400)
-            if (itemsWrongRecyclerView.isVisible) AnimUtilities.animateFromLeft(itemsWrongRecyclerView, layout, startDelay = 600)
+            if (itemsWrongRecyclerView.isVisible) AnimUtilities.animateFromLeft(
+                itemsWrongRecyclerView,
+                layout,
+                startDelay = 600
+            )
             else AnimUtilities.animateFromLeft(emptyRecyclerViewText, layout, startDelay = 600)
             AnimUtilities.animateFromRight(restartButton, layout, startDelay = 800)
             AnimUtilities.animateFromLeft(backToMenuButton, layout, startDelay = 1000)

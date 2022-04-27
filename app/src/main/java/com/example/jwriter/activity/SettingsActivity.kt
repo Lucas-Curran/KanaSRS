@@ -1,7 +1,8 @@
-package com.example.jwriter
+package com.example.jwriter.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.jwriter.R
 
 /*
 Could possibly include:

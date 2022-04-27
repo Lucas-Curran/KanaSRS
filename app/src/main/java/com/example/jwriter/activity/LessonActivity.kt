@@ -1,33 +1,25 @@
-package com.example.jwriter
+package com.example.jwriter.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Rect
-import android.graphics.drawable.Drawable
 import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.view.animation.LayoutAnimationController
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.view.children
-import androidx.core.view.get
-import androidx.viewpager.widget.ViewPager
-import androidx.viewpager2.widget.ViewPager2
+import com.example.jwriter.JWriterDatabase
+import com.example.jwriter.Kana
+import com.example.jwriter.KanaConverter
+import com.example.jwriter.R
 import com.github.jinatonic.confetti.CommonConfetti
-import com.github.jinatonic.confetti.Utils
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
-import kotlin.concurrent.thread
 
 class LessonActivity : AppCompatActivity() {
 

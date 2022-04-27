@@ -12,11 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JWriter">
         <activity
-            android:name=".LessonActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-        <activity
-            android:name=".MenuActivity"
+            android:name=".activity.MenuActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.App.Starting">
@@ -27,15 +23,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".StatsActivity"
+            android:name=".activity.LessonActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
+            android:name=".activity.StatsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activity.SettingsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ReviewActivity"
+            android:name=".activity.ReviewActivity"
             android:exported="true"
             android:screenOrientation="portrait"></activity>
     </application>
