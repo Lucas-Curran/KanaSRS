@@ -1,6 +1,10 @@
 package com.example.jwriter
 
+import android.animation.AnimatorSet
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintLayout
 
 /**
@@ -26,5 +30,20 @@ class AnimUtilities {
                 }.duration = 1000
             }.setStartDelay(delay).duration = 1000
         }
+
+        @SuppressLint("Recycle")
+        fun slideView(view: View, currentHeight: Int, newHeight: Int) {
+            val slideAnimator = ValueAnimator.ofInt(currentHeight, newHeight).setDuration(500)
+            slideAnimator.addUpdateListener {
+                val value = it.animatedValue as Int
+                view.layoutParams.height = value
+                view.requestLayout()
+            }
+            val animationSet = AnimatorSet()
+            animationSet.interpolator = AccelerateDecelerateInterpolator()
+            animationSet.play(slideAnimator)
+            animationSet.start()
+        }
+
     }
 }
