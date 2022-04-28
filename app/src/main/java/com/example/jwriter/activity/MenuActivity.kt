@@ -34,7 +34,7 @@ class MenuActivity : AppCompatActivity() {
     private var numItemsToReview: Int = 0
     private var mostRecentReview = Long.MAX_VALUE
     private var kanaToReview = ArrayList<Kana>()
-    private var levelNames = arrayOf("")
+    private var levelNames = arrayOf("Rookie", "Amateur", "Expert", "Master", "Sensei")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
