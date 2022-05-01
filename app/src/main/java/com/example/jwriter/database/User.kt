@@ -1,4 +1,4 @@
-package com.example.jwriter
+package com.example.jwriter.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

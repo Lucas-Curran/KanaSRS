@@ -10,7 +10,7 @@ import android.graphics.Color
 import android.os.Build
 import android.provider.Settings
 import androidx.core.app.NotificationCompat
-import com.example.jwriter.JWriterDatabase
+import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.R
 import com.example.jwriter.activity.MenuActivity
 import me.leolin.shortcutbadger.ShortcutBadger

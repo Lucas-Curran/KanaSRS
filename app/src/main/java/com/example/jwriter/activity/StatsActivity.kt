@@ -7,7 +7,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.jwriter.JWriterDatabase
+import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.R
 import com.google.android.material.tabs.TabLayout
 import com.skydoves.progressview.ProgressView

@@ -1,4 +1,4 @@
-package com.example.jwriter
+package com.example.jwriter.database
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo

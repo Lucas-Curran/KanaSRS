@@ -1,4 +1,4 @@
-package com.example.jwriter
+package com.example.jwriter.util
 
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator

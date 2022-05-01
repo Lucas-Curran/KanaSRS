@@ -17,6 +17,10 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jwriter.*
+import com.example.jwriter.database.JWriterDatabase
+import com.example.jwriter.database.Kana
+import com.example.jwriter.util.AnimUtilities
+import com.example.jwriter.util.KanaConverter
 import kotlin.random.Random
 
 /**

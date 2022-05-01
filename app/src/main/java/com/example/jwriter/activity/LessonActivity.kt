@@ -13,9 +13,9 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import com.example.jwriter.JWriterDatabase
-import com.example.jwriter.Kana
-import com.example.jwriter.KanaConverter
+import com.example.jwriter.database.JWriterDatabase
+import com.example.jwriter.database.Kana
+import com.example.jwriter.util.KanaConverter
 import com.example.jwriter.R
 import com.github.jinatonic.confetti.CommonConfetti
 import com.google.android.material.button.MaterialButton

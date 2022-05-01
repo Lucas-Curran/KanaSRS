@@ -1,6 +1,7 @@
-package com.example.jwriter
+package com.example.jwriter.database
 
 import androidx.room.*
+import com.example.jwriter.database.Kana
 
 @Dao
 interface KanaDao {

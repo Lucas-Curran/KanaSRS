@@ -1,11 +1,9 @@
-package com.example.jwriter
+package com.example.jwriter.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
-import java.util.concurrent.Executors
 
 
 // TODO: Give preset kana data a description column, gif link column, drawable int, mp3 int

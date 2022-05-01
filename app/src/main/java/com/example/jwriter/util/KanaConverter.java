@@ -1,4 +1,4 @@
-package com.example.jwriter;
+package com.example.jwriter.util;
 
 import java.util.HashMap;
 import java.util.regex.Matcher;

@@ -16,8 +16,10 @@ import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.jwriter.*
+import com.example.jwriter.database.JWriterDatabase
+import com.example.jwriter.database.Kana
 import com.example.jwriter.notification.NotificationReceiver
-import me.leolin.shortcutbadger.ShortcutBadger
+import com.example.jwriter.util.AnimUtilities
 import java.time.Duration
 import java.util.*
 
