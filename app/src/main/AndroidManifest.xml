@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JWriter">
+        <receiver android:name=".notification.NotificationReceiver"/>
         <activity
             android:name=".activity.MenuActivity"
             android:exported="true"
