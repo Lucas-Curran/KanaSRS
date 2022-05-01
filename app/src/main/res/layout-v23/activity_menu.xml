@@ -66,11 +66,12 @@
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
             <RelativeLayout
+                android:id="@+id/summaryRelativeLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="240dp">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/summary"
+                    android:id="@+id/summaryButton"
                     style="@style/Widget.MaterialComponents.Button.Icon"
                     android:layout_width="match_parent"
                     android:layout_height="210dp"
@@ -85,9 +86,9 @@
                     android:id="@+id/summaryTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/summary"
-                    android:layout_alignTop="@id/summary"
-                    android:layout_alignEnd="@id/summary"
+                    android:layout_alignStart="@id/summaryButton"
+                    android:layout_alignTop="@id/summaryButton"
+                    android:layout_alignEnd="@id/summaryButton"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
 
@@ -101,8 +102,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_below="@id/summaryTitle"
-                    android:layout_alignStart="@id/summary"
-                    android:layout_alignEnd="@id/summary"
+                    android:layout_alignStart="@id/summaryButton"
+                    android:layout_alignEnd="@id/summaryButton"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="3dp"
                     android:layout_marginEnd="30dp"
@@ -113,8 +114,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/divider1"
-                    android:layout_alignStart="@id/summary"
-                    android:layout_alignEnd="@id/summary"
+                    android:layout_alignStart="@id/summaryButton"
+                    android:layout_alignEnd="@id/summaryButton"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:gravity="start"
@@ -128,8 +129,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
                     android:layout_below="@id/nextReviewText"
-                    android:layout_alignStart="@id/summary"
-                    android:layout_alignEnd="@id/summary"
+                    android:layout_alignStart="@id/summaryButton"
+                    android:layout_alignEnd="@id/summaryButton"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="10dp"
@@ -150,8 +151,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="25dp"
                     android:layout_below="@id/hiraganaProgressView"
-                    android:layout_alignStart="@id/summary"
-                    android:layout_alignEnd="@id/summary"
+                    android:layout_alignStart="@id/summaryButton"
+                    android:layout_alignEnd="@id/summaryButton"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="10dp"
@@ -167,21 +168,41 @@
                     app:progressView_min="0"
                     app:progressView_progress="0" />
 
+                <Space
+                    android:id="@+id/belowKatakanaSpace"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:layout_below="@id/katakanaProgressView"/>
+
+                <include
+                    android:id="@+id/levelsLayout"
+                    layout="@layout/level_item"
+                    android:elevation="10dp"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_below="@id/belowKatakanaSpace"
+                    android:layout_alignStart="@id/summaryButton"
+                    android:layout_alignEnd="@id/summaryButton"
+                    />
+
                 <RelativeLayout
                     android:id="@+id/showMoreRelativeLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/katakanaProgressView"
-                    android:layout_alignBottom="@+id/summary"
+                    android:layout_alignBottom="@+id/summaryButton"
                     android:layout_marginBottom="8dp">
 
                     <ImageView
                         android:id="@+id/arrowImageView"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:layout_alignParentBottom="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginEnd="25dp"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
                         android:src="@android:drawable/arrow_down_float" />
 
                 </RelativeLayout>
