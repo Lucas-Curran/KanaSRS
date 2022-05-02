@@ -26,6 +26,7 @@ class MenuIntroFragment : Fragment() {
     private var container: ViewGroup? = null
     private var showMore = true
     private var moving = false
+    private lateinit var levelsLayoutTarget: Target
     private lateinit var buttons: ArrayList<View>
     private lateinit var spotLight: Spotlight
     private var currentSpotlight = 0
@@ -93,7 +94,8 @@ class MenuIntroFragment : Fragment() {
                     false
                 }
             }))
-            targets.add(AnimUtilities.newTarget(levelsLayout, levelsLayout.height.toFloat() + 800, levelsLayout.width.toFloat(), first, {
+
+           levelsLayoutTarget = AnimUtilities.newTarget(levelsLayout.findViewById(R.id.expertLinearLayout), levelsLayout.height.toFloat(), levelsLayout.width.toFloat(), first, {
 
             }, {
                 showMoreArrow.isEnabled = false
@@ -105,7 +107,9 @@ class MenuIntroFragment : Fragment() {
                     }
                     true
                 }
-            }))
+            })
+
+            targets.add(levelsLayoutTarget)
 
             activity?.let {
                     spotLight = Spotlight.Builder(it)
@@ -155,7 +159,6 @@ class MenuIntroFragment : Fragment() {
                 showMoreArrow.setImageResource(android.R.drawable.arrow_down_float)
             }
         }
-
     }
 
 

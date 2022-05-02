@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
@@ -15,6 +16,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.marginBottom
 import com.example.jwriter.*
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
@@ -35,6 +37,8 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var levelsLayout: LinearLayout
     private lateinit var showMoreArrow: ImageView
     private lateinit var summaryButton: Button
+    private lateinit var templateLevels: RelativeLayout
+
     private var showMore = true
     private var moving = false
     private var numItemsToReview: Int = 0
@@ -44,7 +48,7 @@ class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
-        if (1 == 1) {
+        if (1 == 2) {
             startActivity(Intent(this, IntroActivity::class.java))
         } else {
             for (kana in JWriterDatabase.getInstance(this).kanaDao().getKana()) {
@@ -88,18 +92,21 @@ class MenuActivity : AppCompatActivity() {
             showMoreLayout = findViewById(R.id.showMoreRelativeLayout)
             showMoreArrow = findViewById(R.id.arrowImageView)
             summaryLayout = findViewById(R.id.summaryRelativeLayout)
+            levelsLayout = findViewById(R.id.levelsLayout)
+
             showMoreArrow.setOnClickListener {
                 if (showMore && !moving) {
                     moving = true
                     AnimUtilities.slideView(
                         summaryLayout,
                         summaryLayout.height,
-                        summaryLayout.height + 800
+                        summaryLayout.height + levelsLayout.measuredHeight + levelsLayout.marginBottom
+
                     ) {}
                     AnimUtilities.slideView(
                         summaryButton,
                         summaryButton.height,
-                        summaryButton.height + 800
+                        summaryButton.height+ levelsLayout.measuredHeight + levelsLayout.marginBottom
                     ) {
                         showMore = false
                         moving = false
@@ -110,12 +117,12 @@ class MenuActivity : AppCompatActivity() {
                     AnimUtilities.slideView(
                         summaryLayout,
                         summaryLayout.height,
-                        summaryLayout.height - 800
+                        summaryLayout.height -  levelsLayout.measuredHeight - levelsLayout.marginBottom
                     ) {}
                     AnimUtilities.slideView(
                         summaryButton,
                         summaryButton.height,
-                        summaryButton.height - 800
+                        summaryButton.height - levelsLayout.measuredHeight - levelsLayout.marginBottom
                     ) {
                         moving = false
                         showMore = true
@@ -124,7 +131,6 @@ class MenuActivity : AppCompatActivity() {
                 }
             }
 
-            levelsLayout = findViewById(R.id.levelsLayout)
             levelsLayout.findViewById<LinearLayout>(R.id.rookieLinearLayout).setOnClickListener {
                 println("rookie")
             }

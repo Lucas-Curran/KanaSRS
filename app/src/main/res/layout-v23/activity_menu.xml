@@ -179,13 +179,14 @@
                 <include
                     android:id="@+id/levelsLayout"
                     layout="@layout/level_item"
-                    android:elevation="10dp"
-                    android:layout_height="match_parent"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/belowKatakanaSpace"
-                    android:layout_alignStart="@id/summaryButton"
-                    android:layout_alignEnd="@id/summaryButton"
-                    />
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true" />
 
                 <RelativeLayout
                     android:id="@+id/showMoreRelativeLayout"
@@ -199,9 +200,9 @@
                         android:id="@+id/arrowImageView"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
+                        android:layout_marginTop="20dp"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"
                         android:layout_marginStart="25dp"
                         android:layout_marginEnd="25dp"
                         android:foreground="?android:attr/selectableItemBackground"
