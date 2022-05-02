@@ -10,4 +10,5 @@
     <color name="pink">#c02e4c</color>
     <color name="lime">#90EE90</color>
     <color name="azure">#4599ff</color>
+    <color name="spotlight_background">#BF000000</color>
 </resources>

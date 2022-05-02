@@ -7,6 +7,9 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
+import com.takusemba.spotlight.OnTargetListener
+import com.takusemba.spotlight.Target
+import com.takusemba.spotlight.shape.RoundedRectangle
 
 /**
  * Utilities class for animations during program
@@ -47,6 +50,28 @@ class AnimUtilities {
                 onEnd()
             }
             animationSet.start()
+        }
+
+        fun newTarget(anchor: View, height: Float, width: Float, overlay: View, onStart: (() -> Unit)? = null, onEnd: (() -> Unit)? = null): Target {
+            val target = Target.Builder()
+                .setAnchor(anchor)
+                .setShape(RoundedRectangle(height, width, 30f))
+                .setOverlay(overlay)
+                .setOnTargetListener(object : OnTargetListener {
+                    override fun onEnded() {
+                        if (onEnd != null) {
+                            onEnd()
+                        }
+                    }
+
+                    override fun onStarted() {
+                        if (onStart != null) {
+                            onStart()
+                        }
+                    }
+
+                }).build()
+            return target
         }
 
     }

@@ -44,122 +44,127 @@ class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
-
-        for (kana in JWriterDatabase.getInstance(this).kanaDao().getKana()) {
-            //Check if there is a review time, and if so, check if the current time has passed the stored review time
-            // Review time is calculated during review answers and initially added when learned in lessons
-            if (kana.reviewTime != null) {
-                if (kana.reviewTime!! < System.currentTimeMillis()) {
-                    numItemsToReview++
-                    kanaToReview.add(kana)
-                } else {
-                    val millisecondsUntilReview = kana.reviewTime!! - System.currentTimeMillis()
-                    if (millisecondsUntilReview < mostRecentReview) {
-                        mostRecentReview = millisecondsUntilReview
+        if (1 == 1) {
+            startActivity(Intent(this, IntroActivity::class.java))
+        } else {
+            for (kana in JWriterDatabase.getInstance(this).kanaDao().getKana()) {
+                //Check if there is a review time, and if so, check if the current time has passed the stored review time
+                // Review time is calculated during review answers and initially added when learned in lessons
+                if (kana.reviewTime != null) {
+                    if (kana.reviewTime!! < System.currentTimeMillis()) {
+                        numItemsToReview++
+                        kanaToReview.add(kana)
+                    } else {
+                        val millisecondsUntilReview = kana.reviewTime!! - System.currentTimeMillis()
+                        if (millisecondsUntilReview < mostRecentReview) {
+                            mostRecentReview = millisecondsUntilReview
+                        }
                     }
                 }
             }
-        }
 
-        setContentView(R.layout.activity_menu)
+            setContentView(R.layout.activity_menu)
 
-        myAlarm()
+            myAlarm()
 
-        val numReviewTextView = findViewById<TextView>(R.id.numItemsTextView)
-        numReviewTextView.text = numItemsToReview.toString()
+            val numReviewTextView = findViewById<TextView>(R.id.numItemsTextView)
+            numReviewTextView.text = numItemsToReview.toString()
 
-        val nextReviewTime = findViewById<TextView>(R.id.nextReviewText)
-        if (mostRecentReview == Long.MAX_VALUE) {
-            nextReviewTime.text = "Time to next review: none"
-        } else {
-            nextReviewTime.text = "Time to next review: ${formatTime(mostRecentReview)}"
-        }
-
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        toolbar.overflowIcon?.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-            R.color.white, BlendModeCompat.SRC_ATOP)
-        setSupportActionBar(toolbar)
-
-        summaryButton = findViewById(R.id.summaryButton)
-        showMoreLayout = findViewById(R.id.showMoreRelativeLayout)
-        showMoreArrow = findViewById(R.id.arrowImageView)
-        summaryLayout = findViewById(R.id.summaryRelativeLayout)
-        showMoreArrow.setOnClickListener {
-            if (showMore && !moving) {
-                moving = true
-                AnimUtilities.slideView(
-                    summaryLayout,
-                    summaryLayout.height,
-                    summaryLayout.height + 800
-                ) {}
-                AnimUtilities.slideView(
-                    summaryButton,
-                    summaryButton.height,
-                    summaryButton.height + 800
-                ) {
-                    showMore = false
-                    moving = false
-                }
-                showMoreArrow.setImageResource(android.R.drawable.arrow_up_float)
-            } else if (!showMore && !moving) {
-                moving = true
-                AnimUtilities.slideView(
-                    summaryLayout,
-                    summaryLayout.height,
-                    summaryLayout.height - 800
-                ) {}
-                AnimUtilities.slideView(
-                    summaryButton,
-                    summaryButton.height,
-                    summaryButton.height - 800
-                ) {
-                    moving = false
-                    showMore = true
-                }
-                showMoreArrow.setImageResource(android.R.drawable.arrow_down_float)
+            val nextReviewTime = findViewById<TextView>(R.id.nextReviewText)
+            if (mostRecentReview == Long.MAX_VALUE) {
+                nextReviewTime.text = "Time to next review: none"
+            } else {
+                nextReviewTime.text = "Time to next review: ${formatTime(mostRecentReview)}"
             }
-        }
 
-        levelsLayout = findViewById(R.id.levelsLayout)
-        levelsLayout.findViewById<LinearLayout>(R.id.rookieLinearLayout).setOnClickListener {
-            println("rookie")
-        }
-        levelsLayout.findViewById<LinearLayout>(R.id.amateurLinearLayout).setOnClickListener {
-            println("amateur")
-        }
-        levelsLayout.findViewById<LinearLayout>(R.id.expertLinearLayout).setOnClickListener {
-            println("expert")
-        }
-        levelsLayout.findViewById<LinearLayout>(R.id.masterLinearLayout).setOnClickListener {
-            println("master")
-        }
-        levelsLayout.findViewById<LinearLayout>(R.id.senseiLinearLayout).setOnClickListener {
-            println("sensei")
-        }
+            val toolbar = findViewById<Toolbar>(R.id.toolbar)
+            toolbar.overflowIcon?.colorFilter =
+                BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                    R.color.white, BlendModeCompat.SRC_ATOP
+                )
+            setSupportActionBar(toolbar)
 
-        lessonButton = findViewById(R.id.lessonButton)
-        lessonButton.setOnClickListener {
-            startActivity(Intent(this, LessonActivity::class.java))
-        }
-
-        reviewButton = findViewById(R.id.reviewButton)
-        reviewButton.setOnClickListener {
-            if (numItemsToReview > 0) {
-                val intent = Intent(this, ReviewActivity::class.java)
-                intent.putExtra("review", true)
-                intent.putExtra("kana", kanaToReview)
-                startActivity(intent)
+            summaryButton = findViewById(R.id.summaryButton)
+            showMoreLayout = findViewById(R.id.showMoreRelativeLayout)
+            showMoreArrow = findViewById(R.id.arrowImageView)
+            summaryLayout = findViewById(R.id.summaryRelativeLayout)
+            showMoreArrow.setOnClickListener {
+                if (showMore && !moving) {
+                    moving = true
+                    AnimUtilities.slideView(
+                        summaryLayout,
+                        summaryLayout.height,
+                        summaryLayout.height + 800
+                    ) {}
+                    AnimUtilities.slideView(
+                        summaryButton,
+                        summaryButton.height,
+                        summaryButton.height + 800
+                    ) {
+                        showMore = false
+                        moving = false
+                    }
+                    showMoreArrow.setImageResource(android.R.drawable.arrow_up_float)
+                } else if (!showMore && !moving) {
+                    moving = true
+                    AnimUtilities.slideView(
+                        summaryLayout,
+                        summaryLayout.height,
+                        summaryLayout.height - 800
+                    ) {}
+                    AnimUtilities.slideView(
+                        summaryButton,
+                        summaryButton.height,
+                        summaryButton.height - 800
+                    ) {
+                        moving = false
+                        showMore = true
+                    }
+                    showMoreArrow.setImageResource(android.R.drawable.arrow_down_float)
+                }
             }
-        }
 
-        statsButton = findViewById(R.id.statsButton)
-        statsButton.setOnClickListener {
-            startActivity(Intent(this, StatsActivity::class.java))
-        }
+            levelsLayout = findViewById(R.id.levelsLayout)
+            levelsLayout.findViewById<LinearLayout>(R.id.rookieLinearLayout).setOnClickListener {
+                println("rookie")
+            }
+            levelsLayout.findViewById<LinearLayout>(R.id.amateurLinearLayout).setOnClickListener {
+                println("amateur")
+            }
+            levelsLayout.findViewById<LinearLayout>(R.id.expertLinearLayout).setOnClickListener {
+                println("expert")
+            }
+            levelsLayout.findViewById<LinearLayout>(R.id.masterLinearLayout).setOnClickListener {
+                println("master")
+            }
+            levelsLayout.findViewById<LinearLayout>(R.id.senseiLinearLayout).setOnClickListener {
+                println("sensei")
+            }
 
-        settingsButton = findViewById(R.id.settingsButton)
-        settingsButton.setOnClickListener {
-            startActivity(Intent(this, SettingsActivity::class.java))
+            lessonButton = findViewById(R.id.lessonButton)
+            lessonButton.setOnClickListener {
+                startActivity(Intent(this, LessonActivity::class.java))
+            }
+
+            reviewButton = findViewById(R.id.reviewButton)
+            reviewButton.setOnClickListener {
+                if (numItemsToReview > 0) {
+                    val intent = Intent(this, ReviewActivity::class.java)
+                    intent.putExtra("review", true)
+                    intent.putExtra("kana", kanaToReview)
+                    startActivity(intent)
+                }
+            }
+
+            statsButton = findViewById(R.id.statsButton)
+            statsButton.setOnClickListener {
+                startActivity(Intent(this, StatsActivity::class.java))
+            }
+
+            settingsButton = findViewById(R.id.settingsButton)
+            settingsButton.setOnClickListener {
+                startActivity(Intent(this, SettingsActivity::class.java))
+            }
         }
     }
 

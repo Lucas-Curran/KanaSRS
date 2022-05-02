@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.jwriter">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JWriter">
-        <receiver android:name=".notification.NotificationReceiver"/>
+        <activity
+            android:name=".activity.IntroActivity"
+            android:exported="false" />
+
+        <receiver android:name=".notification.NotificationReceiver" />
+
         <activity
             android:name=".activity.MenuActivity"
             android:exported="true"
@@ -25,8 +31,8 @@
         </activity>
         <activity
             android:name=".activity.LessonActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.StatsActivity"
             android:exported="false"
@@ -38,7 +44,7 @@
         <activity
             android:name=".activity.ReviewActivity"
             android:exported="true"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
