@@ -9,17 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.marginBottom
-import androidx.viewpager.widget.ViewPager
 import com.example.jwriter.util.AnimUtilities
 import com.google.android.material.button.MaterialButton
 import com.skydoves.progressview.ProgressView
-import com.takusemba.spotlight.OnTargetListener
 import com.takusemba.spotlight.Spotlight
 import com.takusemba.spotlight.Target
-import com.takusemba.spotlight.shape.RoundedRectangle
-import java.lang.IllegalStateException
 
 class MenuIntroFragment : Fragment() {
 
@@ -96,7 +91,7 @@ class MenuIntroFragment : Fragment() {
                 }
             }))
 
-           levelsLayoutTarget = AnimUtilities.newTarget(levelsLayout.findViewById(R.id.expertLinearLayout), levelsLayout.measuredHeight.toFloat(), levelsLayout.measuredWidth.toFloat(), first, {
+           levelsLayoutTarget = AnimUtilities.newTarget(levelsLayout.findViewById(R.id.expert), levelsLayout.measuredHeight.toFloat(), levelsLayout.measuredWidth.toFloat(), first, {
 
             }, {
                 showMoreArrow.isEnabled = false

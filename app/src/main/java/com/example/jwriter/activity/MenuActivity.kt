@@ -13,7 +13,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.BlendModeColorFilterCompat
@@ -47,6 +46,13 @@ class MenuActivity : AppCompatActivity() {
     private var mostRecentReview = Long.MAX_VALUE
     private var kanaToReview = ArrayList<Kana>()
     private var levelsArray = ArrayList<View>()
+    private var levelsItemArray = IntArray(5)
+
+    val ROOKIE = 0
+    val AMATEUR = 1
+    val EXPERT = 2
+    val MASTER = 3
+    val SENSEI = 4
 
     val MotionEvent.up get() = action == MotionEvent.ACTION_UP
 
@@ -105,18 +111,33 @@ class MenuActivity : AppCompatActivity() {
             summaryLayout = findViewById(R.id.summaryRelativeLayout)
             levelsLayout = findViewById(R.id.levelsLayout)
 
-            val rookie = levelsLayout.findViewById<LinearLayout>(R.id.rookieLinearLayout)
-            val amateur = levelsLayout.findViewById<LinearLayout>(R.id.amateurLinearLayout)
-            val expert = levelsLayout.findViewById<LinearLayout>(R.id.expertLinearLayout)
-            val master = levelsLayout.findViewById<LinearLayout>(R.id.masterLinearLayout)
-            val sensei = levelsLayout.findViewById<LinearLayout>(R.id.senseiLinearLayout)
+            val rookie = levelsLayout.findViewById<LinearLayout>(R.id.rookie)
+            val amateur = levelsLayout.findViewById<LinearLayout>(R.id.amateur)
+            val expert = levelsLayout.findViewById<LinearLayout>(R.id.expert)
+            val master = levelsLayout.findViewById<LinearLayout>(R.id.master)
+            val sensei = levelsLayout.findViewById<LinearLayout>(R.id.sensei)
             levelsArray.add(rookie)
             levelsArray.add(amateur)
             levelsArray.add(expert)
             levelsArray.add(master)
             levelsArray.add(sensei)
 
-            for (level in levelsArray) {
+            for (kana in JWriterDatabase.getInstance(this).kanaDao().getKana()) {
+                if (kana.level != null) {
+                    println(kana.level)
+                    when (kana.level) {
+                        1, 2 -> levelsItemArray[ROOKIE] += 1
+                        3 -> levelsItemArray[AMATEUR] += 1
+                        4 -> levelsItemArray[EXPERT] += 1
+                        5 -> levelsItemArray[MASTER] += 1
+                        6 -> levelsItemArray[SENSEI] += 1
+                    }
+                }
+            }
+
+            for ((index, level) in levelsArray.withIndex()) {
+                val name = level.context.resources.getResourceEntryName(level.id)
+                level.findViewById<TextView>(resources.getIdentifier("${name}NumKanaTextView", "id", packageName)).text = levelsItemArray[index].toString()
                level.setOnClickListener {
                     println("level")
                 }

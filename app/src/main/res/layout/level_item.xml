@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:id="@+id/rookieLinearLayout"
+        android:id="@+id/rookie"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -20,9 +20,11 @@
         android:focusable="true">
 
         <TextView
+            android:id="@+id/rookieNumKanaTextView"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:text="0"
+            android:textColor="@color/white"
             android:textStyle="bold"
             android:background="@drawable/square_outline"
             android:textSize="30sp"
@@ -43,7 +45,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/amateurLinearLayout"
+        android:id="@+id/amateur"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -56,8 +58,10 @@
         android:focusable="true">
 
         <TextView
+            android:id="@+id/amateurNumKanaTextView"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:textColor="@color/white"
             android:text="0"
             android:textStyle="bold"
             android:background="@drawable/square_outline"
@@ -79,7 +83,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/expertLinearLayout"
+        android:id="@+id/expert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -92,9 +96,11 @@
         android:focusable="true">
 
         <TextView
+            android:id="@+id/expertNumKanaTextView"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:text="0"
+            android:textColor="@color/white"
             android:textStyle="bold"
             android:background="@drawable/square_outline"
             android:textSize="30sp"
@@ -115,7 +121,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/masterLinearLayout"
+        android:id="@+id/master"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -128,9 +134,11 @@
         android:focusable="true">
 
         <TextView
+            android:id="@+id/masterNumKanaTextView"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:text="0"
+            android:textColor="@color/white"
             android:textStyle="bold"
             android:background="@drawable/square_outline"
             android:textSize="30sp"
@@ -151,7 +159,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/senseiLinearLayout"
+        android:id="@+id/sensei"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -164,9 +172,11 @@
         android:focusable="true">
 
         <TextView
+            android:id="@+id/senseiNumKanaTextView"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:text="0"
+            android:textColor="@color/white"
             android:textStyle="bold"
             android:background="@drawable/square_outline"
             android:textSize="30sp"
@@ -179,7 +189,7 @@
             android:textStyle="bold"
             android:text="Sensei"
             android:background="@drawable/rounded_square"
-            android:backgroundTint="#FFBA01"
+            android:backgroundTint="#E1AD01"
             android:textColor="@color/white"
             android:gravity="center"
             android:textSize="30sp" />
