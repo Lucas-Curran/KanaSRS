@@ -4,13 +4,16 @@ import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
 import androidx.core.graphics.BlendModeColorFilterCompat
@@ -37,14 +40,22 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var levelsLayout: LinearLayout
     private lateinit var showMoreArrow: ImageView
     private lateinit var summaryButton: Button
-    private lateinit var templateLevels: RelativeLayout
 
     private var showMore = true
     private var moving = false
     private var numItemsToReview: Int = 0
     private var mostRecentReview = Long.MAX_VALUE
     private var kanaToReview = ArrayList<Kana>()
+    private var levelsArray = ArrayList<View>()
 
+    val MotionEvent.up get() = action == MotionEvent.ACTION_UP
+
+    private fun MotionEvent.isIn(view: View): Boolean {
+        val rect = Rect(view.left, view.top, view.right, view.bottom)
+        return rect.contains((view.left + x).toInt(), (view.top + y).toInt())
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -94,9 +105,30 @@ class MenuActivity : AppCompatActivity() {
             summaryLayout = findViewById(R.id.summaryRelativeLayout)
             levelsLayout = findViewById(R.id.levelsLayout)
 
+            val rookie = levelsLayout.findViewById<LinearLayout>(R.id.rookieLinearLayout)
+            val amateur = levelsLayout.findViewById<LinearLayout>(R.id.amateurLinearLayout)
+            val expert = levelsLayout.findViewById<LinearLayout>(R.id.expertLinearLayout)
+            val master = levelsLayout.findViewById<LinearLayout>(R.id.masterLinearLayout)
+            val sensei = levelsLayout.findViewById<LinearLayout>(R.id.senseiLinearLayout)
+            levelsArray.add(rookie)
+            levelsArray.add(amateur)
+            levelsArray.add(expert)
+            levelsArray.add(master)
+            levelsArray.add(sensei)
+
+            for (level in levelsArray) {
+               level.setOnClickListener {
+                    println("level")
+                }
+            }
+
             showMoreArrow.setOnClickListener {
+
+                showMoreArrow.isSelected = !showMoreArrow.isSelected
+
                 if (showMore && !moving) {
                     moving = true
+                    showMoreArrow.isEnabled = false
                     AnimUtilities.slideView(
                         summaryLayout,
                         summaryLayout.height,
@@ -106,14 +138,16 @@ class MenuActivity : AppCompatActivity() {
                     AnimUtilities.slideView(
                         summaryButton,
                         summaryButton.height,
-                        summaryButton.height+ levelsLayout.measuredHeight + levelsLayout.marginBottom
+                        summaryButton.height + levelsLayout.measuredHeight + levelsLayout.marginBottom
                     ) {
                         showMore = false
                         moving = false
+                        showMoreArrow.isEnabled = true
                     }
                     showMoreArrow.setImageResource(android.R.drawable.arrow_up_float)
                 } else if (!showMore && !moving) {
                     moving = true
+                    showMoreArrow.isEnabled = false
                     AnimUtilities.slideView(
                         summaryLayout,
                         summaryLayout.height,
@@ -126,25 +160,10 @@ class MenuActivity : AppCompatActivity() {
                     ) {
                         moving = false
                         showMore = true
+                        showMoreArrow.isEnabled = true
                     }
                     showMoreArrow.setImageResource(android.R.drawable.arrow_down_float)
                 }
-            }
-
-            levelsLayout.findViewById<LinearLayout>(R.id.rookieLinearLayout).setOnClickListener {
-                println("rookie")
-            }
-            levelsLayout.findViewById<LinearLayout>(R.id.amateurLinearLayout).setOnClickListener {
-                println("amateur")
-            }
-            levelsLayout.findViewById<LinearLayout>(R.id.expertLinearLayout).setOnClickListener {
-                println("expert")
-            }
-            levelsLayout.findViewById<LinearLayout>(R.id.masterLinearLayout).setOnClickListener {
-                println("master")
-            }
-            levelsLayout.findViewById<LinearLayout>(R.id.senseiLinearLayout).setOnClickListener {
-                println("sensei")
             }
 
             lessonButton = findViewById(R.id.lessonButton)

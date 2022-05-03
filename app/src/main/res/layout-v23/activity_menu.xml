@@ -198,14 +198,14 @@
 
                     <ImageView
                         android:id="@+id/arrowImageView"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentEnd="true"
+                        android:layout_width="200dp"
+                        android:layout_height="25dp"
+                        android:layout_centerHorizontal="true"
                         android:layout_marginStart="25dp"
+                        android:layout_marginTop="20dp"
                         android:layout_marginEnd="25dp"
-                        android:foreground="?android:attr/selectableItemBackground"
+                        android:padding="2dp"
+                        android:background="@drawable/pill_selector"
                         android:src="@android:drawable/arrow_down_float" />
 
                 </RelativeLayout>

@@ -183,6 +183,18 @@
                     android:layout_height="65dp"
                     android:layout_below="@id/katakanaProgressView"/>
 
+                <include
+                    android:id="@+id/levelsLayout"
+                    layout="@layout/level_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/belowKatakanaSpace"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true" />
+
                 <RelativeLayout
                     android:id="@+id/showMoreRelativeLayout"
                     android:layout_width="match_parent"
@@ -204,22 +216,6 @@
                         android:src="@android:drawable/arrow_down_float" />
 
                 </RelativeLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <include
-                    android:id="@+id/levelsLayout"
-                    layout="@layout/level_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginEnd="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true" />
 
             </RelativeLayout>
 

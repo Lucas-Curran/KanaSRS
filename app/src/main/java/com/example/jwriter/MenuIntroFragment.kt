@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.marginBottom
 import androidx.viewpager.widget.ViewPager
 import com.example.jwriter.util.AnimUtilities
 import com.google.android.material.button.MaterialButton
@@ -95,7 +96,7 @@ class MenuIntroFragment : Fragment() {
                 }
             }))
 
-           levelsLayoutTarget = AnimUtilities.newTarget(levelsLayout.findViewById(R.id.expertLinearLayout), levelsLayout.height.toFloat(), levelsLayout.width.toFloat(), first, {
+           levelsLayoutTarget = AnimUtilities.newTarget(levelsLayout.findViewById(R.id.expertLinearLayout), levelsLayout.measuredHeight.toFloat(), levelsLayout.measuredWidth.toFloat(), first, {
 
             }, {
                 showMoreArrow.isEnabled = false
@@ -128,12 +129,12 @@ class MenuIntroFragment : Fragment() {
                 AnimUtilities.slideView(
                     summaryLayout,
                     summaryLayout.height,
-                    summaryLayout.height + 800
+                    summaryLayout.height + levelsLayout.measuredHeight + levelsLayout.marginBottom
                 ) {}
                 AnimUtilities.slideView(
                     summaryButton,
                     summaryButton.height,
-                    summaryButton.height + 800
+                    summaryLayout.height + levelsLayout.measuredHeight + levelsLayout.marginBottom
                 ) {
                     nextSpotlight()
                     showMore = false
@@ -145,12 +146,12 @@ class MenuIntroFragment : Fragment() {
                 AnimUtilities.slideView(
                     summaryLayout,
                     summaryLayout.height,
-                    summaryLayout.height - 800
+                    summaryLayout.height - levelsLayout.measuredHeight - levelsLayout.marginBottom
                 ) {}
                 AnimUtilities.slideView(
                     summaryButton,
                     summaryButton.height,
-                    summaryButton.height - 800
+                    summaryLayout.height - levelsLayout.measuredHeight - levelsLayout.marginBottom
                 ) {
                     nextSpotlight()
                     moving = false
