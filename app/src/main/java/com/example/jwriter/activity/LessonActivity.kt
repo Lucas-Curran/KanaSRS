@@ -80,7 +80,7 @@ class LessonActivity : AppCompatActivity() {
         mPaint = Paint()
         mPaint!!.isAntiAlias = true
         mPaint!!.isDither = true
-        mPaint!!.color = Color.GREEN
+        mPaint!!.color = Color.WHITE
         mPaint!!.style = Paint.Style.STROKE
         mPaint!!.strokeJoin = Paint.Join.ROUND
         mPaint!!.strokeCap = Paint.Cap.ROUND
