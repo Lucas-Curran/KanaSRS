@@ -13,7 +13,7 @@
         app:showAsAction="collapseActionView|withText"/>
     <item
         android:id="@+id/report"
-        android:title="Report"
+        android:title="Contact"
         android:icon="@android:drawable/ic_dialog_alert"
         app:showAsAction="collapseActionView|withText"/>
 </menu>

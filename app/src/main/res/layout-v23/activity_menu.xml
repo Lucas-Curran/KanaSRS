@@ -182,11 +182,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/belowKatakanaSpace"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="30dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true" />
+                    android:layout_marginBottom="30dp" />
 
                 <RelativeLayout
                     android:id="@+id/showMoreRelativeLayout"
@@ -242,7 +242,7 @@
                     android:background="@drawable/items_review_background"
                     android:elevation="50dp"
                     android:gravity="center"
-                    android:text="5" />
+                    android:text="0" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/reviewButton"
