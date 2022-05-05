@@ -1,10 +1,12 @@
 package com.example.jwriter.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
-import android.graphics.Color
+import android.graphics.*
 import android.media.MediaPlayer
 import android.os.*
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
@@ -16,6 +18,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.marginBottom
 import androidx.core.view.updateLayoutParams
 import com.example.jwriter.R
 import com.example.jwriter.database.JWriterDatabase
@@ -24,8 +29,8 @@ import com.example.jwriter.util.KanaConverter
 import com.github.jinatonic.confetti.CommonConfetti
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
-import java.io.File
 
+private var mPaint: Paint? = null
 
 class LessonActivity : AppCompatActivity() {
 
@@ -47,6 +52,7 @@ class LessonActivity : AppCompatActivity() {
     private val FIRST_KANA = 0
     private val KANA_LETTER_SCREEN = 0
     private val KANA_GIF_SCREEN = 1
+    private val KANA_DRAW_SCREEN = 2
 
     private lateinit var buttonList: ArrayList<ImageButton>
 
@@ -70,6 +76,15 @@ class LessonActivity : AppCompatActivity() {
         rootView = findViewById(R.id.rootView)
 
         buttonList = ArrayList()
+
+        mPaint = Paint()
+        mPaint!!.isAntiAlias = true
+        mPaint!!.isDither = true
+        mPaint!!.color = Color.GREEN
+        mPaint!!.style = Paint.Style.STROKE
+        mPaint!!.strokeJoin = Paint.Join.ROUND
+        mPaint!!.strokeCap = Paint.Cap.ROUND
+        mPaint!!.strokeWidth = 12F
 
         lessonTabLayout.addOnTabSelectedListener( object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -128,9 +143,11 @@ class LessonActivity : AppCompatActivity() {
                 //Add two tabs for letter and for gif
                 val letterTab = itemTabLayout.newTab()
                 val gifTab = itemTabLayout.newTab()
+                val writeTab = itemTabLayout.newTab()
 
                 itemTabLayout.addTab(letterTab)
                 itemTabLayout.addTab(gifTab)
+                itemTabLayout.addTab(writeTab)
 
                 val tempViewAnimator = newView.findViewById<ViewAnimator>(R.id.viewAnimator)
                 val nextButton = newView.findViewById<ImageButton>(R.id.nextItemButton)
@@ -138,6 +155,11 @@ class LessonActivity : AppCompatActivity() {
 
                 buttonList.add(nextButton)
                 buttonList.add(previousButton)
+
+                val drawingView = DrawingView(this)
+                drawingView.background = ContextCompat.getDrawable(this, R.drawable.pink_outline)
+
+                tempViewAnimator.addView(drawingView)
 
                 setNextAnim(tempViewAnimator)
 
@@ -169,7 +191,7 @@ class LessonActivity : AppCompatActivity() {
 
                 nextButton.setOnSingleClickListener {
                     //If on the last item and gif screen, execute code to finish lesson
-                    if (rootViewAnimator.displayedChild == subList.lastIndex && tempViewAnimator.displayedChild == KANA_GIF_SCREEN) {
+                    if (rootViewAnimator.displayedChild == subList.lastIndex && tempViewAnimator.displayedChild == KANA_DRAW_SCREEN) {
                         val view = layoutInflater.inflate(R.layout.lesson_completed_dialog, null)
                         val builder = AlertDialog.Builder(this, R.style.DialogTheme).setView(view).create()
                         builder.setCancelable(false)
@@ -198,7 +220,7 @@ class LessonActivity : AppCompatActivity() {
                         builder.show()
                         startConfetti(rootView)
 
-                    } else if (tempViewAnimator.displayedChild == KANA_GIF_SCREEN) {
+                    } else if (tempViewAnimator.displayedChild == KANA_DRAW_SCREEN) {
                         //If on gif screen, show next kana and switch current kana back to letter tab
                         disableButtons()
                         lessonTabLayout.getTabAt(newTab.position+1)?.select()
@@ -207,16 +229,17 @@ class LessonActivity : AppCompatActivity() {
                             enableButtons()
                         }, rootViewAnimator.inAnimation.duration)
                     } else {
-                        //In case of the else, it switches from letter tab to gif tab
+                        //In case of the else, it switches from letter tab to gif tab or draw tab
+                            //With new draw tab, if the next tab is draw, switch icon
                         //However if on the last item, set the right arrow icon to a checkmark and set the background to lime,
                             // to indicate end of lesson
-                        if (rootViewAnimator.displayedChild == subList.lastIndex) {
+                        if (rootViewAnimator.displayedChild == subList.lastIndex && (itemTabLayout.selectedTabPosition+1 == KANA_DRAW_SCREEN)) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 nextButton.setImageResource(R.drawable.ic_checkmark)
                                 nextButton.setBackgroundColor(resources.getColor(R.color.lime, theme))
                             }
                         }
-                        itemTabLayout.selectTab(gifTab)
+                        itemTabLayout.getTabAt(itemTabLayout.selectedTabPosition+1)?.select()
                     }
                 }
 
@@ -226,14 +249,14 @@ class LessonActivity : AppCompatActivity() {
                         return@setOnSingleClickListener
                     }
                     //If on the gif screen, then go back to the letter tab. Else, it means they are on letter screen, so go to the previous kana
-                    if (tempViewAnimator.displayedChild == KANA_GIF_SCREEN) {
+                    if (tempViewAnimator.displayedChild != KANA_LETTER_SCREEN) {
                         if (rootViewAnimator.displayedChild == subList.lastIndex) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 nextButton.setImageResource(R.drawable.ic_right_arrow)
                                 nextButton.setBackgroundColor(resources.getColor(R.color.azure, theme))
                             }
                         }
-                        itemTabLayout.selectTab(letterTab)
+                        itemTabLayout.getTabAt(itemTabLayout.selectedTabPosition-1)?.select()
                     } else {
                         lessonTabLayout.getTabAt(newTab.position-1)?.select()
                     }
@@ -292,6 +315,91 @@ class LessonActivity : AppCompatActivity() {
     private fun setPrevAnim(viewAnimator: ViewAnimator) {
         viewAnimator.inAnimation = prevAnimIn
         viewAnimator.outAnimation = prevAnimOut
+    }
+
+    class DrawingView(var c: Context) : View(c) {
+
+        private var mBitmap: Bitmap? = null
+        private var mCanvas: Canvas? = null
+        private val mPath: Path = Path()
+        private val mBitmapPaint: Paint = Paint(Paint.DITHER_FLAG)
+        private val circlePaint: Paint = Paint()
+        private val circlePath: Path = Path()
+
+        init {
+            circlePaint.isAntiAlias = true
+            circlePaint.color = Color.BLUE
+            circlePaint.style = Paint.Style.STROKE
+            circlePaint.strokeJoin = Paint.Join.MITER
+            circlePaint.strokeWidth = 4f
+        }
+
+        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+            super.onSizeChanged(w, h, oldw, oldh)
+            mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            mCanvas = Canvas(mBitmap!!)
+        }
+
+        override fun onDraw(canvas: Canvas) {
+            super.onDraw(canvas)
+            canvas.drawBitmap(mBitmap!!, 0F, 0F, mBitmapPaint)
+            canvas.drawPath(mPath, mPaint!!)
+            canvas.drawPath(circlePath, circlePaint)
+        }
+
+        private var mX = 0f
+        private var mY = 0f
+        private fun touchStart(x: Float, y: Float) {
+            mPath.reset()
+            mPath.moveTo(x, y)
+            mX = x
+            mY = y
+        }
+
+        private fun touchMove(x: Float, y: Float) {
+            val dx = Math.abs(x - mX)
+            val dy = Math.abs(y - mY)
+            if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+                mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2)
+                mX = x
+                mY = y
+                circlePath.reset()
+                circlePath.addCircle(mX, mY, 30F, Path.Direction.CW)
+            }
+        }
+
+        private fun touchUp() {
+            mPath.lineTo(mX, mY)
+            circlePath.reset()
+            // commit the path to our offscreen
+            mCanvas?.drawPath(mPath, mPaint!!)
+            // kill this so we don't double draw
+            mPath.reset()
+        }
+
+        override fun onTouchEvent(event: MotionEvent): Boolean {
+            val x = event.x
+            val y = event.y
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    touchStart(x, y)
+                    invalidate()
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    touchMove(x, y)
+                    invalidate()
+                }
+                MotionEvent.ACTION_UP -> {
+                    touchUp()
+                    invalidate()
+                }
+            }
+            return true
+        }
+
+        companion object {
+            private const val TOUCH_TOLERANCE = 4f
+        }
     }
 
 }
