@@ -14,35 +14,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/lessonLinearLayout">
 
-    <ViewAnimator
-        android:id="@+id/viewAnimator"
-        android:layout_width="match_parent"
-        android:layout_height="300dp">
-
-        <me.grantland.widget.AutofitTextView
-            android:id="@+id/kanaTextView"
+        <ViewAnimator
+            android:id="@+id/viewAnimator"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="あ"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+            android:layout_height="300dp">
 
-        <WebView
-            android:id="@+id/strokeWebView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="20dp"
-            android:background="@drawable/square_outline"/>
+            <TextView
+                android:id="@+id/kanaTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoSizeMaxTextSize="280sp"
+                android:autoSizeMinTextSize="180sp"
+                android:autoSizeTextType="uniform"
+                android:gravity="center"
+                android:text="あ"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
-    </ViewAnimator>
+            <WebView
+                android:id="@+id/strokeWebView"
+                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/square_outline" />
+
+        </ViewAnimator>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/itemTabLayout"
             android:layout_width="match_parent"
             android:layout_height="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_below="@id/viewAnimator"
-            android:layout_marginBottom="15dp"
             android:backgroundTint="@android:color/transparent"
             app:tabBackground="@drawable/item_tab_selector"
             app:tabGravity="center"
@@ -56,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@id/infoLayout"
+        app:layout_constraintBottom_toTopOf="@id/infoScrollView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topRelativeLayout">
@@ -101,39 +105,39 @@
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/infoLayout"
+    <ScrollView
+        android:id="@+id/infoScrollView"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:layout_constraintHeight_default="wrap"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/lesson_box"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lessonLinearLayout"
-        app:layout_constraintBottom_toBottomOf="@id/itemConstraintLayout"
-        android:background="@drawable/lesson_box"
-        android:layout_margin="10dp">
+        app:layout_constraintBottom_toBottomOf="@id/itemConstraintLayout">
+
+    <RelativeLayout
+        android:id="@+id/infoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/mnemonicTextView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_above="@id/kanaAudioImageView"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_margin="10dp"
             android:background="@drawable/lesson_box"
             android:padding="10dp"
-            android:text="To remember this letter, think of the center as forming an 'A'"
+            android:text="To remember this letter, think of the center as forming an 'A'."
             android:textColor="@color/white"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
         <ImageView
             android:id="@+id/kanaAudioImageView"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@id/mnemonicTextView"
             android:layout_centerHorizontal="true"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
@@ -143,5 +147,7 @@
             android:src="@drawable/ic_audio" />
 
     </RelativeLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
