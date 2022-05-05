@@ -3,15 +3,19 @@ package com.example.jwriter.activity
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
@@ -24,6 +28,7 @@ import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
 import com.example.jwriter.notification.NotificationReceiver
 import com.example.jwriter.util.AnimUtilities
+import com.google.android.material.button.MaterialButton
 import java.time.Duration
 import java.util.*
 
@@ -48,11 +53,11 @@ class MenuActivity : AppCompatActivity() {
     private var levelsArray = ArrayList<View>()
     private var levelsItemArray = IntArray(5)
 
-    val ROOKIE = 0
-    val AMATEUR = 1
-    val EXPERT = 2
-    val MASTER = 3
-    val SENSEI = 4
+    private val ROOKIE = 0
+    private val AMATEUR = 1
+    private val EXPERT = 2
+    private val MASTER = 3
+    private val SENSEI = 4
 
     val MotionEvent.up get() = action == MotionEvent.ACTION_UP
 
@@ -225,8 +230,8 @@ class MenuActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.report -> println("report")
-            R.id.faq -> println("faq")
+            R.id.report -> showReportDialog()
+            R.id.faq -> showFAQ()
             R.id.refresh -> refreshActivity()
         }
         return super.onOptionsItemSelected(item)
@@ -237,6 +242,36 @@ class MenuActivity : AppCompatActivity() {
         overridePendingTransition(0, 0)
         startActivity(intent)
         overridePendingTransition(0, 0)
+    }
+
+    private fun showFAQ() {
+        val view = layoutInflater.inflate(R.layout.faq_dialog, null)
+        val builder = AlertDialog.Builder(this, R.style.DialogTheme).setView(view).create()
+        builder.show()
+    }
+
+    private fun showReportDialog() {
+        val view = layoutInflater.inflate(R.layout.report_dialog, null)
+        val builder = AlertDialog.Builder(this, R.style.DialogTheme).setView(view).create()
+
+        view.findViewById<MaterialButton>(R.id.reportButton).setOnClickListener {
+            val text = view.findViewById<TextView>(R.id.reportTextView).text
+            val email = Intent(Intent.ACTION_VIEW)
+            val data = Uri.parse("mailto:?subject=JWriter email&body=$text&to=report.jwriter@gmail.com")
+            email.data = data
+            try {
+                startActivity(Intent.createChooser(email, "Send mail..."))
+                finish()
+            } catch (ex: ActivityNotFoundException) {
+                Toast.makeText(
+                    this,
+                    "There is no email client installed.", Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            builder.dismiss()
+        }
+        builder.show()
     }
 
     private fun formatTime(milliseconds: Long): String {
