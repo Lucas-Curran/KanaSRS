@@ -3,8 +3,8 @@ package com.example.jwriter.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.media.MediaPlayer
 import android.os.*
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
@@ -13,13 +13,19 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.view.updateLayoutParams
+import com.example.jwriter.R
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
 import com.example.jwriter.util.KanaConverter
-import com.example.jwriter.R
 import com.github.jinatonic.confetti.CommonConfetti
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
+import java.io.File
+
 
 class LessonActivity : AppCompatActivity() {
 
@@ -35,6 +41,8 @@ class LessonActivity : AppCompatActivity() {
     private lateinit var  prevAnimOut: Animation
 
     private lateinit var rootView: RelativeLayout
+
+    private var mPlayer = MediaPlayer()
 
     private val FIRST_KANA = 0
     private val KANA_LETTER_SCREEN = 0
@@ -105,7 +113,17 @@ class LessonActivity : AppCompatActivity() {
                 newView.findViewById<TextView>(R.id.englishTextView).text =
                     kanaConverter._hiraganaToRomaji(kana.letter)
 
+                newView.findViewById<ImageView>(R.id.kanaAudioImageView).setOnClickListener {
+                    playAudio(kanaConverter._hiraganaToRomaji(kana.letter))
+                }
+
                 val itemTabLayout = newView.findViewById<TabLayout>(R.id.itemTabLayout)
+
+                val constraintLayout = newView.findViewById<ConstraintLayout>(R.id.itemConstraintLayout)
+                val constraintSet = ConstraintSet()
+                constraintSet.clone(constraintLayout)
+                constraintSet.connect(newView.findViewById<RelativeLayout>(R.id.topRelativeLayout).id, ConstraintSet.BOTTOM, itemTabLayout.id, ConstraintSet.TOP)
+                constraintSet.applyTo(constraintLayout)
 
                 //Add two tabs for letter and for gif
                 val letterTab = itemTabLayout.newTab()
@@ -231,6 +249,13 @@ class LessonActivity : AppCompatActivity() {
                     rootViewAnimator.removeView(loadingBar)
                 }
             }
+        }
+    }
+
+    private fun playAudio(letter: String) {
+        if (!mPlayer.isPlaying) {
+            mPlayer = MediaPlayer.create(this, resources.getIdentifier(letter, "raw", packageName))
+            mPlayer.start()
         }
     }
 
