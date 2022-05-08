@@ -29,6 +29,7 @@ import com.example.jwriter.database.Kana
 import com.example.jwriter.notification.NotificationReceiver
 import com.example.jwriter.util.AnimUtilities
 import com.google.android.material.button.MaterialButton
+import com.skydoves.progressview.ProgressView
 import java.time.Duration
 import java.util.*
 
@@ -44,10 +45,14 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var levelsLayout: LinearLayout
     private lateinit var showMoreArrow: ImageView
     private lateinit var summaryButton: Button
+    private lateinit var hiraganaProgressView: ProgressView
+    private lateinit var katakanaProgressView: ProgressView
 
     private var showMore = true
     private var moving = false
     private var numItemsToReview: Int = 0
+    private var numHiraganaMastered: Float = 0f
+    private var numKatakanaMastered: Float = 0f
     private var mostRecentReview = Long.MAX_VALUE
     private var kanaToReview = ArrayList<Kana>()
     private var levelsArray = ArrayList<View>()
@@ -87,6 +92,11 @@ class MenuActivity : AppCompatActivity() {
                         }
                     }
                 }
+                if (kana.level == 6 && kana.isHiragana) {
+                    numHiraganaMastered++
+                } else if (kana.level == 6 && !kana.isHiragana) {
+                    numKatakanaMastered++
+                }
             }
 
             setContentView(R.layout.activity_menu)
@@ -110,6 +120,14 @@ class MenuActivity : AppCompatActivity() {
                 )
             setSupportActionBar(toolbar)
 
+            hiraganaProgressView = findViewById(R.id.hiraganaProgressView)
+            katakanaProgressView = findViewById(R.id.katakanaProgressView)
+
+            hiraganaProgressView.progress = numHiraganaMastered
+            katakanaProgressView.progress = numKatakanaMastered
+            hiraganaProgressView.labelText = "Hiragana (${numHiraganaMastered.toInt()}/46)"
+            katakanaProgressView.labelText = "Katakana (${numKatakanaMastered.toInt()}/46)"
+
             summaryButton = findViewById(R.id.summaryButton)
             showMoreLayout = findViewById(R.id.showMoreRelativeLayout)
             showMoreArrow = findViewById(R.id.arrowImageView)
@@ -129,7 +147,6 @@ class MenuActivity : AppCompatActivity() {
 
             for (kana in JWriterDatabase.getInstance(this).kanaDao().getKana()) {
                 if (kana.level != null) {
-                    println(kana.level)
                     when (kana.level) {
                         1, 2 -> levelsItemArray[ROOKIE] += 1
                         3 -> levelsItemArray[AMATEUR] += 1
@@ -143,8 +160,10 @@ class MenuActivity : AppCompatActivity() {
             for ((index, level) in levelsArray.withIndex()) {
                 val name = level.context.resources.getResourceEntryName(level.id)
                 level.findViewById<TextView>(resources.getIdentifier("${name}NumKanaTextView", "id", packageName)).text = levelsItemArray[index].toString()
-               level.setOnClickListener {
-                    println("level")
+                level.setOnClickListener {
+                    val intent = Intent(this, KanaGridActivity::class.java)
+                    intent.putExtra("level", name)
+                    startActivity(intent)
                 }
             }
 
@@ -307,6 +326,11 @@ class MenuActivity : AppCompatActivity() {
             AlarmManager.INTERVAL_DAY,
             pendingIntent
         )
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        refreshActivity()
     }
 
 }
