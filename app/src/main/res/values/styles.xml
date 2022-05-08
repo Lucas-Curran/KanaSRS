@@ -3,6 +3,8 @@
     <style name="Toolbar.Custom" parent="@style/Base.TextAppearance.AppCompat.Title">
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">#ffff</item>
+        <item name="font">@font/aldrich</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:actionOverflowButtonStyle">@style/ActionButtonOverflow</item>
         <item name="actionOverflowButtonStyle">@style/ActionButtonOverflow</item>
     </style>
