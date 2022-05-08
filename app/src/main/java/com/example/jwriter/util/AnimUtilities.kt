@@ -3,6 +3,8 @@ package com.example.jwriter.util
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.os.Build
+import android.os.SystemClock
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -10,6 +12,7 @@ import androidx.core.animation.doOnEnd
 import com.takusemba.spotlight.OnTargetListener
 import com.takusemba.spotlight.Target
 import com.takusemba.spotlight.shape.RoundedRectangle
+import java.time.Duration
 
 /**
  * Utilities class for animations during program
@@ -72,6 +75,18 @@ class AnimUtilities {
 
                 }).build()
             return target
+        }
+
+        fun formatTime(milliseconds: Long): String {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val duration = Duration.ofMillis(milliseconds)
+                val newSeconds = duration.seconds - duration.toMinutes() * 60
+                return duration.run {
+                    "%02d:%02d:%02d".format(toHours(), toMinutes(), newSeconds)
+                }
+            } else {
+                return ""
+            }
         }
 
     }
