@@ -17,6 +17,7 @@
         <ViewAnimator
             android:id="@+id/viewAnimator"
             android:layout_width="match_parent"
+            android:layout_margin="10dp"
             android:layout_height="300dp">
 
             <TextView
@@ -33,7 +34,6 @@
 
             <WebView
                 android:id="@+id/strokeWebView"
-                android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/square_outline" />
@@ -44,9 +44,9 @@
             android:id="@+id/itemTabLayout"
             android:layout_width="match_parent"
             android:layout_height="5dp"
+            android:layout_below="@id/viewAnimator"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_below="@id/viewAnimator"
             android:backgroundTint="@android:color/transparent"
             app:tabBackground="@drawable/item_tab_selector"
             app:tabGravity="center"
