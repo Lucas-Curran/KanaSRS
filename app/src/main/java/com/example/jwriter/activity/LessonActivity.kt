@@ -6,9 +6,11 @@ import android.content.Intent
 import android.graphics.*
 import android.media.MediaPlayer
 import android.os.*
+import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
@@ -19,9 +21,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.marginBottom
-import androidx.core.view.updateLayoutParams
+import androidx.core.view.setPadding
+import androidx.core.view.updateMargins
+import com.example.jwriter.DrawingView
 import com.example.jwriter.R
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
@@ -29,8 +31,6 @@ import com.example.jwriter.util.KanaConverter
 import com.github.jinatonic.confetti.CommonConfetti
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
-
-private var mPaint: Paint? = null
 
 class LessonActivity : AppCompatActivity() {
 
@@ -76,15 +76,6 @@ class LessonActivity : AppCompatActivity() {
         rootView = findViewById(R.id.rootView)
 
         buttonList = ArrayList()
-
-        mPaint = Paint()
-        mPaint!!.isAntiAlias = true
-        mPaint!!.isDither = true
-        mPaint!!.color = Color.WHITE
-        mPaint!!.style = Paint.Style.STROKE
-        mPaint!!.strokeJoin = Paint.Join.ROUND
-        mPaint!!.strokeCap = Paint.Cap.ROUND
-        mPaint!!.strokeWidth = 12F
 
         lessonTabLayout.addOnTabSelectedListener( object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -156,10 +147,41 @@ class LessonActivity : AppCompatActivity() {
                 buttonList.add(nextButton)
                 buttonList.add(previousButton)
 
-                val drawingView = DrawingView(this)
-                drawingView.background = ContextCompat.getDrawable(this, R.drawable.pink_outline)
+                val relativeLayout = RelativeLayout(this)
+                relativeLayout.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
+                relativeLayout.background = ContextCompat.getDrawable(this, R.drawable.pink_outline)
 
-                tempViewAnimator.addView(drawingView)
+                val drawingView = DrawingView(this)
+                val clearButton = Button(this)
+                clearButton.text = "Clear"
+                clearButton.textSize = 12f
+                clearButton.minimumHeight = 0
+                clearButton.layoutParams =
+                    RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT).apply {
+                        addRule(RelativeLayout.ALIGN_PARENT_END)
+                        addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
+                        updateMargins(0, 100, 10, 10)
+                    }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    clearButton.setTextColor(resources.getColor(R.color.white, theme))
+                }
+                clearButton.height = 75
+                clearButton.setPadding(10)
+                clearButton.background = ContextCompat.getDrawable(this, R.drawable.pink_outline)
+                val outValue = TypedValue()
+                theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    clearButton.foreground = ContextCompat.getDrawable(this, outValue.resourceId)
+                }
+
+                clearButton.setOnClickListener {
+                    drawingView.clearDrawing()
+                }
+
+                relativeLayout.addView(clearButton)
+                relativeLayout.addView(drawingView)
+
+                tempViewAnimator.addView(relativeLayout)
 
                 setNextAnim(tempViewAnimator)
 
@@ -316,92 +338,6 @@ class LessonActivity : AppCompatActivity() {
         viewAnimator.inAnimation = prevAnimIn
         viewAnimator.outAnimation = prevAnimOut
     }
-
-    class DrawingView(var c: Context) : View(c) {
-
-        private var mBitmap: Bitmap? = null
-        private var mCanvas: Canvas? = null
-        private val mPath: Path = Path()
-        private val mBitmapPaint: Paint = Paint(Paint.DITHER_FLAG)
-        private val circlePaint: Paint = Paint()
-        private val circlePath: Path = Path()
-
-        init {
-            circlePaint.isAntiAlias = true
-            circlePaint.color = Color.BLUE
-            circlePaint.style = Paint.Style.STROKE
-            circlePaint.strokeJoin = Paint.Join.MITER
-            circlePaint.strokeWidth = 4f
-        }
-
-        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-            super.onSizeChanged(w, h, oldw, oldh)
-            mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
-            mCanvas = Canvas(mBitmap!!)
-        }
-
-        override fun onDraw(canvas: Canvas) {
-            super.onDraw(canvas)
-            canvas.drawBitmap(mBitmap!!, 0F, 0F, mBitmapPaint)
-            canvas.drawPath(mPath, mPaint!!)
-            canvas.drawPath(circlePath, circlePaint)
-        }
-
-        private var mX = 0f
-        private var mY = 0f
-        private fun touchStart(x: Float, y: Float) {
-            mPath.reset()
-            mPath.moveTo(x, y)
-            mX = x
-            mY = y
-        }
-
-        private fun touchMove(x: Float, y: Float) {
-            val dx = Math.abs(x - mX)
-            val dy = Math.abs(y - mY)
-            if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
-                mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2)
-                mX = x
-                mY = y
-                circlePath.reset()
-                circlePath.addCircle(mX, mY, 30F, Path.Direction.CW)
-            }
-        }
-
-        private fun touchUp() {
-            mPath.lineTo(mX, mY)
-            circlePath.reset()
-            // commit the path to our offscreen
-            mCanvas?.drawPath(mPath, mPaint!!)
-            // kill this so we don't double draw
-            mPath.reset()
-        }
-
-        override fun onTouchEvent(event: MotionEvent): Boolean {
-            val x = event.x
-            val y = event.y
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    touchStart(x, y)
-                    invalidate()
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    touchMove(x, y)
-                    invalidate()
-                }
-                MotionEvent.ACTION_UP -> {
-                    touchUp()
-                    invalidate()
-                }
-            }
-            return true
-        }
-
-        companion object {
-            private const val TOUCH_TOLERANCE = 4f
-        }
-    }
-
 }
 
 class OnSingleClickListener(private val block: () -> Unit) : View.OnClickListener {
