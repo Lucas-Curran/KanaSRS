@@ -10,5 +10,10 @@
     <color name="pink">#c02e4c</color>
     <color name="lime">#90EE90</color>
     <color name="azure">#4599ff</color>
+    <color name="rookie_pink">#f200a0</color>
+    <color name="amateur_purple">#9b34b4</color>
+    <color name="expert_blue">#4563df</color>
+    <color name="master_blue">#01a0f2</color>
+    <color name="sensei_gold">#E1AD01</color>
     <color name="spotlight_background">#BF000000</color>
 </resources>
