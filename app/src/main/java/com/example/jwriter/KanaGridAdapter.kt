@@ -28,6 +28,7 @@ import com.example.jwriter.activity.setOnSingleClickListener
 import com.example.jwriter.database.Kana
 import com.example.jwriter.util.AnimUtilities
 import com.example.jwriter.util.KanaConverter
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 
@@ -76,6 +77,7 @@ class KanaGridAdapter(var context: Context): RecyclerView.Adapter<KanaGridAdapte
             val view = LayoutInflater.from(parent.context).inflate(R.layout.kana_info_dialog, null)
 
             val dialog = BottomSheetDialog(parent.context)
+            dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
             if (data.reviewTime != null) {
                 if (data.reviewTime!! > System.currentTimeMillis()) {
