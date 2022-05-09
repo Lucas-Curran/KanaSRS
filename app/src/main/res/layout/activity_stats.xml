@@ -15,10 +15,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorColor="@color/purple_200"
-        android:background="@drawable/dialog_background"
-        app:tabSelectedTextColor="@color/purple_200"
-        app:tabTextColor="@color/white">
+        app:tabIndicatorColor="@color/pink"
+        android:background="@drawable/pink_outline"
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextColor="@android:color/darker_gray">
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/overallTab"
@@ -47,8 +47,8 @@
         android:id="@+id/progressScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statsTabLayout">
@@ -61,19 +61,5 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:paddingStart="50dp"
-        android:paddingEnd="50dp"
-        android:text="User data is only stored locally, so switching to a new phone or uninstalling will erase any stats."
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

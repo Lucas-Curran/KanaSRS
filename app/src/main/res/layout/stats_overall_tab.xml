@@ -28,12 +28,24 @@
             android:background="@android:color/darker_gray"
             android:layout_gravity="center"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="5 days"
-            android:textStyle="bold"
+        <View
+            android:layout_width="50dp"
+            android:layout_height="2dp"
             android:layout_margin="5dp"
+            android:background="@android:color/darker_gray"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="5 days"
+            android:background="@drawable/square_outline"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
             android:textSize="40sp"
             android:textColor="@color/white"/>
@@ -51,6 +63,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/dialog_background"
+                android:layout_margin="10dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -92,6 +106,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/dialog_background"
+                android:layout_margin="10dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -131,15 +147,25 @@
 
         </LinearLayout>
 
-        <ProgressBar
+        <com.skydoves.progressview.ProgressView
             android:id="@+id/kanaMasteryBar"
             android:layout_width="match_parent"
-            android:layout_height="10dp"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:progress="10"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="2dp"
-            android:max="92"/>
+            android:layout_height="20dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="20dp"
+            app:progressView_labelText="0/92"
+            app:progressView_labelColorInner="@color/white"
+            app:progressView_labelColorOuter="@color/white"
+            app:progressView_labelSize="10sp"
+            app:progressView_labelTypeface="bold"
+            app:progressView_borderWidth="1dp"
+            app:progressView_radius="0dp"
+            app:progressView_colorBackground="@color/cardview_dark_background"
+            app:progressView_max="92"
+            app:progressView_progress="0"
+            app:progressView_borderColor="@color/white"
+            app:progressView_colorProgress="#006666" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -323,9 +349,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginBottom="20dp"
             app:layout_constraintStart_toStartOf="parent"
             android:gravity="center_vertical"
-            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
             android:clickable="true"
             app:layout_constraintTop_toTopOf="parent"
             android:focusable="true">
@@ -367,6 +396,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_margin="5dp"
                 android:background="@drawable/dialog_background"
                 android:orientation="vertical">
 
@@ -380,6 +410,7 @@
                     android:textSize="30sp" />
 
                 <TextView
+                    android:id="@+id/nextReviewTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
@@ -395,6 +426,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_margin="5dp"
                 android:background="@drawable/dialog_background"
                 android:orientation="vertical">
 
@@ -403,16 +435,17 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:gravity="center"
-                    android:text="@string/next_review"
+                    android:text="@string/num_review"
                     android:textColor="@color/white"
                     android:textSize="30sp" />
 
                 <TextView
+                    android:id="@+id/reviewNumberTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
                     android:gravity="center"
-                    android:text="04:34:52"
+                    android:text="12"
                     android:textColor="@color/white"
                     android:textSize="30sp"
                     android:textStyle="bold" />

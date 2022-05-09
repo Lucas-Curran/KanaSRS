@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.R
+import com.example.jwriter.util.AnimUtilities.Companion.formatTime
 import com.google.android.material.tabs.TabLayout
 import com.skydoves.progressview.ProgressView
 import com.skydoves.progressview.progressView
@@ -34,8 +35,12 @@ class StatsActivity : AppCompatActivity() {
     private lateinit var progressScrollView: ScrollView
     private lateinit var overallView: View
 
+    private var mostRecentReview = Long.MAX_VALUE
+
     private var masteredHiragana = 0
     private var masteredKatakana = 0
+
+    private var numItemsToReview = 0
 
     private var levelsItemArray = IntArray(5)
 
@@ -93,7 +98,35 @@ class StatsActivity : AppCompatActivity() {
 
         overallView.findViewById<TextView>(R.id.hiraganaFraction).text = masteredHiragana.toString()
         overallView.findViewById<TextView>(R.id.katakanaFraction).text = masteredKatakana.toString()
-        overallView.findViewById<ProgressBar>(R.id.kanaMasteryBar).progress = masteredKatakana + masteredHiragana
+
+        val progressView = overallView.findViewById<ProgressView>(R.id.kanaMasteryBar)
+        progressView.progress = (masteredKatakana + masteredHiragana).toFloat()
+        progressView.labelText = "${(masteredKatakana + masteredHiragana)}/92"
+
+        for (kana in JWriterDatabase.getInstance(this).kanaDao().getKana()) {
+            //Check if there is a review time, and if so, check if the current time has passed the stored review time
+            // Review time is calculated during review answers and initially added when learned in lessons
+            if (kana.reviewTime != null) {
+                if (kana.reviewTime!! < System.currentTimeMillis()) {
+                    numItemsToReview++
+                } else {
+                    val millisecondsUntilReview = kana.reviewTime!! - System.currentTimeMillis()
+                    if (millisecondsUntilReview < mostRecentReview) {
+                        mostRecentReview = millisecondsUntilReview
+                    }
+                }
+            }
+        }
+
+        val nextReviewTime = overallView.findViewById<TextView>(R.id.nextReviewTextView)
+
+        if (mostRecentReview == Long.MAX_VALUE) {
+            nextReviewTime.text = "none"
+        } else {
+            nextReviewTime.text = "${formatTime(mostRecentReview)}"
+        }
+
+        overallView.findViewById<TextView>(R.id.reviewNumberTextView).text = "$numItemsToReview"
 
         for ((index, level) in levelsArray.withIndex()) {
             val name = level.resources.getResourceEntryName(level.id)
