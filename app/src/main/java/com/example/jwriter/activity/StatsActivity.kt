@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +33,9 @@ class StatsActivity : AppCompatActivity() {
     private lateinit var katakanaProgressViews: ArrayList<ProgressView>
     private lateinit var progressScrollView: ScrollView
     private lateinit var overallView: View
+
+    private var masteredHiragana = 0
+    private var masteredKatakana = 0
 
     private var levelsItemArray = IntArray(5)
 
@@ -75,10 +79,21 @@ class StatsActivity : AppCompatActivity() {
                     3 -> levelsItemArray[AMATEUR] += 1
                     4 -> levelsItemArray[EXPERT] += 1
                     5 -> levelsItemArray[MASTER] += 1
-                    6 -> levelsItemArray[SENSEI] += 1
+                    6 ->  {
+                        levelsItemArray[SENSEI] += 1
+                        if (kana.isHiragana) {
+                            masteredHiragana++
+                        } else {
+                            masteredKatakana++
+                        }
+                    }
                 }
             }
         }
+
+        overallView.findViewById<TextView>(R.id.hiraganaFraction).text = masteredHiragana.toString()
+        overallView.findViewById<TextView>(R.id.katakanaFraction).text = masteredKatakana.toString()
+        overallView.findViewById<ProgressBar>(R.id.kanaMasteryBar).progress = masteredKatakana + masteredHiragana
 
         for ((index, level) in levelsArray.withIndex()) {
             val name = level.resources.getResourceEntryName(level.id)

@@ -26,30 +26,36 @@ class KanaGridActivity : AppCompatActivity() {
         recyclerView.adapter = kanaGridAdapter
 
         val titleTextView = findViewById<TextView>(R.id.levelTitleTextView)
+        val numeralTextView = findViewById<TextView>(R.id.levelNumeralTextView)
 
         when (intent.getStringExtra("level")) {
             "rookie" -> {
                 dataList = (getKanaAtLevel(1) + getKanaAtLevel(2)).toMutableList()
+                numeralTextView.text = "Learning"
                 titleTextView.text = "ROOKIE"
                 titleTextView.setTextColor(ContextCompat.getColor(this, R.color.rookie_pink))
             }
             "amateur" -> {
                 dataList = getKanaAtLevel(3)
+                numeralTextView.text = "Understanding"
                 titleTextView.text = "AMATEUR"
                 titleTextView.setTextColor(ContextCompat.getColor(this, R.color.amateur_purple))
             }
             "expert" -> {
                 dataList = getKanaAtLevel(4)
+                numeralTextView.text = "Intermediate"
                 titleTextView.text = "EXPERT"
                 titleTextView.setTextColor(ContextCompat.getColor(this, R.color.expert_blue))
             }
             "master" -> {
                 dataList = getKanaAtLevel(5)
+                numeralTextView.text = "Proficient"
                 titleTextView.text = "MASTER"
                 titleTextView.setTextColor(ContextCompat.getColor(this, R.color.master_blue))
             }
             "sensei" -> {
                 dataList = getKanaAtLevel(6)
+                numeralTextView.text = "Mastery"
                 titleTextView.text = "SENSEI"
                 titleTextView.setTextColor(ContextCompat.getColor(this, R.color.sensei_gold))
             }
