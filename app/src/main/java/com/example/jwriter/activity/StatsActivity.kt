@@ -1,12 +1,15 @@
 package com.example.jwriter.activity
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.R
 import com.google.android.material.tabs.TabLayout
@@ -23,12 +26,20 @@ Eventually include graphs, possibly over an interval of time
 
 class StatsActivity : AppCompatActivity() {
 
-    private var score: Int = 0
     private lateinit var progressLinearLayout: LinearLayout
     private lateinit var tabLayout: TabLayout
     private lateinit var hiraganaProgressViews: ArrayList<ProgressView>
     private lateinit var katakanaProgressViews: ArrayList<ProgressView>
     private lateinit var progressScrollView: ScrollView
+    private lateinit var overallView: View
+
+    private var levelsItemArray = IntArray(5)
+
+    private val ROOKIE = 0
+    private val AMATEUR = 1
+    private val EXPERT = 2
+    private val MASTER = 3
+    private val SENSEI = 4
 
     object TabConstants {
          const val OVERALL = 0
@@ -43,11 +54,44 @@ class StatsActivity : AppCompatActivity() {
         hiraganaProgressViews = ArrayList()
         katakanaProgressViews = ArrayList()
 
+        overallView = layoutInflater.inflate(R.layout.stats_overall_tab, null)
+
+
         progressLinearLayout = findViewById(R.id.progressLinearLayout)
         tabLayout = findViewById(R.id.statsTabLayout)
         progressScrollView = findViewById(R.id.progressScrollView)
 
+        val rookie = overallView.findViewById<LinearLayout>(R.id.rookie)
+        val amateur = overallView.findViewById<LinearLayout>(R.id.amateur)
+        val expert = overallView.findViewById<LinearLayout>(R.id.expert)
+        val master = overallView.findViewById<LinearLayout>(R.id.master)
+        val sensei = overallView.findViewById<LinearLayout>(R.id.sensei)
+        val levelsArray = arrayOf(rookie, amateur, expert, master, sensei)
+
+        for (kana in JWriterDatabase.getInstance(this).kanaDao().getKana()) {
+            if (kana.level != null) {
+                when (kana.level) {
+                    1, 2 -> levelsItemArray[ROOKIE] += 1
+                    3 -> levelsItemArray[AMATEUR] += 1
+                    4 -> levelsItemArray[EXPERT] += 1
+                    5 -> levelsItemArray[MASTER] += 1
+                    6 -> levelsItemArray[SENSEI] += 1
+                }
+            }
+        }
+
+        for ((index, level) in levelsArray.withIndex()) {
+            val name = level.resources.getResourceEntryName(level.id)
+            overallView.findViewById<TextView>(resources.getIdentifier("${name}NumKanaTextView", "id", packageName)).text = levelsItemArray[index].toString()
+            level.setOnClickListener {
+                val intent = Intent(this, KanaGridActivity::class.java)
+                intent.putExtra("level", name)
+                startActivity(intent)
+            }
+        }
+
         loadUserStats()
+        overallTab()
     }
 
     /**
@@ -57,8 +101,6 @@ class StatsActivity : AppCompatActivity() {
 
         loadBars(ReviewActivity.hiraganaList, hiragana = true)
         loadBars(ReviewActivity.katakanaList, hiragana = false)
-
-        score = JWriterDatabase.getInstance(this).userDao().getAccuracy()
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
@@ -85,7 +127,6 @@ class StatsActivity : AppCompatActivity() {
                 // Handle tab unselect
             }
         })
-
     }
 
     /**
@@ -93,9 +134,7 @@ class StatsActivity : AppCompatActivity() {
      */
     private fun overallTab() {
         progressLinearLayout.removeAllViewsInLayout()
-        val test = TextView(this)
-        test.text = "Score: " + JWriterDatabase.getInstance(this).userDao().getAccuracy()
-        progressLinearLayout.addView(test)
+        progressLinearLayout.addView(overallView)
     }
 
     /**
