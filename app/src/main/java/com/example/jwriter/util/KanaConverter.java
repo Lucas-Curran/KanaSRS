@@ -39,7 +39,7 @@ public class KanaConverter {
 
     private interface Command
     {
-        public boolean run(String str);
+        boolean run(String str);
     }
 
     public KanaConverter(Boolean useObsoleteKana)
