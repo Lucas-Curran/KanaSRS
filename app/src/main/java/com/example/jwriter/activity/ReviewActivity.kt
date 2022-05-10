@@ -190,9 +190,12 @@ class ReviewActivity : AppCompatActivity() {
             }
 
             if (kanaList.size > 1) {
+                val newKanaPosition = Random.nextInt(1, kanaList.size)
                 kanaList.remove(kana)
-                val newKanaPosition = Random.nextInt(1, kanaList.size-1)
                 kanaList.add(newKanaPosition, kana)
+            } else if (kanaList.size == 2) {
+                kanaList.remove(kana)
+                kanaList.add(1, kana)
             }
         }
 
@@ -235,7 +238,9 @@ class ReviewActivity : AppCompatActivity() {
 
         if (review) {
             val kana = kanaList[0]
-            calculateNextReviewTime(kana = kana, correct = true)
+            if (!incorrectReviewAnswers.contains(kana)) {
+                calculateNextReviewTime(kana = kana, correct = true)
+            }
             kanaList.remove(kana)
         }
 
@@ -338,10 +343,13 @@ class ReviewActivity : AppCompatActivity() {
                 kana.level = kana.level?.minus(1)
             }
         }
-        val millisecondsInDay = 60 * 60 * 24 * 1000
         val now = System.currentTimeMillis()
         val nextPracticeDate = now + levelToTime(kana.level!!)
-        kana.reviewTime = nextPracticeDate
+        if (kana.level == 6) {
+            kana.reviewTime = null
+        } else {
+            kana.reviewTime = nextPracticeDate
+        }
         JWriterDatabase.getInstance(this).kanaDao().updateKana(kana)
     }
 
