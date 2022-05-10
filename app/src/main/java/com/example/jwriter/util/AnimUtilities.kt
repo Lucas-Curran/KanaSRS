@@ -3,10 +3,13 @@ package com.example.jwriter.util
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.SystemClock
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Animation
+import android.widget.ViewAnimator
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
 import com.takusemba.spotlight.OnTargetListener
@@ -18,7 +21,11 @@ import java.time.Duration
  * Utilities class for animations during program
  */
 class AnimUtilities {
+
     companion object {
+
+        var mediaPlayer = MediaPlayer()
+
         fun animateFromLeft(view: View, layout: ConstraintLayout, startDelay: Long) {
             view.x = (-layout.width).toFloat()
             view.animate().translationXBy(layout.width.toFloat() * 1.5F - view.width / 2).setStartDelay(startDelay).duration = 1000
@@ -75,6 +82,16 @@ class AnimUtilities {
 
                 }).build()
             return target
+        }
+
+        fun setNextAnim(viewAnimator: ViewAnimator, animationIn: Animation, animationOut: Animation) {
+            viewAnimator.inAnimation = animationIn
+            viewAnimator.outAnimation = animationOut
+        }
+
+        fun setPrevAnim(viewAnimator: ViewAnimator, prevAnimIn: Animation, prevAnimOut: Animation) {
+            viewAnimator.inAnimation = prevAnimIn
+            viewAnimator.outAnimation = prevAnimOut
         }
 
         fun formatTime(milliseconds: Long): String {

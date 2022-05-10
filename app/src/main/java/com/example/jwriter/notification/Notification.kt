@@ -58,7 +58,7 @@ internal class NotificationHelper(context: Context) {
             val importance = NotificationManager.IMPORTANCE_HIGH
             val notificationChannel = NotificationChannel(
                 NOTIFICATION_CHANNEL_ID,
-                "NOTIFICATION_CHANNEL_NAME",
+                "Kana Review",
                 importance
             )
             notificationChannel.enableLights(true)
