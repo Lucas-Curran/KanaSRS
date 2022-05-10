@@ -1,20 +1,25 @@
 package com.example.jwriter.activity
 
 import android.content.Intent
+import android.graphics.Paint
 import android.graphics.Typeface
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.text.Layout
+import android.view.Gravity
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.ScrollView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.core.view.get
+import com.example.jwriter.KanaInfoView
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.R
+import com.example.jwriter.database.Kana
 import com.example.jwriter.util.AnimUtilities.Companion.formatTime
 import com.google.android.material.tabs.TabLayout
+import com.skydoves.progressview.ProgressLabelConstraints
 import com.skydoves.progressview.ProgressView
 import com.skydoves.progressview.progressView
 import kotlin.random.Random
@@ -100,8 +105,24 @@ class StatsActivity : AppCompatActivity() {
         overallView.findViewById<TextView>(R.id.katakanaFraction).text = masteredKatakana.toString()
 
         val progressView = overallView.findViewById<ProgressView>(R.id.kanaMasteryBar)
-        progressView.progress = (masteredKatakana + masteredHiragana).toFloat()
-        progressView.labelText = "${(masteredKatakana + masteredHiragana)}/92"
+
+        val totalMastered = masteredHiragana + masteredKatakana
+        progressView.progress = totalMastered.toFloat()
+
+        progressView.setOnClickListener {
+            Toast.makeText(this, "$totalMastered kana mastered", Toast.LENGTH_SHORT).show()
+        }
+        progressView.setOnProgressClickListener {
+            Toast.makeText(this, "$totalMastered kana mastered", Toast.LENGTH_SHORT).show()
+        }
+
+        if (totalMastered == 92) {
+            progressView.labelText = "All Mastered!"
+            progressView.labelConstraints = ProgressLabelConstraints.ALIGN_CONTAINER
+            progressView.labelGravity = Gravity.CENTER
+        } else {
+            progressView.labelText = "%.2f".format((totalMastered.toFloat() / 92) * 100) + "%"
+        }
 
         for (kana in JWriterDatabase.getInstance(this).kanaDao().getKana()) {
             //Check if there is a review time, and if so, check if the current time has passed the stored review time
@@ -147,22 +168,17 @@ class StatsActivity : AppCompatActivity() {
      */
     private fun loadUserStats() {
 
-        loadBars(ReviewActivity.hiraganaList, hiragana = true)
-        loadBars(ReviewActivity.katakanaList, hiragana = false)
+        loadBars(JWriterDatabase.getInstance(this).kanaDao().getHiragana())
+        loadBars(JWriterDatabase.getInstance(this).kanaDao().getKatakana())
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 if (tab != null) {
                     when(tab.position) {
-                        TabConstants.OVERALL ->
-                            overallTab()
-                        TabConstants.HIRAGANA ->
-                            hiraganaTab()
-                        TabConstants.KATAKANA ->
-                            katakanaTab()
-                        else ->
-                            println("No tab")
+                        TabConstants.OVERALL -> overallTab()
+                        TabConstants.HIRAGANA -> hiraganaTab()
+                        TabConstants.KATAKANA -> katakanaTab()
                     }
                 }
             }
@@ -214,22 +230,64 @@ class StatsActivity : AppCompatActivity() {
      * @param barList string array of labels attached to each bar
      * @param hiragana whether the bar is hiragana labels
      */
-    private fun loadBars(barList: Array<String>, hiragana: Boolean) {
-        for (letter in barList) {
+    private fun loadBars(barList: List<Kana>) {
+        for (kana in barList) {
+
+            var color: Int = 0
+            var progress: Float = 0f
+
+            if (kana.level != null) {
+                when (kana.level) {
+                    1 -> {
+                        color = ContextCompat.getColor(this, R.color.rookie_pink)
+                        progress = 1f
+                    }
+                    2 -> {
+                        color = ContextCompat.getColor(this, R.color.rookie_pink)
+                        progress = 2f
+                    }
+                    3 -> {
+                        color = ContextCompat.getColor(this, R.color.amateur_purple)
+                        progress = 3f
+                    }
+                    4 -> {
+                        color = ContextCompat.getColor(this, R.color.expert_blue)
+                        progress = 4f
+                    }
+                    5 -> {
+                        color = ContextCompat.getColor(this, R.color.master_blue)
+                        progress = 5f
+                    }
+                    6 -> {
+                        color = ContextCompat.getColor(this, R.color.sensei_gold)
+                        progress = 6f
+                    }
+                }
+            }
+
             val myProgressView = progressView(this) {
-                setSize(300, 35)
-                setProgress(Random.nextDouble(0.0, 100.0).toFloat())
+
+                setProgress(progress)
                 setMin(0f)
-                setMax(100f)
+                setMax(6f)
                 setRadius(12f)
                 setDuration(1200L)
                 setAutoAnimate(true)
                 setLabelColorInner(ContextCompat.getColor(applicationContext, R.color.white))
                 setLabelColorOuter(ContextCompat.getColor(applicationContext, R.color.black))
-                setLabelText(letter)
+                setLabelText(kana.letter!!)
+                setProgressbarColor(color)
                 setLabelSize(13f)
                 setLabelSpace(10f)
                 setLabelTypeface(Typeface.BOLD)
+            }
+
+            myProgressView.setOnProgressClickListener {
+                KanaInfoView(this, kana).show()
+            }
+
+            myProgressView.setOnClickListener {
+                KanaInfoView(this, kana).show()
             }
 
             val params = LinearLayout.LayoutParams(
@@ -238,7 +296,7 @@ class StatsActivity : AppCompatActivity() {
             )
             params.setMargins(10, 15, 10, 15)
             myProgressView.layoutParams = params
-            if (hiragana) hiraganaProgressViews.add(myProgressView) else katakanaProgressViews.add(myProgressView)
+            if (kana.isHiragana) hiraganaProgressViews.add(myProgressView) else katakanaProgressViews.add(myProgressView)
         }
     }
 
