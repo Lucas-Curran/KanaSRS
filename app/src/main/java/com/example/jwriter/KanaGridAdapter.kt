@@ -27,6 +27,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jwriter.activity.setOnSingleClickListener
 import com.example.jwriter.database.Kana
 import com.example.jwriter.util.AnimUtilities
+import com.example.jwriter.util.AnimUtilities.Companion.setNextAnim
+import com.example.jwriter.util.AnimUtilities.Companion.setPrevAnim
 import com.example.jwriter.util.KanaConverter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -41,8 +43,6 @@ class KanaGridAdapter(var context: Context): RecyclerView.Adapter<KanaGridAdapte
     private lateinit var animationOut: Animation
     private lateinit var prevAnimIn: Animation
     private lateinit var prevAnimOut: Animation
-    private var mPlayer = MediaPlayer()
-
 
     internal fun setDataList(dataList: List<Kana>) {
         this.dataList = dataList
@@ -74,137 +74,10 @@ class KanaGridAdapter(var context: Context): RecyclerView.Adapter<KanaGridAdapte
             6 -> drawable.color = AppCompatResources.getColorStateList(context, R.color.sensei_gold)
         }
         holder.itemView.setOnClickListener {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.kana_info_dialog, null)
-
-            val dialog = BottomSheetDialog(parent.context)
-            dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-
-            if (data.reviewTime != null) {
-                if (data.reviewTime!! > System.currentTimeMillis()) {
-                    val timeUntilReview = data.reviewTime!! - System.currentTimeMillis()
-                    view.findViewById<TextView>(R.id.nextReviewTextView).text = "Review -> ${AnimUtilities.formatTime(timeUntilReview)}"
-                } else {
-                    view.findViewById<TextView>(R.id.nextReviewTextView).text = "Review -> now"
-                }
-            }
-
-            val kanaConverter = KanaConverter(false)
-
-            view.findViewById<TextView>(R.id.kanaEnglishTextView).text = kanaConverter._hiraganaToRomaji(data.letter)
-            view.findViewById<TextView>(R.id.kanaTextView).text = data.letter
-
-            val webStroke = view.findViewById<WebView>(R.id.strokeWebView)
-            webStroke.settings.javaScriptEnabled = true
-            webStroke.webViewClient = WebViewClient()
-            webStroke.loadUrl(data.gif)
-
-
-            val tabLayout = view.findViewById<TabLayout>(R.id.itemTabLayout)
-            val viewAnimator = view.findViewById<ViewAnimator>(R.id.viewAnimator)
-
-            val relativeLayout = RelativeLayout(context)
-            relativeLayout.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
-            relativeLayout.background = ContextCompat.getDrawable(context, R.drawable.pink_outline)
-
-            val drawingView = DrawingView(context)
-            val clearButton = Button(context)
-            clearButton.text = "Clear"
-            clearButton.textSize = 12f
-            clearButton.minimumHeight = 0
-            clearButton.layoutParams =
-                RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT).apply {
-                    addRule(RelativeLayout.ALIGN_PARENT_END)
-                    addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-                    updateMargins(0, 100, 10, 10)
-                }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                clearButton.setTextColor(context.resources.getColor(R.color.white, context.theme))
-            }
-            clearButton.height = 75
-            clearButton.setPadding(10)
-            clearButton.background = ContextCompat.getDrawable(context, R.drawable.pink_outline)
-            val outValue = TypedValue()
-            context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                clearButton.foreground = ContextCompat.getDrawable(context, outValue.resourceId)
-            }
-
-            clearButton.setOnClickListener {
-                drawingView.clearDrawing()
-            }
-
-            relativeLayout.addView(clearButton)
-            relativeLayout.addView(drawingView)
-
-            viewAnimator.addView(relativeLayout)
-
-            animationIn = AnimationUtils.loadAnimation(context, R.anim.slide_in_right)
-            animationOut = AnimationUtils.loadAnimation(context, R.anim.slide_out_left)
-            prevAnimIn = AnimationUtils.loadAnimation(context, R.anim.slide_in_left)
-            prevAnimOut = AnimationUtils.loadAnimation(context, R.anim.slide_out_right)
-
-            val letterTab = tabLayout.newTab()
-            val gifTab = tabLayout.newTab()
-            val writeTab = tabLayout.newTab()
-
-            tabLayout.addTab(letterTab)
-            tabLayout.addTab(gifTab)
-            tabLayout.addTab(writeTab)
-
-            tabLayout.addOnTabSelectedListener( object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                    val tabPosition = tab?.position!!
-                    viewAnimator.displayedChild = tabPosition
-                }
-
-                override fun onTabUnselected(tab: TabLayout.Tab?) {
-                }
-
-                override fun onTabReselected(tab: TabLayout.Tab?) {
-                }
-
-            })
-
-            view.findViewById<ImageView>(R.id.kanaAudioImageView).setOnClickListener {
-                playAudio(kanaConverter._hiraganaToRomaji(data.letter))
-            }
-
-            view.findViewById<ImageButton>(R.id.nextItemButton).setOnSingleClickListener {
-                setNextAnim(viewAnimator)
-                tabLayout.getTabAt(tabLayout.selectedTabPosition+1)?.select()
-                if (tabLayout.selectedTabPosition == 2) {
-                    dialog.behavior.isDraggable = false
-                }
-            }
-
-            view.findViewById<ImageButton>(R.id.previousItemButton).setOnSingleClickListener {
-                setPrevAnim(viewAnimator)
-                tabLayout.getTabAt(tabLayout.selectedTabPosition-1)?.select()
-                dialog.behavior.isDraggable = true
-            }
-
-            dialog.setContentView(view)
-            dialog.show()
+            KanaInfoView(parent.context, data).show()
         }
     }
 
     override fun getItemCount() = dataList.size
-
-    private fun playAudio(letter: String) {
-        if (!mPlayer.isPlaying) {
-            mPlayer = MediaPlayer.create(context, context.resources.getIdentifier(letter, "raw", context.packageName))
-            mPlayer.start()
-        }
-    }
-
-    private fun setNextAnim(viewAnimator: ViewAnimator) {
-        viewAnimator.inAnimation = animationIn
-        viewAnimator.outAnimation = animationOut
-    }
-
-    private fun setPrevAnim(viewAnimator: ViewAnimator) {
-        viewAnimator.inAnimation = prevAnimIn
-        viewAnimator.outAnimation = prevAnimOut
-    }
 
 }
