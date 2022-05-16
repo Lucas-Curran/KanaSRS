@@ -6,10 +6,13 @@ import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.SystemClock
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import android.widget.ViewAnimator
+import androidx.annotation.ColorInt
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
 import com.takusemba.spotlight.OnTargetListener
@@ -104,6 +107,15 @@ class AnimUtilities {
             } else {
                 return ""
             }
+        }
+
+
+        fun CharSequence.colorizeText(
+            textPartToColorize: CharSequence,
+            @ColorInt color: Int
+        ): CharSequence = SpannableString(this).apply {
+            val startIndexOfText = indexOf(textPartToColorize.toString())
+            setSpan(ForegroundColorSpan(color), startIndexOfText, startIndexOfText.plus(textPartToColorize.length), 0)
         }
 
     }
