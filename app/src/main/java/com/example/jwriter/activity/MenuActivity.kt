@@ -9,6 +9,7 @@ import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -19,15 +20,20 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.text.backgroundColor
+import androidx.core.text.bold
+import androidx.core.text.color
 import androidx.core.view.marginBottom
 import com.example.jwriter.*
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
 import com.example.jwriter.notification.NotificationReceiver
 import com.example.jwriter.util.AnimUtilities
+import com.example.jwriter.util.AnimUtilities.Companion.colorizeText
 import com.google.android.material.button.MaterialButton
 import com.skydoves.progressview.ProgressView
 import java.time.Duration
@@ -40,13 +46,12 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var statsButton: Button
     private lateinit var settingsButton: Button
     private lateinit var lessonButton: Button
-    private lateinit var showMoreLayout: RelativeLayout
     private lateinit var summaryLayout: RelativeLayout
     private lateinit var levelsLayout: LinearLayout
     private lateinit var showMoreArrow: ImageView
     private lateinit var summaryButton: Button
-    private lateinit var hiraganaProgressView: ProgressView
-    private lateinit var katakanaProgressView: ProgressView
+    private lateinit var currentReviewsTextView: TextView
+    private lateinit var remainingLessonsTextView: TextView
 
     private var showMore = true
     private var moving = false
@@ -120,16 +125,14 @@ class MenuActivity : AppCompatActivity() {
                 )
             setSupportActionBar(toolbar)
 
-            hiraganaProgressView = findViewById(R.id.hiraganaProgressView)
-            katakanaProgressView = findViewById(R.id.katakanaProgressView)
+            currentReviewsTextView = findViewById(R.id.currentReviewsTextView)
+            remainingLessonsTextView = findViewById(R.id.remainingLessonsTextView)
 
-            hiraganaProgressView.progress = numHiraganaMastered
-            katakanaProgressView.progress = numKatakanaMastered
-            hiraganaProgressView.labelText = "Hiragana (${numHiraganaMastered.toInt()}/46)"
-            katakanaProgressView.labelText = "Katakana (${numKatakanaMastered.toInt()}/46)"
+            currentReviewsTextView.text = "Current Reviews: $numItemsToReview".colorizeText(numItemsToReview.toString(), ContextCompat.getColor(this, R.color.azure))
+            remainingLessonsTextView.text = getRemainingLessons()
+
 
             summaryButton = findViewById(R.id.summaryButton)
-            showMoreLayout = findViewById(R.id.showMoreRelativeLayout)
             showMoreArrow = findViewById(R.id.arrowImageView)
             summaryLayout = findViewById(R.id.summaryRelativeLayout)
             levelsLayout = findViewById(R.id.levelsLayout)
@@ -326,6 +329,11 @@ class MenuActivity : AppCompatActivity() {
             AlarmManager.INTERVAL_DAY,
             pendingIntent
         )
+    }
+
+    private fun getRemainingLessons(): CharSequence {
+        val numberRemaining = 10
+        return "Daily remaining lessons: $numberRemaining".colorizeText(numberRemaining.toString(), ContextCompat.getColor(this, R.color.pink))
     }
 
     override fun onRestart() {

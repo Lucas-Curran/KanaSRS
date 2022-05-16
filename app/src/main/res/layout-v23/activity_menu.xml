@@ -93,7 +93,6 @@
                     android:layout_alignEnd="@id/summaryButton"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
-
                     android:text="Summary"
                     android:textColor="@color/white"
                     android:textSize="20dp"
@@ -111,70 +110,72 @@
                     android:layout_marginEnd="30dp"
                     android:background="#AAAAAA" />
 
-                <TextView
-                    android:id="@+id/nextReviewText"
+                <LinearLayout
+                    android:id="@+id/summaryInfoLinearLayout"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="100dp"
                     android:layout_below="@+id/divider1"
                     android:layout_alignStart="@id/summaryButton"
                     android:layout_alignEnd="@id/summaryButton"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="50dp"
                     android:layout_marginTop="10dp"
-                    android:gravity="start"
-                    android:text="Time to next review: 4 hours"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:layout_marginEnd="50dp"
+                    android:background="@drawable/dialog_background"
+                    android:orientation="vertical">
 
-                <com.skydoves.progressview.ProgressView
-                    android:id="@+id/hiraganaProgressView"
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_below="@id/nextReviewText"
-                    android:layout_alignStart="@id/summaryButton"
-                    android:layout_alignEnd="@id/summaryButton"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="10dp"
-                    app:progressView_borderColor="#eeeeee"
-                    app:progressView_borderWidth="3dp"
-                    app:progressView_colorBackground="@color/white"
-                    app:progressView_colorProgress="#ED1C24"
-                    app:progressView_labelColorInner="@color/white"
-                    app:progressView_labelSize="16sp"
-                    app:progressView_labelText="Hiragana (0/46)"
-                    app:progressView_labelTypeface="bold"
-                    app:progressView_max="46"
-                    app:progressView_min="0"
-                    app:progressView_progress="0" />
+                    <TextView
+                        android:id="@+id/nextReviewText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="start|center_vertical"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:text="Time to next review: none"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
-                <com.skydoves.progressview.ProgressView
-                    android:id="@+id/katakanaProgressView"
-                    android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:layout_below="@id/hiraganaProgressView"
-                    android:layout_alignStart="@id/summaryButton"
-                    android:layout_alignEnd="@id/summaryButton"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="10dp"
-                    app:progressView_borderColor="#eeeeee"
-                    app:progressView_borderWidth="3dp"
-                    app:progressView_colorBackground="@color/white"
-                    app:progressView_colorProgress="#ED1C24"
-                    app:progressView_labelColorInner="@color/white"
-                    app:progressView_labelSize="16sp"
-                    app:progressView_labelText="Katakana (0/46)"
-                    app:progressView_labelTypeface="bold"
-                    app:progressView_max="46"
-                    app:progressView_min="0"
-                    app:progressView_progress="0" />
+                    <TextView
+                        android:id="@+id/remainingLessonsTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_weight="1"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:background="#4f4f4f"
+                        android:gravity="start|center_vertical"
+                        android:text="Daily remaining lessons: 10"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/currentReviewsTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:gravity="start|center_vertical"
+                        android:text="Current reviews: 0"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
                 <Space
                     android:id="@+id/belowKatakanaSpace"
                     android:layout_width="match_parent"
                     android:layout_height="65dp"
-                    android:layout_below="@id/katakanaProgressView"/>
+                    android:layout_below="@id/summaryInfoLinearLayout" />
 
                 <include
                     android:id="@+id/levelsLayout"
@@ -184,31 +185,23 @@
                     android:layout_below="@id/belowKatakanaSpace"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="30dp" />
 
-                <RelativeLayout
-                    android:id="@+id/showMoreRelativeLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/katakanaProgressView"
-                    android:layout_alignBottom="@+id/summaryButton"
-                    android:layout_marginBottom="8dp">
-
-                    <ImageView
-                        android:id="@+id/arrowImageView"
-                        android:layout_width="200dp"
-                        android:layout_height="25dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginStart="25dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginEnd="25dp"
-                        android:padding="2dp"
-                        android:background="@drawable/pill_selector"
-                        android:src="@android:drawable/arrow_down_float" />
-
-                </RelativeLayout>
+                <ImageView
+                    android:id="@+id/arrowImageView"
+                    android:layout_width="200dp"
+                    android:layout_height="25dp"
+                    android:layout_below="@id/summaryInfoLinearLayout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="25dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/pill_selector"
+                    android:padding="2dp"
+                    android:src="@android:drawable/arrow_down_float" />
 
             </RelativeLayout>
 
