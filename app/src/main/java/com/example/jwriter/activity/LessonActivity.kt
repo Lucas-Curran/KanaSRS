@@ -100,7 +100,16 @@ class LessonActivity : AppCompatActivity() {
         kanaList = JWriterDatabase.getInstance(this).kanaDao().getUnlearnedKana()
         val kanaConverter = KanaConverter(false)
 
-        val subList = kanaList.subList(0, 5)
+        //Lesson number should generally be 10, 5, or 0.
+        //However when the user reaches the end of the unlearned kana list, the number will become something else
+        //So if the lesson number is >= 5, then just make the sublist 5 kana
+        //Otherwise, for example the lessons to do is 3, since we check in the menu activity if the unlearned kana is > 5 or not,
+        //then we can just make the sublist size equal to the number of lessons left
+        val subList = if (JWriterDatabase.getInstance(this).userDao().getUser().lessonsNumber!! >= 5) {
+            kanaList.subList(0, 5)
+        } else {
+            kanaList.subList(0, JWriterDatabase.getInstance(this).userDao().getUser().lessonsNumber!!)
+        }
 
         Handler(Looper.getMainLooper()).post {
 
@@ -108,7 +117,7 @@ class LessonActivity : AppCompatActivity() {
 
                 val newTab = lessonTabLayout.newTab()
                 //Make touch do nothing so user can't skip through lesson
-                newTab.view.setOnTouchListener { view, motionEvent ->
+                newTab.view.setOnTouchListener { _, _ ->
                     true
                 }
                 lessonTabLayout.addTab(newTab)
