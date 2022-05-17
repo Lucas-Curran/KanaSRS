@@ -9,8 +9,6 @@ import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.text.SpannableStringBuilder
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -24,23 +22,22 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.text.backgroundColor
-import androidx.core.text.bold
-import androidx.core.text.color
 import androidx.core.view.marginBottom
 import com.example.jwriter.*
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
+import com.example.jwriter.database.User
 import com.example.jwriter.notification.NotificationReceiver
 import com.example.jwriter.util.AnimUtilities
 import com.example.jwriter.util.AnimUtilities.Companion.colorizeText
 import com.google.android.material.button.MaterialButton
-import com.skydoves.progressview.ProgressView
 import java.time.Duration
 import java.util.*
 
 
 class MenuActivity : AppCompatActivity() {
+
+    private lateinit var db: JWriterDatabase
 
     private lateinit var reviewButton: Button
     private lateinit var statsButton: Button
@@ -56,6 +53,7 @@ class MenuActivity : AppCompatActivity() {
     private var showMore = true
     private var moving = false
     private var numItemsToReview: Int = 0
+    private var remainingLessons: Int = 0
     private var numHiraganaMastered: Float = 0f
     private var numKatakanaMastered: Float = 0f
     private var mostRecentReview = Long.MAX_VALUE
@@ -80,10 +78,14 @@ class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+
+        db = JWriterDatabase.getInstance(this)
+
         if (1 == 2) {
             startActivity(Intent(this, IntroActivity::class.java))
         } else {
-            for (kana in JWriterDatabase.getInstance(this).kanaDao().getKana()) {
+            val user = db.userDao().getUser()
+            for (kana in db.kanaDao().getKana()) {
                 //Check if there is a review time, and if so, check if the current time has passed the stored review time
                 // Review time is calculated during review answers and initially added when learned in lessons
                 if (kana.reviewTime != null) {
@@ -128,9 +130,8 @@ class MenuActivity : AppCompatActivity() {
             currentReviewsTextView = findViewById(R.id.currentReviewsTextView)
             remainingLessonsTextView = findViewById(R.id.remainingLessonsTextView)
 
+            checkLessonTimer(user)
             currentReviewsTextView.text = "Current Reviews: $numItemsToReview".colorizeText(numItemsToReview.toString(), ContextCompat.getColor(this, R.color.azure))
-            remainingLessonsTextView.text = getRemainingLessons()
-
 
             summaryButton = findViewById(R.id.summaryButton)
             showMoreArrow = findViewById(R.id.arrowImageView)
@@ -148,7 +149,7 @@ class MenuActivity : AppCompatActivity() {
             levelsArray.add(master)
             levelsArray.add(sensei)
 
-            for (kana in JWriterDatabase.getInstance(this).kanaDao().getKana()) {
+            for (kana in db.kanaDao().getKana()) {
                 if (kana.level != null) {
                     when (kana.level) {
                         1, 2 -> levelsItemArray[ROOKIE] += 1
@@ -216,7 +217,11 @@ class MenuActivity : AppCompatActivity() {
 
             lessonButton = findViewById(R.id.lessonButton)
             lessonButton.setOnClickListener {
-                startActivity(Intent(this, LessonActivity::class.java))
+                if (user.lessonsNumber!! > 0) {
+                    startActivity(Intent(this, LessonActivity::class.java))
+                } else {
+                    Toast.makeText(this, "You can do more lessons in ${formatTime(user.lessonRefreshTime!! - System.currentTimeMillis())}", Toast.LENGTH_SHORT).show()
+                }
             }
 
             reviewButton = findViewById(R.id.reviewButton)
@@ -331,9 +336,28 @@ class MenuActivity : AppCompatActivity() {
         )
     }
 
-    private fun getRemainingLessons(): CharSequence {
-        val numberRemaining = 10
-        return "Daily remaining lessons: $numberRemaining".colorizeText(numberRemaining.toString(), ContextCompat.getColor(this, R.color.pink))
+    private fun checkLessonTimer(user: User) {
+        if (user.lessonRefreshTime != null) {
+            //If current clock time is greater than time set to refresh, reset lesson number and make refresh time null
+            if (System.currentTimeMillis() > user.lessonRefreshTime!!) {
+                if (db.kanaDao().getUnlearnedKana().size in 1..9) {
+                    user.lessonsNumber = db.kanaDao().getUnlearnedKana().size
+                } else {
+                    user.lessonsNumber = 10
+                }
+                user.lessonRefreshTime = null
+                db.userDao().updateUser(user)
+            }
+        } else {
+            //If the current remaining kana number is between 1-9, make lesson number the unlearned kana size
+            if (db.kanaDao().getUnlearnedKana().size in 1..9) {
+                user.lessonsNumber = db.kanaDao().getUnlearnedKana().size
+            } else {
+                user.lessonsNumber = 10
+            }
+            db.userDao().updateUser(user)
+        }
+        remainingLessonsTextView.text = "Daily remaining lessons: ${user.lessonsNumber}".colorizeText(user.lessonsNumber.toString(), ContextCompat.getColor(this, R.color.pink))
     }
 
     override fun onRestart() {
