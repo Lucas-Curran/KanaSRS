@@ -190,26 +190,14 @@
 
                 <TextView
                     android:id="@+id/rookieNumKanaTextView"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:text="0"
-                    android:layout_marginBottom="5dp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:background="@drawable/square_outline"
-                    android:textSize="30sp"
-                    android:gravity="center"/>
-
-                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:background="@drawable/rounded_square"
                     android:backgroundTint="#f200a0"
                     android:gravity="center"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:text="Rookie"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:textSize="30sp"
                     android:textStyle="bold" />
@@ -231,21 +219,9 @@
 
                 <TextView
                     android:id="@+id/amateurNumKanaTextView"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"
-                    android:text="0"
-                    android:layout_marginBottom="5dp"
-                    android:textStyle="bold"
-                    android:background="@drawable/square_outline"
-                    android:textSize="30sp"
-                    android:gravity="center"/>
-
-                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Amateur"
+                    android:layout_height="50dp"
+                    android:text="0"
                     android:textStyle="bold"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:background="@drawable/rounded_square"
@@ -278,26 +254,14 @@
 
                 <TextView
                     android:id="@+id/expertNumKanaTextView"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:text="0"
-                    android:layout_marginBottom="5dp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:background="@drawable/square_outline"
-                    android:textSize="30sp"
-                    android:gravity="center"/>
-
-                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:background="@drawable/rounded_square"
                     android:backgroundTint="@color/expert_blue"
                     android:gravity="center"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:text="Expert"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:textSize="30sp"
                     android:textStyle="bold" />
@@ -319,21 +283,9 @@
 
                 <TextView
                     android:id="@+id/masterNumKanaTextView"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"
-                    android:text="0"
-                    android:layout_marginBottom="5dp"
-                    android:textStyle="bold"
-                    android:background="@drawable/square_outline"
-                    android:textSize="30sp"
-                    android:gravity="center"/>
-
-                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Master"
+                    android:layout_height="50dp"
+                    android:text="0"
                     android:textStyle="bold"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:background="@drawable/rounded_square"
@@ -364,21 +316,9 @@
 
             <TextView
                 android:id="@+id/senseiNumKanaTextView"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:textColor="@color/white"
-                android:layout_gravity="center"
-                android:text="0"
-                android:layout_marginBottom="5dp"
-                android:textStyle="bold"
-                android:background="@drawable/square_outline"
-                android:textSize="30sp"
-                android:gravity="center"/>
-
-            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Sensei"
+                android:layout_height="50dp"
+                android:text="0"
                 android:textStyle="bold"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:background="@drawable/rounded_square"
