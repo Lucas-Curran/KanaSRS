@@ -4,12 +4,14 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 
 // TODO: Give preset kana data a description column, gif link column, drawable int, mp3 int
 
 
-@Database(entities = [User::class, Kana::class], version = 3)
+@Database(entities = [User::class, Kana::class], version = 4)
 abstract class JWriterDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
@@ -28,12 +30,15 @@ abstract class JWriterDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context): JWriterDatabase {
 
+            // Note for future, if you need to change the db file in assets,
+            // use migration and exec sql statements
+
             return Room.databaseBuilder(context, JWriterDatabase::class.java, "jwriter.db").createFromAsset("jwriter.db")
-                .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
                 .build()
 
-            //Code below is for manual data entry
+            // Code below is for manual data entry
 
 //            return Room.databaseBuilder(context, JWriterDatabase::class.java, "jwriter.db")
 //                .addCallback(object : RoomDatabase.Callback() {

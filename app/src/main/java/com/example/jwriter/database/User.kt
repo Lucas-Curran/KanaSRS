@@ -8,6 +8,6 @@ import androidx.room.PrimaryKey
 data class User(
     @PrimaryKey(autoGenerate = true) val id: Long = 0L,
     @ColumnInfo(name = "total_accuracy") var totalAccuracy: Int,
-) {
-    constructor(totalAccuracy: Int) : this(0, totalAccuracy)
-}
+    @ColumnInfo(name = "lessonRefreshTime") var lessonRefreshTime: Long?,
+    @ColumnInfo(name = "lessonsNumber") var lessonsNumber: Int?
+)
