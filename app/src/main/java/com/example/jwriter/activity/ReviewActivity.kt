@@ -202,9 +202,12 @@ class ReviewActivity : AppCompatActivity() {
         if (quiz) {
             val kana = kanaList[0]
             if (kanaList.size > 1) {
+                val newKanaPosition = Random.nextInt(1, kanaList.size)
                 kanaList.remove(kana)
-                val newKanaPosition = Random.nextInt(1, kanaList.size-1)
                 kanaList.add(newKanaPosition, kana)
+            } else if (kanaList.size == 2) {
+                kanaList.remove(kana)
+                kanaList.add(1, kana)
             }
         }
 
@@ -265,15 +268,21 @@ class ReviewActivity : AppCompatActivity() {
      */
     private fun completedSet() {
 
-        //Since there is only one user in the database, get index 0 of users
-        val user = JWriterDatabase.getInstance(this).userDao().getUser()
-        user.totalAccuracy = user.totalAccuracy.plus(score)
-        JWriterDatabase.getInstance(this).userDao().updateUser(user)
-
         if (quiz) {
             for (kana in correctQuizAnswers) {
                 learnKana(kana)
             }
+
+            val user = JWriterDatabase.getInstance(this).userDao().getUser()
+            // Subtract remaining lessons for the day by the quiz size, and
+            // then if the lesson refresh time isn't set, make it one day from now
+            user.lessonsNumber = user.lessonsNumber?.minus(correctQuizAnswers.size)
+            if (user.lessonRefreshTime == null) {
+                //val oneDay = 24 * 1000L * 60 * 60
+                val oneMinute = 1000 * 60
+                user.lessonRefreshTime = System.currentTimeMillis() + oneMinute
+            }
+            JWriterDatabase.getInstance(this).userDao().updateUser(user)
         }
 
         // If no wrong answers,
