@@ -32,6 +32,7 @@ import com.example.jwriter.notification.NotificationReceiver
 import com.example.jwriter.util.AnimUtilities
 import com.example.jwriter.util.AnimUtilities.Companion.colorizeText
 import com.example.jwriter.util.AnimUtilities.Companion.disable
+import com.example.jwriter.util.AnimUtilities.Companion.formatTime
 import com.google.android.material.button.MaterialButton
 import java.time.Duration
 import java.util.*
@@ -315,18 +316,6 @@ class MenuActivity : AppCompatActivity() {
             builder.dismiss()
         }
         builder.show()
-    }
-
-    private fun formatTime(milliseconds: Long): String {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val duration = Duration.ofMillis(milliseconds)
-            val newSeconds = duration.seconds - duration.toMinutes() * 60
-            return duration.run {
-                "%02d:%02d:%02d".format(toHours(), toMinutes(), newSeconds)
-            }
-        } else {
-            return ""
-        }
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")

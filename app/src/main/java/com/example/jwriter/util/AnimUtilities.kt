@@ -8,12 +8,14 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.SystemClock
 import android.text.SpannableString
+import android.text.format.DateUtils
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import android.widget.ViewAnimator
 import androidx.annotation.ColorInt
+import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.graphics.BlendModeColorFilterCompat
@@ -100,16 +102,25 @@ class AnimUtilities {
             viewAnimator.outAnimation = prevAnimOut
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
         fun formatTime(milliseconds: Long): String {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val duration = Duration.ofMillis(milliseconds)
-                val newSeconds = duration.seconds - duration.toMinutes() * 60
-                return duration.run {
-                    "%02d:%02d:%02d".format(toHours(), toMinutes(), newSeconds)
+                val days = duration.toHours().toInt() / 24
+                val timeFormat = "%02d:%02d:%02d".format(
+                    (duration.seconds / 3600) % 24,
+                    (duration.seconds % 3600) / 60,
+                    (duration.seconds % 60)
+                )
+            var returnTime = ""
+            if (days > 0) {
+                if (days == 1) {
+                    returnTime = "$days Day - $timeFormat"
                 }
+                returnTime += "$days Days - $timeFormat"
             } else {
-                return ""
+                returnTime = timeFormat
             }
+            return returnTime
         }
 
 
