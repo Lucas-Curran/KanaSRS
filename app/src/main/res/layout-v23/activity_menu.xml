@@ -206,22 +206,40 @@
 
             </RelativeLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/lessonButton"
-                style="@style/Widget.MaterialComponents.Button.Icon"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_margin="15dp"
-                android:background="@drawable/custom_button"
-                android:drawableTop="@drawable/ic_learn"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:paddingTop="40dp"
-                android:paddingBottom="40dp"
-                android:elevation="100dp"
-                android:translationZ="100dp"
-                android:text="Learn"
-                android:textSize="20sp"
-                app:backgroundTint="@color/pink" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/lessonRefreshTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/lessonButton"
+                    android:layout_alignEnd="@id/lessonButton"
+                    android:visibility="invisible"
+                    android:text="Lessons refresh in 1:42:51"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:layout_alignBottom="@id/lessonButton"
+                    android:elevation="10dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/lessonButton"
+                    style="@style/Widget.MaterialComponents.Button.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_margin="15dp"
+                    android:background="@drawable/custom_button"
+                    android:drawableTop="@drawable/ic_learn"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:paddingTop="40dp"
+                    android:paddingBottom="40dp"
+                    android:text="Learn"
+                    android:textSize="20sp"
+                    app:backgroundTint="@color/pink" />
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -255,7 +273,6 @@
                     android:foreground="?android:attr/selectableItemBackground"
                     android:paddingTop="40dp"
                     android:paddingBottom="40dp"
-
                     android:text="ひらがな・カタカナ\nReview"
                     android:textSize="20sp"
                     app:backgroundTint="#4599ff" />

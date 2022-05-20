@@ -16,6 +16,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -30,6 +31,7 @@ import com.example.jwriter.database.User
 import com.example.jwriter.notification.NotificationReceiver
 import com.example.jwriter.util.AnimUtilities
 import com.example.jwriter.util.AnimUtilities.Companion.colorizeText
+import com.example.jwriter.util.AnimUtilities.Companion.disable
 import com.google.android.material.button.MaterialButton
 import java.time.Duration
 import java.util.*
@@ -53,7 +55,6 @@ class MenuActivity : AppCompatActivity() {
     private var showMore = true
     private var moving = false
     private var numItemsToReview: Int = 0
-    private var remainingLessons: Int = 0
     private var numHiraganaMastered: Float = 0f
     private var numKatakanaMastered: Float = 0f
     private var mostRecentReview = Long.MAX_VALUE
@@ -223,8 +224,23 @@ class MenuActivity : AppCompatActivity() {
                     Toast.makeText(this, "You can do more lessons in ${formatTime(user.lessonRefreshTime!! - System.currentTimeMillis())}", Toast.LENGTH_SHORT).show()
                 }
             }
+            val refreshTimeText = findViewById<TextView>(R.id.lessonRefreshTime)
+            if (user.lessonRefreshTime != null) {
+                refreshTimeText.visibility = View.VISIBLE
+                refreshTimeText.text = "Lessons refresh in ${formatTime(user.lessonRefreshTime!! - System.currentTimeMillis())}"
+            }
 
             reviewButton = findViewById(R.id.reviewButton)
+
+            if (numItemsToReview == 0) {
+                reviewButton.disable()
+                numReviewTextView.background = ContextCompat.getDrawable(this, R.drawable.no_review_items_background)
+            }
+
+            if (user.lessonsNumber == 0) {
+                lessonButton.disable()
+            }
+
             reviewButton.setOnClickListener {
                 if (numItemsToReview > 0) {
                     val intent = Intent(this, ReviewActivity::class.java)
@@ -316,8 +332,8 @@ class MenuActivity : AppCompatActivity() {
     @SuppressLint("UnspecifiedImmutableFlag")
     fun myAlarm() {
         val calendar = Calendar.getInstance()
-        calendar[Calendar.HOUR_OF_DAY] = 20
-        calendar[Calendar.MINUTE] = 43
+        calendar[Calendar.HOUR_OF_DAY] = 12
+        calendar[Calendar.MINUTE] = 0
         calendar[Calendar.SECOND] = 0
         if (calendar.time < Date()) calendar.add(Calendar.DAY_OF_MONTH, 1)
         val intent = Intent(applicationContext, NotificationReceiver::class.java)
