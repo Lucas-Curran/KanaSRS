@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
@@ -31,6 +32,7 @@ class KanaInfoView(context: Context, kana: Kana) {
     private var prevAnimIn: Animation
     private var prevAnimOut: Animation
     private var dialog: BottomSheetDialog
+    private var nextReviewText: TextView
     private var mContext: Context
 
     init {
@@ -42,18 +44,20 @@ class KanaInfoView(context: Context, kana: Kana) {
         dialog = BottomSheetDialog(context)
         dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
+        nextReviewText = view.findViewById(R.id.nextReviewTextView)
+
         if (kana.reviewTime != null) {
             if (kana.reviewTime!! > System.currentTimeMillis()) {
                 val timeUntilReview = kana.reviewTime!! - System.currentTimeMillis()
-                view.findViewById<TextView>(R.id.nextReviewTextView).text = "Review -> ${AnimUtilities.formatTime(timeUntilReview)}"
+                nextReviewText.text = "Review -> ${AnimUtilities.formatTime(timeUntilReview)}"
             } else {
-                view.findViewById<TextView>(R.id.nextReviewTextView).text = "Review -> now"
+                nextReviewText.text = "Review -> now"
             }
         } else {
             if (!kana.hasLearned) {
-                view.findViewById<TextView>(R.id.nextReviewTextView).text = "Need to learn"
+                nextReviewText.text = "Need to learn"
             } else {
-                view.findViewById<TextView>(R.id.nextReviewTextView).text = "Already mastered!"
+                nextReviewText.text = "Already mastered!"
             }
         }
 
@@ -134,6 +138,9 @@ class KanaInfoView(context: Context, kana: Kana) {
 
         })
 
+        val nextButton = view.findViewById<ImageButton>(R.id.nextItemButton)
+        val previousButton = view.findViewById<ImageButton>(R.id.previousItemButton)
+
         view.findViewById<ImageView>(R.id.kanaAudioImageView).setOnClickListener {
             if (!mediaPlayer.isPlaying) {
                 mediaPlayer = MediaPlayer.create(mContext, mContext.resources.getIdentifier(kanaConverter._hiraganaToRomaji(kana.letter), "raw", mContext.packageName))
@@ -141,18 +148,32 @@ class KanaInfoView(context: Context, kana: Kana) {
             }
         }
 
-        view.findViewById<ImageButton>(R.id.nextItemButton).setOnSingleClickListener {
+        nextButton.setOnSingleClickListener {
+
+            if (tabLayout.selectedTabPosition == 2) {
+                dialog.dismiss()
+                return@setOnSingleClickListener
+            }
+
             setNextAnim(viewAnimator, animationIn, animationOut)
             tabLayout.getTabAt(tabLayout.selectedTabPosition+1)?.select()
             if (tabLayout.selectedTabPosition == 2) {
                 dialog.behavior.isDraggable = false
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    nextButton.setImageResource(R.drawable.ic_checkmark)
+                    nextButton.setBackgroundColor(context.resources.getColor(R.color.lime, context.theme))
+                }
             }
         }
 
-        view.findViewById<ImageButton>(R.id.previousItemButton).setOnSingleClickListener {
+        previousButton.setOnSingleClickListener {
             setPrevAnim(viewAnimator, prevAnimIn, prevAnimOut)
             tabLayout.getTabAt(tabLayout.selectedTabPosition-1)?.select()
             dialog.behavior.isDraggable = true
+            if (tabLayout.selectedTabPosition == 1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                nextButton.setImageResource(R.drawable.ic_right_arrow)
+                nextButton.setBackgroundColor(context.resources.getColor(R.color.azure, context.theme))
+            }
         }
 
         dialog.setContentView(view)
@@ -160,6 +181,10 @@ class KanaInfoView(context: Context, kana: Kana) {
 
     fun show() {
         dialog.show()
+    }
+
+    fun setReviewToGone() {
+        nextReviewText.visibility = View.GONE
     }
 
 }
