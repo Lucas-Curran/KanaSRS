@@ -8,33 +8,114 @@
     android:background="@color/cardview_dark_background"
     tools:context=".activity.ReviewActivity">
 
+    <include
+        android:id="@+id/finishGameLayout"
+        layout="@layout/finish_game_view"
+        android:visibility="invisible" />
+
+    <ProgressBar
+        android:id="@+id/reviewProgressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        app:layout_goneMarginStart="10dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:progressTint="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/numberCorrectTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/numberCorrectTextView"
+        android:layout_width="19dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/checkmark"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/checkmark"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/ic_checkmark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/newLevelLayout"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/review_level_background"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/letterToGuess"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reviewProgressBar">
+
+        <ImageView
+            android:id="@+id/arrowIndicator"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/pill_shape"
+            android:padding="7dp"
+            android:src="@drawable/ic_up_arrow"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/newLevelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="Rookie"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/letterToGuess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="あ"
-        android:layout_marginBottom="200dp"
         android:textColor="@color/white"
         android:textSize="100sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/newLevelLayout" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/responseEditText"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_width="220dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:singleLine="true"
+        android:layout_marginEnd="20dp"
+        android:paddingEnd="20dp"
+        android:background="@drawable/square_outline"
+        android:hint="Answer"
         android:maxLength="3"
+        android:singleLine="true"
         android:textAlignment="center"
         android:textColor="@color/white"
+        android:textColorHint="@android:color/darker_gray"
         android:textSize="30sp"
-        android:hint="Answer"
-        android:background="@drawable/input_background"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/letterToGuess" />
 
@@ -42,58 +123,26 @@
         android:id="@+id/submitButton"
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         android:background="@drawable/custom_button"
+        android:foreground="?android:attr/selectableItemBackground"
         android:text="Submit"
         app:backgroundTint="#4599ff"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/responseEditText" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/moveOnButton"
-        style="@style/Widget.MaterialComponents.Button.Icon"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="Next"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/custom_button"
-        app:backgroundTint="#ff5078"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/responseEditText" />
-
-    <TextView
-        android:id="@+id/correctAnswerTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Correct answer is A"
-        android:visibility="invisible"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/responseImageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/submitButton" />
+        app:layout_constraintTop_toBottomOf="@+id/letterToGuess" />
 
     <ImageView
         android:id="@+id/responseImageView"
         android:layout_width="125dp"
         android:layout_height="125dp"
-        android:layout_marginBottom="45dp"
+        android:layout_marginTop="10dp"
         android:visibility="invisible"
-        android:layout_marginTop="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/submitButton"
+        app:layout_constraintTop_toBottomOf="@+id/responseEditText"
         app:srcCompat="@drawable/animated_check" />
-
-    <include
-        android:id="@+id/finishGameLayout"
-        layout="@layout/finish_game_view"
-        android:visibility="invisible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
