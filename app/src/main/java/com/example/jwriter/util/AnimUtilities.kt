@@ -3,6 +3,7 @@ package com.example.jwriter.util
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.graphics.*
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.SystemClock
@@ -15,6 +16,8 @@ import android.widget.ViewAnimator
 import androidx.annotation.ColorInt
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import com.takusemba.spotlight.OnTargetListener
 import com.takusemba.spotlight.Target
 import com.takusemba.spotlight.shape.RoundedRectangle
@@ -116,6 +119,11 @@ class AnimUtilities {
         ): CharSequence = SpannableString(this).apply {
             val startIndexOfText = indexOf(textPartToColorize.toString())
             setSpan(ForegroundColorSpan(color), startIndexOfText, startIndexOfText.plus(textPartToColorize.length), 0)
+        }
+
+        fun View.disable() {
+            isClickable = false
+            isEnabled = false
         }
 
     }
