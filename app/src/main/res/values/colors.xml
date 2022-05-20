@@ -16,4 +16,6 @@
     <color name="master_blue">#01a0f2</color>
     <color name="sensei_gold">#E1AD01</color>
     <color name="spotlight_background">#BF000000</color>
+    <color name="disabled_button">#EBEBE4</color>
+    <color name="wrong_answer">#ff5078</color>
 </resources>
