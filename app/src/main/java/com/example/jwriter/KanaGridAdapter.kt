@@ -2,37 +2,15 @@ package com.example.jwriter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
-import android.media.MediaPlayer
-import android.os.Build
-import android.util.TypedValue
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
-import androidx.core.view.marginBottom
-import androidx.core.view.setPadding
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updateMargins
 import androidx.recyclerview.widget.RecyclerView
-import com.example.jwriter.activity.setOnSingleClickListener
 import com.example.jwriter.database.Kana
-import com.example.jwriter.util.AnimUtilities
-import com.example.jwriter.util.AnimUtilities.Companion.setNextAnim
-import com.example.jwriter.util.AnimUtilities.Companion.setPrevAnim
-import com.example.jwriter.util.KanaConverter
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.tabs.TabLayout
 
 
 class KanaGridAdapter(var context: Context): RecyclerView.Adapter<KanaGridAdapter.ViewHolder>()  {
