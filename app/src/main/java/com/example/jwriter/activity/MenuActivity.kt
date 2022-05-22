@@ -7,7 +7,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Rect
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -16,7 +15,6 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -29,12 +27,11 @@ import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
 import com.example.jwriter.database.User
 import com.example.jwriter.notification.NotificationReceiver
-import com.example.jwriter.util.AnimUtilities
-import com.example.jwriter.util.AnimUtilities.Companion.colorizeText
-import com.example.jwriter.util.AnimUtilities.Companion.disable
-import com.example.jwriter.util.AnimUtilities.Companion.formatTime
+import com.example.jwriter.util.Utilities
+import com.example.jwriter.util.Utilities.Companion.colorizeText
+import com.example.jwriter.util.Utilities.Companion.disable
+import com.example.jwriter.util.Utilities.Companion.formatTime
 import com.google.android.material.button.MaterialButton
-import java.time.Duration
 import java.util.*
 
 
@@ -59,6 +56,7 @@ class MenuActivity : AppCompatActivity() {
     private var numHiraganaMastered: Float = 0f
     private var numKatakanaMastered: Float = 0f
     private var mostRecentReview = Long.MAX_VALUE
+    private var nextKanaToReview = ""
     private var kanaToReview = ArrayList<Kana>()
     private var levelsArray = ArrayList<View>()
     private var levelsItemArray = IntArray(5)
@@ -98,6 +96,7 @@ class MenuActivity : AppCompatActivity() {
                         val millisecondsUntilReview = kana.reviewTime!! - System.currentTimeMillis()
                         if (millisecondsUntilReview < mostRecentReview) {
                             mostRecentReview = millisecondsUntilReview
+                            nextKanaToReview = kana.letter!!
                         }
                     }
                 }
@@ -117,9 +116,9 @@ class MenuActivity : AppCompatActivity() {
 
             val nextReviewTime = findViewById<TextView>(R.id.nextReviewText)
             if (mostRecentReview == Long.MAX_VALUE) {
-                nextReviewTime.text = "Time to next review: none"
+                nextReviewTime.text = "Next review: none"
             } else {
-                nextReviewTime.text = "Time to next review: ${formatTime(mostRecentReview)}"
+                nextReviewTime.text = "Next review: \n\t$nextKanaToReview -> ${formatTime(mostRecentReview)}"
             }
 
             val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -127,6 +126,7 @@ class MenuActivity : AppCompatActivity() {
                 BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
                     R.color.white, BlendModeCompat.SRC_ATOP
                 )
+
             setSupportActionBar(toolbar)
 
             currentReviewsTextView = findViewById(R.id.currentReviewsTextView)
@@ -180,13 +180,13 @@ class MenuActivity : AppCompatActivity() {
                 if (showMore && !moving) {
                     moving = true
                     showMoreArrow.isEnabled = false
-                    AnimUtilities.slideView(
+                    Utilities.slideView(
                         summaryLayout,
                         summaryLayout.height,
                         summaryLayout.height + levelsLayout.measuredHeight + levelsLayout.marginBottom
 
                     ) {}
-                    AnimUtilities.slideView(
+                    Utilities.slideView(
                         summaryButton,
                         summaryButton.height,
                         summaryButton.height + levelsLayout.measuredHeight + levelsLayout.marginBottom
@@ -199,12 +199,12 @@ class MenuActivity : AppCompatActivity() {
                 } else if (!showMore && !moving) {
                     moving = true
                     showMoreArrow.isEnabled = false
-                    AnimUtilities.slideView(
+                    Utilities.slideView(
                         summaryLayout,
                         summaryLayout.height,
                         summaryLayout.height -  levelsLayout.measuredHeight - levelsLayout.marginBottom
                     ) {}
-                    AnimUtilities.slideView(
+                    Utilities.slideView(
                         summaryButton,
                         summaryButton.height,
                         summaryButton.height - levelsLayout.measuredHeight - levelsLayout.marginBottom
