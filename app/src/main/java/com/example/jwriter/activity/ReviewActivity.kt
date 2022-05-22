@@ -3,10 +3,10 @@ package com.example.jwriter.activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.TransitionDrawable
 import android.os.Build
 import android.os.Bundle
+import android.text.InputType
 import android.text.SpannableStringBuilder
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -14,8 +14,10 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
@@ -25,8 +27,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.jwriter.*
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
-import com.example.jwriter.util.AnimUtilities
-import com.example.jwriter.util.AnimUtilities.Companion.colorizeText
+import com.example.jwriter.util.Utilities
+import com.example.jwriter.util.Utilities.Companion.colorizeText
 import com.example.jwriter.util.KanaConverter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlin.random.Random
@@ -58,6 +60,8 @@ class ReviewActivity : AppCompatActivity() {
     private lateinit var newLevelTextView: TextView
     private lateinit var reviewProgressBar: ProgressBar
     private lateinit var numberCorrectTextView: TextView
+    private lateinit var incorrectImageView: ImageView
+    private lateinit var incorrectTextView: TextView
 
     private lateinit var correctTransition: TransitionDrawable
     private lateinit var incorrectTransition: TransitionDrawable
@@ -74,6 +78,8 @@ class ReviewActivity : AppCompatActivity() {
 
     private var quiz = false
     private var review = false
+    private var transitioning = false
+    private var reviewOver = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,6 +117,7 @@ class ReviewActivity : AppCompatActivity() {
         newLevelTextView = findViewById(R.id.newLevelTextView)
         reviewProgressBar = findViewById(R.id.reviewProgressBar)
         numberCorrectTextView = findViewById(R.id.numberCorrectTextView)
+        incorrectTextView = findViewById(R.id.numberWrongTextView)
 
         correctTransition = TransitionDrawable(arrayOf(
             ContextCompat.getDrawable(this, R.drawable.square_outline),
@@ -138,7 +145,7 @@ class ReviewActivity : AppCompatActivity() {
             //If guess is correct, show positive response and move on to next letter
             //else, show negative response, show correct answer, and make "next" button visible
 
-            if (userResponseEditText.text.toString() == kanaConverter._hiraganaToRomaji(letterTextView.text.toString())) {
+            if (userResponseEditText.text.toString().lowercase() == kanaConverter._hiraganaToRomaji(letterTextView.text.toString())) {
                 correctAnswer()
             } else {
                 incorrectAnswer()
@@ -146,27 +153,29 @@ class ReviewActivity : AppCompatActivity() {
         }
 
         userResponseEditText.setOnEditorActionListener { textView, i, keyEvent ->
-            if ((keyEvent != null && (keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (i == EditorInfo.IME_ACTION_DONE)) {
+            if ((keyEvent != null && (keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)) || (i == EditorInfo.IME_ACTION_DONE)) {
                 submitButton.performClick()
-                true
-            } else {
-                false
             }
+            true
         }
 
         reviewProgressBar.max = kanaList.size
 
         letterTextView.text = kanaList[0].letter
+
+        userResponseEditText.requestFocus()
+
+        val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(userResponseEditText, InputMethodManager.SHOW_IMPLICIT)
     }
 
     /**
      * Moves on to next letter in list
      */
     private fun moveToNext(incorrect: Boolean) {
-
-        totalAnswered++
+        transitioning = true
         submitButton.isEnabled = false
-        userResponseEditText.isEnabled = false
+        userResponseEditText.keyListener = null
 
         if (incorrect) {
             incorrectTransition.reverseTransition(300)
@@ -189,12 +198,17 @@ class ReviewActivity : AppCompatActivity() {
                 userResponseEditText.setText("")
                 responseImage.animate().alpha(0F).duration = 300
                 newLevelLayout.animate().alpha(0F).duration = 300
+                userResponseEditText.inputType = InputType.TYPE_CLASS_TEXT
                 userResponseEditText.isEnabled = true
                 submitButton.isEnabled = true
+                //Make cursor invisible and back to visible because of UI glitch
+                userResponseEditText.isCursorVisible = false
+                userResponseEditText.isCursorVisible = true
                 userResponseEditText.requestFocus()
                 val imm: InputMethodManager =
                     getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(userResponseEditText, InputMethodManager.SHOW_IMPLICIT)
+                    imm.showSoftInput(userResponseEditText, InputMethodManager.SHOW_IMPLICIT)
+                transitioning = false
             }.duration = 850
         }.duration = 850
     }
@@ -203,6 +217,8 @@ class ReviewActivity : AppCompatActivity() {
      * Executes when user inputs incorrect answer
      */
     private fun incorrectAnswer() {
+
+        totalAnswered++
 
         if (review) {
             val kana = kanaList[0]
@@ -252,10 +268,7 @@ class ReviewActivity : AppCompatActivity() {
             }
         }
 
-        this.currentFocus?.let {
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            imm?.hideSoftInputFromWindow(it.windowToken, 0)
-        }
+        incorrectTextView.text = (totalAnswered - score).toString()
 
         userResponseEditText.background = incorrectTransition
         incorrectTransition.startTransition(300)
@@ -278,6 +291,8 @@ class ReviewActivity : AppCompatActivity() {
      * Executes when user inputs correct answer
      */
     private fun correctAnswer() {
+
+        totalAnswered++
 
         if (review) {
             val kana = kanaList[0]
@@ -319,6 +334,8 @@ class ReviewActivity : AppCompatActivity() {
                 newLevelLayout.backgroundTintList = AppCompatResources.getColorStateList(this, color)
                 newLevelLayout.visibility = View.VISIBLE
                 newLevelLayout.alpha = 1F
+
+                incorrectReviewAnswers.remove(kana)
 
             } else {
                 calculateNextReviewTime(kana = kana, correct = false)
@@ -365,6 +382,11 @@ class ReviewActivity : AppCompatActivity() {
      */
     private fun completedSet() {
 
+        reviewOver = true
+        transitioning = true
+        submitButton.isEnabled = false
+        userResponseEditText.isEnabled = false
+
         if (quiz) {
             for (kana in correctQuizAnswers) {
                 learnKana(kana)
@@ -395,38 +417,39 @@ class ReviewActivity : AppCompatActivity() {
         }
 
         //Animate all the on screen views to the bottom
-        AnimUtilities.animateEnd(letterTextView, rootLayout, 300) {
+        Utilities.animateEnd(letterTextView, rootLayout, 300) {
             letterTextView.visibility = View.INVISIBLE
         }
-        AnimUtilities.animateEnd(userResponseEditText, rootLayout, 400) {
+        Utilities.animateEnd(userResponseEditText, rootLayout, 400) {
             userResponseEditText.visibility = View.INVISIBLE
         }
-        AnimUtilities.animateEnd(submitButton, rootLayout, 500) {
+        Utilities.animateEnd(submitButton, rootLayout, 500) {
             submitButton.visibility = View.INVISIBLE
             layout.visibility = View.VISIBLE
             userScoreText.text = "$score/$totalAnswered"
 
-            AnimUtilities.animateFromLeft(scoreText, layout, startDelay = 200)
-            AnimUtilities.animateFromRight(userScoreText, layout, startDelay = 400)
-            if (itemsWrongRecyclerView.isVisible) AnimUtilities.animateFromLeft(
+            Utilities.animateFromLeft(scoreText, layout, startDelay = 200)
+            Utilities.animateFromRight(userScoreText, layout, startDelay = 400)
+            if (itemsWrongRecyclerView.isVisible) Utilities.animateFromLeft(
                 itemsWrongRecyclerView,
                 layout,
                 startDelay = 600
             )
-            else AnimUtilities.animateFromLeft(emptyRecyclerViewText, layout, startDelay = 600)
-            AnimUtilities.animateFromRight(restartButton, layout, startDelay = 800)
-            AnimUtilities.animateFromLeft(backToMenuButton, layout, startDelay = 1000)
+            else Utilities.animateFromLeft(emptyRecyclerViewText, layout, startDelay = 600)
+            Utilities.animateFromRight(restartButton, layout, startDelay = 800)
+            Utilities.animateFromLeft(backToMenuButton, layout, startDelay = 1000)
 
             backToMenuButton.setOnClickListener {
                 startActivity(Intent(this, MenuActivity::class.java))
             }
+            transitioning = false
         }
-        AnimUtilities.animateEnd(newLevelLayout, rootLayout, 200) {
+        Utilities.animateEnd(newLevelLayout, rootLayout, 200) {
             newLevelLayout.visibility = View.INVISIBLE
         }
 
         //After last view is off screen, begin animating end screen results to screen
-        AnimUtilities.animateEnd(responseImage, rootLayout, 100) {
+        Utilities.animateEnd(responseImage, rootLayout, 100) {
             responseImage.visibility = View.INVISIBLE
         }
     }
@@ -499,31 +522,69 @@ class ReviewActivity : AppCompatActivity() {
         val oneMinute = 1000 * 60L
         val millisecondsInHours = 1000L * 60 * 60
         val millisecondsInDays = millisecondsInHours * 24
-        return when(level) {
-            1 -> (millisecondsInHours * 73) // Level 1 is 8 hours after review
-            2 -> (millisecondsInDays * 1) // Level 2 is 1 day after review
-            3 -> (millisecondsInDays * 3) // Level 3 is 2 days after review
-            4 -> (millisecondsInDays * 7) // Level 4 is 7 days (1 week) after review
-            5 -> (millisecondsInDays * 14) // Level 5 is 14 day (2 weeks) after review
-            6 -> (millisecondsInDays * 30) // Level 6 is 30 days (1 month) after review
-            else -> 0
-        }
-        //For debugging
 //        return when(level) {
-//            1 -> oneMinute * 1
-//            2 -> oneMinute * 2
-//            3 -> oneMinute * 3
-//            4 -> oneMinute * 4
-//            5 -> oneMinute * 5
-//            6 -> oneMinute * 6
+//            1 -> (millisecondsInHours * 73) // Level 1 is 8 hours after review
+//            2 -> (millisecondsInDays * 1) // Level 2 is 1 day after review
+//            3 -> (millisecondsInDays * 3) // Level 3 is 2 days after review
+//            4 -> (millisecondsInDays * 7) // Level 4 is 7 days (1 week) after review
+//            5 -> (millisecondsInDays * 14) // Level 5 is 14 day (2 weeks) after review
+//            6 -> (millisecondsInDays * 30) // Level 6 is 30 days (1 month) after review
 //            else -> 0
 //        }
+        //For debugging
+        return when(level) {
+            1 -> oneMinute * 1
+            2 -> oneMinute * 2
+            3 -> oneMinute * 3
+            4 -> oneMinute * 4
+            5 -> oneMinute * 5
+            6 -> oneMinute * 6
+            else -> 0
+        }
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        //TODO: Dialog pops up asking if they are sure they want to leave mid-review
-        // If user leaves, calculate next review time for all items in the wrong answers array
+        if (!transitioning) {
+
+            if (reviewOver) {
+                startActivity(Intent(this, MenuActivity::class.java))
+                return
+            }
+
+            val view = layoutInflater.inflate(R.layout.leave_review_dialog, null)
+            val dialog = AlertDialog.Builder(this, R.style.DialogTheme).create()
+
+            if (quiz) {
+                view.findViewById<TextView>(R.id.titleTextView).text = "End Quiz"
+                view.findViewById<TextView>(R.id.quizExplainTextView).visibility = View.VISIBLE
+            }
+
+            view.findViewById<TextView>(R.id.cancelButton).setOnClickListener {
+                dialog.dismiss()
+            }
+
+            view.findViewById<TextView>(R.id.endReviewTextView).setOnClickListener {
+                //If user gets kana incorrect, it will be added to incorrect review answers list
+                //If user later gets it correct, it will be removed from the list, and the review time for incorrect kana is then calculated.
+                //If user gets it incorrect, but backs out of the session before getting it correct,
+                //the review time for all kana in the list will be calculated, so they cannot cheat the system
+                for (kana in incorrectReviewAnswers) {
+                    calculateNextReviewTime(kana, correct = false)
+                }
+
+                // If it's a quiz, just send user back to menu without learning the kana
+                // If it's review, then complete what they have done
+                if (quiz) {
+                    startActivity(Intent(this, MenuActivity::class.java))
+                } else if (review && !reviewOver) {
+                    completedSet()
+                }
+                dialog.dismiss()
+            }
+
+            dialog.setView(view)
+            dialog.show()
+        }
     }
 
     //size of 45 (0-45) since there are 46 characters
