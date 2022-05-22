@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.*
 import androidx.core.view.marginBottom
-import com.example.jwriter.util.AnimUtilities
+import com.example.jwriter.util.Utilities
 import com.google.android.material.button.MaterialButton
 import com.skydoves.progressview.ProgressView
 import com.takusemba.spotlight.Spotlight
@@ -81,17 +81,17 @@ class MenuIntroFragment : Fragment() {
 
         view.post {
 
-            targets.add(AnimUtilities.newTarget(summaryButton, summaryButton.height.toFloat(), summaryButton.width.toFloat(), first))
-            targets.add(AnimUtilities.newTarget(nextReviewTextView, nextReviewTextView.height.toFloat(), nextReviewTextView.width.toFloat(), first))
-            targets.add(AnimUtilities.newTarget(progressBarSpace, hiraganaProgressBar.height.toFloat() * 2.6f, hiraganaProgressBar.width.toFloat(), first))
-            targets.add(AnimUtilities.newTarget(showMoreArrow, showMoreArrow.height.toFloat(), showMoreArrow.width.toFloat(), first, {
+            targets.add(Utilities.newTarget(summaryButton, summaryButton.height.toFloat(), summaryButton.width.toFloat(), first))
+            targets.add(Utilities.newTarget(nextReviewTextView, nextReviewTextView.height.toFloat(), nextReviewTextView.width.toFloat(), first))
+            targets.add(Utilities.newTarget(progressBarSpace, hiraganaProgressBar.height.toFloat() * 2.6f, hiraganaProgressBar.width.toFloat(), first))
+            targets.add(Utilities.newTarget(showMoreArrow, showMoreArrow.height.toFloat(), showMoreArrow.width.toFloat(), first, {
                 showMoreArrow.isEnabled = true
                 first.setOnTouchListener { view, motionEvent ->
                     false
                 }
             }))
 
-           levelsLayoutTarget = AnimUtilities.newTarget(levelsLayout.findViewById(R.id.expert), levelsLayout.measuredHeight.toFloat(), levelsLayout.measuredWidth.toFloat(), first, {
+           levelsLayoutTarget = Utilities.newTarget(levelsLayout.findViewById(R.id.expert), levelsLayout.measuredHeight.toFloat(), levelsLayout.measuredWidth.toFloat(), first, {
 
             }, {
                 showMoreArrow.isEnabled = false
@@ -121,12 +121,12 @@ class MenuIntroFragment : Fragment() {
         showMoreArrow.setOnClickListener {
             if (showMore && !moving) {
                 moving = true
-                AnimUtilities.slideView(
+                Utilities.slideView(
                     summaryLayout,
                     summaryLayout.height,
                     summaryLayout.height + levelsLayout.measuredHeight + levelsLayout.marginBottom
                 ) {}
-                AnimUtilities.slideView(
+                Utilities.slideView(
                     summaryButton,
                     summaryButton.height,
                     summaryLayout.height + levelsLayout.measuredHeight + levelsLayout.marginBottom
@@ -138,12 +138,12 @@ class MenuIntroFragment : Fragment() {
                 showMoreArrow.setImageResource(android.R.drawable.arrow_up_float)
             } else if (!showMore && !moving) {
                 moving = true
-                AnimUtilities.slideView(
+                Utilities.slideView(
                     summaryLayout,
                     summaryLayout.height,
                     summaryLayout.height - levelsLayout.measuredHeight - levelsLayout.marginBottom
                 ) {}
-                AnimUtilities.slideView(
+                Utilities.slideView(
                     summaryButton,
                     summaryButton.height,
                     summaryLayout.height - levelsLayout.measuredHeight - levelsLayout.marginBottom

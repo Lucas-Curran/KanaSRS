@@ -16,10 +16,10 @@ import androidx.core.view.setPadding
 import androidx.core.view.updateMargins
 import com.example.jwriter.activity.setOnSingleClickListener
 import com.example.jwriter.database.Kana
-import com.example.jwriter.util.AnimUtilities
-import com.example.jwriter.util.AnimUtilities.Companion.mediaPlayer
-import com.example.jwriter.util.AnimUtilities.Companion.setNextAnim
-import com.example.jwriter.util.AnimUtilities.Companion.setPrevAnim
+import com.example.jwriter.util.Utilities
+import com.example.jwriter.util.Utilities.Companion.mediaPlayer
+import com.example.jwriter.util.Utilities.Companion.setNextAnim
+import com.example.jwriter.util.Utilities.Companion.setPrevAnim
 import com.example.jwriter.util.KanaConverter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -49,7 +49,7 @@ class KanaInfoView(context: Context, kana: Kana) {
         if (kana.reviewTime != null) {
             if (kana.reviewTime!! > System.currentTimeMillis()) {
                 val timeUntilReview = kana.reviewTime!! - System.currentTimeMillis()
-                nextReviewText.text = "Review -> ${AnimUtilities.formatTime(timeUntilReview)}"
+                nextReviewText.text = "Review -> ${Utilities.formatTime(timeUntilReview)}"
             } else {
                 nextReviewText.text = "Review -> now"
             }
