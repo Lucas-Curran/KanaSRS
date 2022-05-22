@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cardview_dark_background"
-    tools:context=".activity.ReviewActivity">
+    tools:context=".activity.ReviewActivity"
+    app:layoutDescription="@xml/activity_review_scene">
 
     <include
         android:id="@+id/finishGameLayout"
@@ -26,7 +27,8 @@
         android:progressTint="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/numberCorrectTextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/incorrectImageView"/>
 
     <TextView
         android:id="@+id/numberCorrectTextView"
@@ -45,9 +47,32 @@
         android:layout_height="15dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
+        app:tint="@color/lime"
         android:src="@drawable/ic_checkmark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/numberWrongTextView"
+        android:layout_width="19dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/checkmark"
+        app:layout_constraintTop_toBottomOf="@id/numberCorrectTextView"/>
+
+    <ImageView
+        android:id="@+id/incorrectImageView"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        app:tint="@color/wrong_answer"
+        android:src="@drawable/ic_x"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkmark" />
 
     <LinearLayout
         android:id="@+id/newLevelLayout"
@@ -92,6 +117,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="あ"
+        android:shadowColor="@color/black"
+        android:shadowDx="1.5"
+        android:shadowDy="1.3"
+        android:shadowRadius="1.6"
         android:textColor="@color/white"
         android:textSize="100sp"
         android:textStyle="bold"
@@ -107,15 +136,20 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:paddingEnd="20dp"
+        android:shadowColor="@color/black"
+        android:shadowDx="1.5"
+        android:shadowDy="1.3"
+        android:shadowRadius="1.6"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:paddingEnd="40dp"
         android:background="@drawable/square_outline"
-        android:hint="Answer"
+        android:hint="答え"
         android:maxLength="3"
         android:singleLine="true"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textColorHint="@android:color/darker_gray"
-        android:textSize="30sp"
+        android:textSize="36sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/letterToGuess" />
 
@@ -129,6 +163,7 @@
         android:background="@drawable/custom_button"
         android:foreground="?android:attr/selectableItemBackground"
         android:text="Submit"
+        android:textSize="16sp"
         app:backgroundTint="#4599ff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/letterToGuess" />
