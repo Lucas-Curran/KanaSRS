@@ -50,8 +50,7 @@
                     android:duration="1000"
                     android:valueFrom="0"
                     android:valueTo="1"
-                    android:valueType="floatType"
-                    android:interpolator="@android:anim/decelerate_interpolator"/>
+                    android:valueType="floatType"/>
             </set>
         </aapt:attr>
     </target>
@@ -62,8 +61,7 @@
                 android:duration="1000"
                 android:valueFrom="0"
                 android:valueTo="1"
-                android:valueType="floatType"
-                android:interpolator="@android:anim/decelerate_interpolator"/>
+                android:valueType="floatType"/>
         </aapt:attr>
     </target>
 </animated-vector>
