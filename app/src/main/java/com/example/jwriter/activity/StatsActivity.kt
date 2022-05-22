@@ -1,28 +1,22 @@
 package com.example.jwriter.activity
 
 import android.content.Intent
-import android.graphics.Paint
 import android.graphics.Typeface
-import android.media.MediaPlayer
 import android.os.Bundle
-import android.text.Layout
 import android.view.Gravity
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
-import androidx.core.view.get
 import com.example.jwriter.KanaInfoView
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.R
 import com.example.jwriter.database.Kana
-import com.example.jwriter.util.AnimUtilities.Companion.formatTime
+import com.example.jwriter.util.Utilities.Companion.formatTime
 import com.google.android.material.tabs.TabLayout
 import com.skydoves.progressview.ProgressLabelConstraints
 import com.skydoves.progressview.ProgressView
 import com.skydoves.progressview.progressView
-import kotlin.random.Random
 
 
 /*
