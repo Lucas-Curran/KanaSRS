@@ -33,17 +33,50 @@ class Utilities {
 
         var mediaPlayer = MediaPlayer()
 
+        fun animateUp(view: View, startDelay: Long) {
+            view.animate().translationYBy(-1000F).withEndAction {
+                view.visibility = View.GONE
+            }.setStartDelay(startDelay).duration = 2000
+        }
+
+        fun animateFromTop(view: View, layout: ConstraintLayout, startDelay: Long) {
+            view.y = (-layout.height).toFloat()
+            view.animate().translationYBy(layout.height.toFloat()).setStartDelay(startDelay).duration = 1000
+        }
+
+        fun animateFromBottom(view: View, layout: ConstraintLayout, startDelay: Long) {
+            view.y = (layout.height).toFloat()
+            view.animate().translationYBy(-view.height.toFloat()).setStartDelay(startDelay).duration = 1000
+        }
+
         fun animateFromLeft(view: View, layout: ConstraintLayout, startDelay: Long) {
             view.x = (-layout.width).toFloat()
             view.animate().translationXBy(layout.width.toFloat() * 1.5F - view.width / 2).setStartDelay(startDelay).duration = 1000
         }
+
         fun animateFromRight(view: View, layout: ConstraintLayout, startDelay: Long) {
             view.x = (layout.width).toFloat() * 2
             view.animate().translationXBy(-layout.width.toFloat() * 1.5F - view.width / 2).setStartDelay(startDelay).duration = 1000
         }
-        /**
-         * Helper function for end screen animation
-         */
+
+        fun animateToLeft(view: View, startDelay: Long, endAction: (() -> Unit)? = null) {
+            view.animate().translationXBy(-1000F).withEndAction {
+                view.visibility = View.GONE
+                if (endAction != null) {
+                    endAction()
+                }
+            }.setStartDelay(startDelay).duration = 2000
+        }
+
+        fun animateToRight(view: View, startDelay: Long, endAction: (() -> Unit)? = null) {
+            view.animate().translationXBy(1000F).withEndAction {
+                view.visibility = View.GONE
+                if (endAction != null) {
+                    endAction()
+                }
+            }.setStartDelay(startDelay).duration = 2000
+        }
+
          fun animateEnd(view: View, rootLayout: ConstraintLayout, delay: Long, action: () -> Unit) {
             view.animate().translationYBy(-300F).withEndAction {
                 view.animate().translationYBy(rootLayout.height.toFloat()).withEndAction {
