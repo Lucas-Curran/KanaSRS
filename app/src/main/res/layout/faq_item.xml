@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/numberTextView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/faq_circle"
+        android:text="四"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/questionTextView"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/lesson_box"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_marginStart="30dp"
+        android:paddingStart="70dp"
+        android:text="This is some example text to demonstrate a question inside this box."
+        app:layout_constraintBottom_toBottomOf="@id/numberTextView"
+        app:layout_constraintStart_toStartOf="@id/numberTextView"
+        app:layout_constraintTop_toTopOf="@id/numberTextView"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
