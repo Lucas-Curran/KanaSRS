@@ -5,6 +5,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.res.AssetManager
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
@@ -18,8 +19,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.BlendModeColorFilterCompat
-import androidx.core.graphics.BlendModeCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.marginBottom
 import com.example.jwriter.*
@@ -32,6 +31,7 @@ import com.example.jwriter.util.Utilities.Companion.colorizeText
 import com.example.jwriter.util.Utilities.Companion.disable
 import com.example.jwriter.util.Utilities.Companion.formatTime
 import com.google.android.material.button.MaterialButton
+import java.io.File
 import java.util.*
 
 
@@ -122,11 +122,6 @@ class MenuActivity : AppCompatActivity() {
             }
 
             val toolbar = findViewById<Toolbar>(R.id.toolbar)
-            toolbar.overflowIcon?.colorFilter =
-                BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                    R.color.white, BlendModeCompat.SRC_ATOP
-                )
-
             setSupportActionBar(toolbar)
 
             currentReviewsTextView = findViewById(R.id.currentReviewsTextView)
@@ -289,8 +284,23 @@ class MenuActivity : AppCompatActivity() {
     }
 
     private fun showFAQ() {
+
         val view = layoutInflater.inflate(R.layout.faq_dialog, null)
         val builder = AlertDialog.Builder(this, R.style.DialogTheme).setView(view).create()
+
+        val contents = this.assets.open("faq.txt").bufferedReader().use { it.readText() }
+        val questions = contents.split("\n")
+
+        val linearLayout = view.findViewById<LinearLayout>(R.id.faqLinearLayout)
+
+        for (question in questions) {
+            val list = question.split("* ")
+            val faqItem = layoutInflater.inflate(R.layout.faq_item, null)
+            faqItem.findViewById<TextView>(R.id.numberTextView).text = list[0]
+            faqItem.findViewById<TextView>(R.id.questionTextView).text = list[1]
+            linearLayout.addView(faqItem)
+        }
+
         builder.show()
     }
 
