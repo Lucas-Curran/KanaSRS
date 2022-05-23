@@ -5,11 +5,9 @@
         <item name="android:textColor">#ffff</item>
         <item name="font">@font/aldrich</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:actionOverflowButtonStyle">@style/ActionButtonOverflow</item>
-        <item name="actionOverflowButtonStyle">@style/ActionButtonOverflow</item>
     </style>
-    <style name="ActionButtonOverflow" parent="@style/Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:tint">@color/white</item>
+    <style name="MyToolbarStyle" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorSecondary">@color/white</item>
     </style>
     <style name="DialogTheme" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
