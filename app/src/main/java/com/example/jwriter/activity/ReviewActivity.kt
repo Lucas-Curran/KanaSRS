@@ -17,13 +17,9 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
-import androidx.core.view.isVisible
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.jwriter.*
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
@@ -31,6 +27,7 @@ import com.example.jwriter.util.Utilities
 import com.example.jwriter.util.Utilities.Companion.colorizeText
 import com.example.jwriter.util.KanaConverter
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.button.MaterialButton
 import kotlin.random.Random
 
 /**
@@ -48,20 +45,16 @@ class ReviewActivity : AppCompatActivity() {
     private lateinit var rootLayout: ConstraintLayout
     private lateinit var kanaConverter: KanaConverter
     private lateinit var kanaList: MutableList<Kana>
-    private lateinit var layout: ConstraintLayout
-    private lateinit var scoreText: TextView
-    private lateinit var userScoreText: TextView
-    private lateinit var restartButton: Button
-    private lateinit var backToMenuButton: Button
-    private lateinit var itemsWrongRecyclerView: RecyclerView
-    private lateinit var emptyRecyclerViewText: TextView
     private lateinit var newLevelLayout: LinearLayout
     private lateinit var arrowIndicator: ImageView
     private lateinit var newLevelTextView: TextView
     private lateinit var reviewProgressBar: ProgressBar
+    private lateinit var endReviewLayout: ConstraintLayout
+
     private lateinit var numberCorrectTextView: TextView
-    private lateinit var incorrectImageView: ImageView
     private lateinit var incorrectTextView: TextView
+    private lateinit var correctImageView: ImageView
+    private lateinit var incorrectImageView: ImageView
 
     private lateinit var correctTransition: TransitionDrawable
     private lateinit var incorrectTransition: TransitionDrawable
@@ -106,18 +99,15 @@ class ReviewActivity : AppCompatActivity() {
         letterTextView = findViewById(R.id.letterToGuess)
         userResponseEditText = findViewById(R.id.responseEditText)
         rootLayout = findViewById(R.id.rootLayout)
-        layout = findViewById(R.id.finishGameLayout)
-        scoreText = findViewById(R.id.scoreTextView)
-        userScoreText = findViewById(R.id.userScoreTextView)
-        restartButton = findViewById(R.id.restartButton)
-        backToMenuButton = findViewById(R.id.backToMenuButton)
-        emptyRecyclerViewText = findViewById(R.id.empty_view)
         newLevelLayout = findViewById(R.id.newLevelLayout)
         arrowIndicator = findViewById(R.id.arrowIndicator)
         newLevelTextView = findViewById(R.id.newLevelTextView)
         reviewProgressBar = findViewById(R.id.reviewProgressBar)
         numberCorrectTextView = findViewById(R.id.numberCorrectTextView)
         incorrectTextView = findViewById(R.id.numberWrongTextView)
+        correctImageView = findViewById(R.id.correctImageView)
+        incorrectImageView = findViewById(R.id.incorrectImageView)
+        endReviewLayout = findViewById(R.id.finishGameLayout)
 
         correctTransition = TransitionDrawable(arrayOf(
             ContextCompat.getDrawable(this, R.drawable.square_outline),
@@ -127,12 +117,6 @@ class ReviewActivity : AppCompatActivity() {
             ContextCompat.getDrawable(this, R.drawable.square_outline),
             ContextCompat.getDrawable(this, R.drawable.input_background_incorrect))
         )
-
-        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        itemsWrongRecyclerView = findViewById(R.id.itemsWrongRecyclerView)
-        itemsWrongRecyclerView.layoutManager = layoutManager
-
-        itemsWrongRecyclerView.adapter = WrongItemAdapter(englishWrongAnswers, japaneseWrongAnswers)
 
         submitButton = findViewById(R.id.submitButton)
         submitButton.setOnClickListener {
@@ -276,8 +260,6 @@ class ReviewActivity : AppCompatActivity() {
         englishWrongAnswers.add(userResponseEditText.text.toString())
         japaneseWrongAnswers.add(letterTextView.text.toString())
 
-        itemsWrongRecyclerView.adapter?.notifyItemInserted(japaneseWrongAnswers.size-1)
-
         responseImage.visibility = View.VISIBLE
 
         //Set image as x, and start animation
@@ -404,53 +386,32 @@ class ReviewActivity : AppCompatActivity() {
             JWriterDatabase.getInstance(this).userDao().updateUser(user)
         }
 
-        // If no wrong answers,
-        // make wrong answer recycler invisible,
-        // show perfect score label
-        // and then reconfigure constraints on buttons
-        if (japaneseWrongAnswers.isEmpty()) {
-            itemsWrongRecyclerView.visibility = View.GONE
-            emptyRecyclerViewText.visibility = View.VISIBLE
-            val restartParams = restartButton.layoutParams as ConstraintLayout.LayoutParams
-            restartParams.topToBottom = emptyRecyclerViewText.id
-            restartButton.requestLayout()
-        }
+        // Animate views off the screen and then animate the end screen onto screen
+
+        Utilities.animateUp(reviewProgressBar, 100)
+        Utilities.animateUp(correctImageView, 100)
+        Utilities.animateUp(incorrectImageView, 100)
+        Utilities.animateUp(numberCorrectTextView, 100)
+        Utilities.animateUp(incorrectTextView, 100)
 
         //Animate all the on screen views to the bottom
-        Utilities.animateEnd(letterTextView, rootLayout, 300) {
-            letterTextView.visibility = View.INVISIBLE
-        }
-        Utilities.animateEnd(userResponseEditText, rootLayout, 400) {
-            userResponseEditText.visibility = View.INVISIBLE
-        }
-        Utilities.animateEnd(submitButton, rootLayout, 500) {
-            submitButton.visibility = View.INVISIBLE
-            layout.visibility = View.VISIBLE
-            userScoreText.text = "$score/$totalAnswered"
-
-            Utilities.animateFromLeft(scoreText, layout, startDelay = 200)
-            Utilities.animateFromRight(userScoreText, layout, startDelay = 400)
-            if (itemsWrongRecyclerView.isVisible) Utilities.animateFromLeft(
-                itemsWrongRecyclerView,
-                layout,
-                startDelay = 600
-            )
-            else Utilities.animateFromLeft(emptyRecyclerViewText, layout, startDelay = 600)
-            Utilities.animateFromRight(restartButton, layout, startDelay = 800)
-            Utilities.animateFromLeft(backToMenuButton, layout, startDelay = 1000)
-
-            backToMenuButton.setOnClickListener {
+        Utilities.animateToLeft(responseImage, 100)
+        Utilities.animateUp(newLevelLayout, 200)
+        Utilities.animateUp(letterTextView, 300)
+        Utilities.animateToLeft(userResponseEditText, 400)
+        //After last view is off screen, begin animating end screen results to screen
+        Utilities.animateToRight(submitButton, 400) {
+            transitioning = false
+            endReviewLayout.visibility = View.VISIBLE
+            val finishButton = endReviewLayout.findViewById<MaterialButton>(R.id.finishButton)
+            finishButton.setOnClickListener {
                 startActivity(Intent(this, MenuActivity::class.java))
             }
-            transitioning = false
-        }
-        Utilities.animateEnd(newLevelLayout, rootLayout, 200) {
-            newLevelLayout.visibility = View.INVISIBLE
-        }
+            val linearLayout = endReviewLayout.findViewById<LinearLayout>(R.id.rootLinearLayout)
 
-        //After last view is off screen, begin animating end screen results to screen
-        Utilities.animateEnd(responseImage, rootLayout, 100) {
-            responseImage.visibility = View.INVISIBLE
+            Utilities.animateFromTop(linearLayout, rootLayout, 200)
+            Utilities.animateFromTop(endReviewLayout.findViewById(R.id.layoutDivider), rootLayout, 300)
+            Utilities.animateFromBottom(finishButton, rootLayout, 400)
         }
     }
 
