@@ -133,7 +133,7 @@ class StatsActivity : AppCompatActivity() {
             }
         }
 
-        val nextReviewTime = overallView.findViewById<TextView>(R.id.nextReviewTextView)
+        val nextReviewTime = overallView.findViewById<TextView>(R.id.topTextView)
 
         if (mostRecentReview == Long.MAX_VALUE) {
             nextReviewTime.text = "none"
