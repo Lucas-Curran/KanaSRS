@@ -139,7 +139,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:backgroundTint="@null"
-        android:background="@drawable/lime_outline"
+        android:background="@drawable/review_box"
         android:drawableBottom="@drawable/end_review_check"
         android:foreground="?android:attr/selectableItemBackground"
         android:paddingTop="40dp"
