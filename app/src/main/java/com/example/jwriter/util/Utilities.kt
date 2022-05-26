@@ -3,6 +3,7 @@ package com.example.jwriter.util
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.media.MediaPlayer
 import android.os.Build
 import android.text.SpannableString
@@ -11,6 +12,8 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ViewAnimator
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
@@ -19,6 +22,7 @@ import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import androidx.core.text.italic
+import androidx.core.view.marginBottom
 import com.takusemba.spotlight.OnTargetListener
 import com.takusemba.spotlight.Target
 import com.takusemba.spotlight.shape.RoundedRectangle
@@ -46,7 +50,7 @@ class Utilities {
 
         fun animateFromBottom(view: View, layout: ConstraintLayout, startDelay: Long) {
             view.y = (layout.height).toFloat()
-            view.animate().translationYBy(-view.height.toFloat()).setStartDelay(startDelay).duration = 1000
+            view.animate().translationYBy(-view.height.toFloat() - view.marginBottom).setStartDelay(startDelay).duration = 1000
         }
 
         fun animateFromLeft(view: View, layout: ConstraintLayout, startDelay: Long) {
@@ -172,6 +176,14 @@ class Utilities {
         fun View.disable() {
             isClickable = false
             isEnabled = false
+        }
+
+        fun EditText.showKeyboard() {
+            post {
+                requestFocus()
+                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+            }
         }
 
     }
