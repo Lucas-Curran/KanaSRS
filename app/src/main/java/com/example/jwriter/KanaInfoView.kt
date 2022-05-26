@@ -25,39 +25,36 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 
-class KanaInfoView(context: Context, kana: Kana) {
+class KanaInfoView(val context: Context, val kana: Kana) {
 
     private var animationIn: Animation
     private var animationOut: Animation
     private var prevAnimIn: Animation
     private var prevAnimOut: Animation
     private var dialog: BottomSheetDialog
-    private var nextReviewText: TextView
-    private var mContext: Context
+    private var topTextView: TextView
 
     init {
-
-        mContext = context
 
         val view = LayoutInflater.from(context).inflate(R.layout.kana_info_dialog, null)
 
         dialog = BottomSheetDialog(context)
         dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
-        nextReviewText = view.findViewById(R.id.nextReviewTextView)
+        topTextView = view.findViewById(R.id.topTextView)
 
         if (kana.reviewTime != null) {
             if (kana.reviewTime!! > System.currentTimeMillis()) {
                 val timeUntilReview = kana.reviewTime!! - System.currentTimeMillis()
-                nextReviewText.text = "Review -> ${Utilities.formatTime(timeUntilReview)}"
+                topTextView.text = "Review -> ${Utilities.formatTime(timeUntilReview)}"
             } else {
-                nextReviewText.text = "Review -> now"
+                topTextView.text = "Review -> now"
             }
         } else {
             if (!kana.hasLearned) {
-                nextReviewText.text = "Need to learn"
+                topTextView.text = "Need to learn"
             } else {
-                nextReviewText.text = "Already mastered!"
+                topTextView.text = "Already mastered!"
             }
         }
 
@@ -143,7 +140,7 @@ class KanaInfoView(context: Context, kana: Kana) {
 
         view.findViewById<ImageView>(R.id.kanaAudioImageView).setOnClickListener {
             if (!mediaPlayer.isPlaying) {
-                mediaPlayer = MediaPlayer.create(mContext, mContext.resources.getIdentifier(kanaConverter._hiraganaToRomaji(kana.letter), "raw", mContext.packageName))
+                mediaPlayer = MediaPlayer.create(context, context.resources.getIdentifier(kanaConverter._hiraganaToRomaji(kana.letter), "raw", context.packageName))
                 mediaPlayer.start()
             }
         }
@@ -183,8 +180,21 @@ class KanaInfoView(context: Context, kana: Kana) {
         dialog.show()
     }
 
+    fun setTextToLevel(color: Int) {
+        val levelText = when (kana.level) {
+            1, 2 -> "Rookie"
+            3 -> "Amateur"
+            4 -> "Expert"
+            5 -> "Master"
+            6 -> "Sensei"
+            else -> ""
+        }
+        topTextView.text = levelText
+        topTextView.setTextColor(ContextCompat.getColor(context, color))
+    }
+
     fun setReviewToGone() {
-        nextReviewText.visibility = View.GONE
+        topTextView.visibility = View.GONE
     }
 
 }
