@@ -1,5 +1,6 @@
 package com.example.jwriter.activity
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
@@ -8,9 +9,8 @@ import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.text.SpannableStringBuilder
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
+import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -20,15 +20,20 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.jwriter.*
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
+import com.example.jwriter.util.KanaConverter
 import com.example.jwriter.util.Utilities
 import com.example.jwriter.util.Utilities.Companion.colorizeText
-import com.example.jwriter.util.KanaConverter
+import com.example.jwriter.util.Utilities.Companion.showKeyboard
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
+import java.util.*
 import kotlin.random.Random
+
 
 /**
  *
@@ -64,9 +69,7 @@ class ReviewActivity : AppCompatActivity() {
     private var totalAnswered = 0
 
     //Japanese wrong answers is
-    private val japaneseWrongAnswers = arrayListOf<String>()
-    private val englishWrongAnswers = arrayListOf<String>()
-    private val correctQuizAnswers = arrayListOf<Kana>()
+    private val correctReviewAnswers = arrayListOf<Kana>()
     private val incorrectReviewAnswers = arrayListOf<Kana>()
 
     private var quiz = false
@@ -110,47 +113,59 @@ class ReviewActivity : AppCompatActivity() {
         endReviewLayout = findViewById(R.id.finishGameLayout)
 
         correctTransition = TransitionDrawable(arrayOf(
-            ContextCompat.getDrawable(this, R.drawable.square_outline),
+            ContextCompat.getDrawable(this, R.drawable.review_box),
             ContextCompat.getDrawable(this, R.drawable.input_background_correct))
         )
         incorrectTransition = TransitionDrawable(arrayOf(
-            ContextCompat.getDrawable(this, R.drawable.square_outline),
+            ContextCompat.getDrawable(this, R.drawable.review_box),
             ContextCompat.getDrawable(this, R.drawable.input_background_incorrect))
         )
 
         submitButton = findViewById(R.id.submitButton)
-        submitButton.setOnClickListener {
+        submitButton.setOnSingleClickListener {
+            if (!transitioning) {
+                if (userResponseEditText.text.isEmpty()) {
+                    Toast.makeText(
+                        this,
+                        "Please enter something in the input field",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnSingleClickListener
+                }
 
-            if (userResponseEditText.text.isEmpty()) {
-                Toast.makeText(this, "Please enter something in the input field", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
+                //If guess is correct, show positive response and move on to next letter
+                //else, show negative response, show correct answer, and make "next" button visible
 
-            //If guess is correct, show positive response and move on to next letter
-            //else, show negative response, show correct answer, and make "next" button visible
-
-            if (userResponseEditText.text.toString().lowercase() == kanaConverter._hiraganaToRomaji(letterTextView.text.toString())) {
-                correctAnswer()
-            } else {
-                incorrectAnswer()
+                if (userResponseEditText.text.toString()
+                        .lowercase() == kanaConverter._hiraganaToRomaji(letterTextView.text.toString())
+                ) {
+                    correctAnswer()
+                } else {
+                    incorrectAnswer()
+                }
             }
         }
 
         userResponseEditText.setOnEditorActionListener { textView, i, keyEvent ->
             if ((keyEvent != null && (keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)) || (i == EditorInfo.IME_ACTION_DONE)) {
-                submitButton.performClick()
+                if (!transitioning) {
+                    submitButton.performClick()
+                }
             }
             true
         }
 
-        reviewProgressBar.max = kanaList.size
+        reviewProgressBar.max = kanaList.size * 100
 
         letterTextView.text = kanaList[0].letter
 
-        userResponseEditText.requestFocus()
+        val timer = Timer()
+        timer.schedule(object : TimerTask() {
+            override fun run() {
+                userResponseEditText.showKeyboard()
+            }
+        }, 500)
 
-        val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.showSoftInput(userResponseEditText, InputMethodManager.SHOW_IMPLICIT)
     }
 
     /**
@@ -188,10 +203,7 @@ class ReviewActivity : AppCompatActivity() {
                 //Make cursor invisible and back to visible because of UI glitch
                 userResponseEditText.isCursorVisible = false
                 userResponseEditText.isCursorVisible = true
-                userResponseEditText.requestFocus()
-                val imm: InputMethodManager =
-                    getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.showSoftInput(userResponseEditText, InputMethodManager.SHOW_IMPLICIT)
+                userResponseEditText.showKeyboard()
                 transitioning = false
             }.duration = 850
         }.duration = 850
@@ -257,9 +269,6 @@ class ReviewActivity : AppCompatActivity() {
         userResponseEditText.background = incorrectTransition
         incorrectTransition.startTransition(300)
 
-        englishWrongAnswers.add(userResponseEditText.text.toString())
-        japaneseWrongAnswers.add(letterTextView.text.toString())
-
         responseImage.visibility = View.VISIBLE
 
         //Set image as x, and start animation
@@ -317,7 +326,7 @@ class ReviewActivity : AppCompatActivity() {
                 newLevelLayout.visibility = View.VISIBLE
                 newLevelLayout.alpha = 1F
 
-                incorrectReviewAnswers.remove(kana)
+                correctReviewAnswers.add(kana)
 
             } else {
                 calculateNextReviewTime(kana = kana, correct = false)
@@ -335,7 +344,7 @@ class ReviewActivity : AppCompatActivity() {
         if (quiz) {
             val kana = kanaList[0]
             kanaList.remove(kana)
-            correctQuizAnswers.add(kana)
+            correctReviewAnswers.add(kana)
         }
 
         userResponseEditText.background = correctTransition
@@ -346,7 +355,10 @@ class ReviewActivity : AppCompatActivity() {
 
         numberCorrectTextView.text = score.toString()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            reviewProgressBar.setProgress(score, true)
+            val animation = ObjectAnimator.ofInt(reviewProgressBar, "progress", reviewProgressBar.progress, score * 100)
+            animation.duration = 1000
+            animation.interpolator = DecelerateInterpolator()
+            animation.start()
         } else {
             reviewProgressBar.progress = score
         }
@@ -370,14 +382,14 @@ class ReviewActivity : AppCompatActivity() {
         userResponseEditText.isEnabled = false
 
         if (quiz) {
-            for (kana in correctQuizAnswers) {
+            for (kana in correctReviewAnswers) {
                 learnKana(kana)
             }
 
             val user = JWriterDatabase.getInstance(this).userDao().getUser()
             // Subtract remaining lessons for the day by the quiz size, and
             // then if the lesson refresh time isn't set, make it one day from now
-            user.lessonsNumber = user.lessonsNumber?.minus(correctQuizAnswers.size)
+            user.lessonsNumber = user.lessonsNumber?.minus(correctReviewAnswers.size)
             if (user.lessonRefreshTime == null) {
                 val oneDay = 24 * 1000L * 60 * 60
                 //val oneMinute = 1000 * 60
@@ -408,6 +420,17 @@ class ReviewActivity : AppCompatActivity() {
                 startActivity(Intent(this, MenuActivity::class.java))
             }
             val linearLayout = endReviewLayout.findViewById<LinearLayout>(R.id.rootLinearLayout)
+
+            endReviewLayout.findViewById<TextView>(R.id.endCorrectTextView).text = correctReviewAnswers.size.toString()
+            endReviewLayout.findViewById<TextView>(R.id.endIncorrectTextView).text = incorrectReviewAnswers.size.toString()
+
+            val correctRecyclerView = endReviewLayout.findViewById<RecyclerView>(R.id.correctRecyclerView)
+            val incorrectRecyclerView = endReviewLayout.findViewById<RecyclerView>(R.id.incorrectRecyclerView)
+
+            correctRecyclerView.adapter = ReviewedKanaAdapter(correctReviewAnswers, this, true)
+            incorrectRecyclerView.adapter = ReviewedKanaAdapter(incorrectReviewAnswers, this, false)
+            correctRecyclerView.layoutManager = LinearLayoutManager(this)
+            incorrectRecyclerView.layoutManager = LinearLayoutManager(this)
 
             Utilities.animateFromTop(linearLayout, rootLayout, 200)
             Utilities.animateFromTop(endReviewLayout.findViewById(R.id.layoutDivider), rootLayout, 300)
@@ -546,22 +569,6 @@ class ReviewActivity : AppCompatActivity() {
             dialog.setView(view)
             dialog.show()
         }
-    }
-
-    //size of 45 (0-45) since there are 46 characters
-    companion object KanaList {
-        val hiraganaList = arrayOf(
-            "あ", "い", "う", "え", "お", "か", "き", "く", "け", "こ"
-            , "さ", "し", "す", "せ", "そ", "た", "ち", "つ", "て", "と"
-            , "な", "に", "ぬ", "ね", "の", "は", "ひ", "ふ", "へ", "ほ"
-            , "ま", "み", "む", "め", "も", "や", "ゆ", "よ", "ら", "り"
-            , "る", "れ", "ろ", "わ", "を", "ん")
-        val katakanaList = arrayOf(
-            "ア", "イ", "ウ", "エ", "オ", "カ", "キ", "ク", "ケ", "コ"
-            , "サ", "シ", "ス", "セ", "ソ", "タ", "チ", "ツ", "テ", "ト"
-            , "ナ", "ニ", "ヌ", "ネ", "ノ", "ハ", "ヒ", "フ", "ヘ", "ホ"
-            , "マ", "ミ", "ム", "メ", "モ", "ヤ", "ユ", "ヨ", "ラ", "リ"
-            , "ル", "レ", "ロ", "ワ", "ヲ", "ン")
     }
 
 }
