@@ -15,8 +15,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/cardview_dark_background"
         app:tabIndicatorColor="@color/pink"
-        android:background="@drawable/pink_outline"
         app:tabSelectedTextColor="@color/white"
         app:tabTextColor="@android:color/darker_gray">
 

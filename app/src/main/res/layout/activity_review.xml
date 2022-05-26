@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/finishGameLayout"
-        layout="@layout/finish_game_view"
+        layout="@layout/finish_review_layout"
         android:visibility="invisible" />
 
     <ProgressBar
@@ -141,7 +141,7 @@
         android:shadowRadius="1.6"
         android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:paddingEnd="40dp"
-        android:background="@drawable/square_outline"
+        android:background="@drawable/review_box"
         android:hint="答え"
         android:maxLength="3"
         android:singleLine="true"
