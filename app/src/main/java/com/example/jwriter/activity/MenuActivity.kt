@@ -5,14 +5,10 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.res.AssetManager
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.MotionEvent
-import android.view.View
+import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +17,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.marginBottom
-import com.example.jwriter.*
+import androidx.core.view.marginTop
+import com.example.jwriter.R
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
 import com.example.jwriter.database.User
@@ -31,7 +28,6 @@ import com.example.jwriter.util.Utilities.Companion.colorizeText
 import com.example.jwriter.util.Utilities.Companion.disable
 import com.example.jwriter.util.Utilities.Companion.formatTime
 import com.google.android.material.button.MaterialButton
-import java.io.File
 import java.util.*
 
 
@@ -294,10 +290,47 @@ class MenuActivity : AppCompatActivity() {
         val linearLayout = view.findViewById<LinearLayout>(R.id.faqLinearLayout)
 
         for (question in questions) {
+
             val list = question.split("* ")
             val faqItem = layoutInflater.inflate(R.layout.faq_item, null)
+            val questionTextView = faqItem.findViewById<TextView>(R.id.questionTextView)
+            val relativeLayout = faqItem.findViewById<RelativeLayout>(R.id.faqRelativeLayout)
+            val answerTextView = faqItem.findViewById<TextView>(R.id.answerTextView)
+            val divider = faqItem.findViewById<View>(R.id.faqDivider)
+
+            var open = false
+            var moving = false
+
+            //First index is kanji number, second index is question, third index is answer
+
             faqItem.findViewById<TextView>(R.id.numberTextView).text = list[0]
-            faqItem.findViewById<TextView>(R.id.questionTextView).text = list[1]
+            questionTextView.text = list[1]
+            answerTextView.text = list[2]
+
+            faqItem.setOnSingleClickListener {
+
+                val shiftSpace = answerTextView.measuredHeight + answerTextView.marginBottom + divider.measuredHeight + divider.marginTop + divider.marginBottom
+
+                if (!moving) {
+                    moving = true
+                    faqItem.isSelected = !faqItem.isSelected
+                    if (!open) {
+                        Utilities.slideView(relativeLayout, relativeLayout.measuredHeight, relativeLayout.measuredHeight + shiftSpace) {
+                        }
+                        Utilities.slideView(questionTextView, questionTextView.measuredHeight, questionTextView.measuredHeight + shiftSpace) {
+                            open = true
+                            moving = false
+                        }
+                    } else {
+                        Utilities.slideView(relativeLayout, relativeLayout.measuredHeight, relativeLayout.measuredHeight - shiftSpace) {
+                        }
+                        Utilities.slideView(questionTextView, questionTextView.measuredHeight, questionTextView.measuredHeight - shiftSpace) {
+                            open = false
+                            moving = false
+                        }
+                    }
+                }
+            }
             linearLayout.addView(faqItem)
         }
 
