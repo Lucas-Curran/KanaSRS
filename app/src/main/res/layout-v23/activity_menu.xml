@@ -305,7 +305,7 @@
                 android:layout_height="200dp"
                 android:layout_margin="15dp"
                 android:background="@drawable/custom_button"
-                android:drawableTop="@android:drawable/ic_menu_preferences"
+                android:drawableTop="@drawable/ic_settings"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:paddingTop="60dp"
                 android:paddingBottom="40dp"
