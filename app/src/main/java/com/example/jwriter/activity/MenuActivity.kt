@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.net.Uri
@@ -105,7 +106,7 @@ class MenuActivity : AppCompatActivity() {
 
             setContentView(R.layout.activity_menu)
 
-            myAlarm()
+            Utilities.setAlarm(this)
 
             val numReviewTextView = findViewById<TextView>(R.id.numItemsTextView)
             numReviewTextView.text = numItemsToReview.toString()
@@ -361,47 +362,26 @@ class MenuActivity : AppCompatActivity() {
         builder.show()
     }
 
-    @SuppressLint("UnspecifiedImmutableFlag")
-    fun myAlarm() {
-        val calendar = Calendar.getInstance()
-        calendar[Calendar.HOUR_OF_DAY] = 12
-        calendar[Calendar.MINUTE] = 0
-        calendar[Calendar.SECOND] = 0
-        if (calendar.time < Date()) calendar.add(Calendar.DAY_OF_MONTH, 1)
-        val intent = Intent(applicationContext, NotificationReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            applicationContext,
-            0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
-        )
-    }
-
     private fun checkLessonTimer(user: User) {
+        val sharedPref = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE)
+        val lessonNumber = sharedPref.getInt("jwriterLessonNumber", 10)
         if (user.lessonRefreshTime != null) {
             //If current clock time is greater than time set to refresh, reset lesson number and make refresh time null
             if (System.currentTimeMillis() > user.lessonRefreshTime!!) {
                 if (db.kanaDao().getUnlearnedKana().size in 1..9) {
                     user.lessonsNumber = db.kanaDao().getUnlearnedKana().size
                 } else {
-                    user.lessonsNumber = 10
+                    user.lessonsNumber = lessonNumber
                 }
                 user.lessonRefreshTime = null
                 db.userDao().updateUser(user)
             }
         } else {
             //If the current remaining kana number is between 1-9, make lesson number the unlearned kana size
-            if (db.kanaDao().getUnlearnedKana().size in 1..9) {
+            if (db.kanaDao().getUnlearnedKana().size in 1 until lessonNumber) {
                 user.lessonsNumber = db.kanaDao().getUnlearnedKana().size
             } else {
-                user.lessonsNumber = 10
+                user.lessonsNumber = lessonNumber
             }
             db.userDao().updateUser(user)
         }
