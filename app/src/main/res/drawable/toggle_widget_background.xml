@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/pink" android:state_checked="true" />
-    <item android:drawable="@android:color/holo_red_dark" android:state_pressed="true"/>
-    <item android:drawable="@android:color/transparent" />
+
+    <item android:drawable="@drawable/lessons_pressed_background" android:state_pressed="true" />
+    <item android:drawable="@drawable/lessons_selected_background" android:state_checked="true" />
+    <item android:drawable="@drawable/review_box" />
 </selector>
