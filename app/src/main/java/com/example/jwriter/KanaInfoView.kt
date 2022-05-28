@@ -60,7 +60,11 @@ class KanaInfoView(val context: Context, val kana: Kana) {
 
         val kanaConverter = KanaConverter(false)
 
-        view.findViewById<TextView>(R.id.kanaEnglishTextView).text = kanaConverter._hiraganaToRomaji(kana.letter)
+        view.findViewById<TextView>(R.id.kanaEnglishTextView).text = kana.letter?.let {
+            kanaConverter.hiraganaToRomaji(
+                it
+            )
+        }
         view.findViewById<TextView>(R.id.kanaTextView).text = kana.letter
 
         val webStroke = view.findViewById<WebView>(R.id.strokeWebView)
@@ -140,7 +144,11 @@ class KanaInfoView(val context: Context, val kana: Kana) {
 
         view.findViewById<ImageView>(R.id.kanaAudioImageView).setOnClickListener {
             if (!mediaPlayer.isPlaying) {
-                mediaPlayer = MediaPlayer.create(context, context.resources.getIdentifier(kanaConverter._hiraganaToRomaji(kana.letter), "raw", context.packageName))
+                mediaPlayer = MediaPlayer.create(context, context.resources.getIdentifier(kana.letter?.let { it1 ->
+                    kanaConverter.hiraganaToRomaji(
+                        it1
+                    )
+                }, "raw", context.packageName))
                 mediaPlayer.start()
             }
         }

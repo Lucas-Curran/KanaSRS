@@ -1,16 +1,13 @@
 package com.example.jwriter.activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.graphics.*
 import android.media.MediaPlayer
 import android.os.*
 import android.util.TypedValue
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.MarginLayoutParams
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
@@ -126,10 +123,10 @@ class LessonActivity : AppCompatActivity() {
 
                 newView.findViewById<TextView>(R.id.kanaTextView).text = kana.letter
                 newView.findViewById<TextView>(R.id.englishTextView).text =
-                    kanaConverter._hiraganaToRomaji(kana.letter)
+                    kana.letter?.let { kanaConverter.hiraganaToRomaji(it) }
 
                 newView.findViewById<ImageView>(R.id.kanaAudioImageView).setOnClickListener {
-                    playAudio(kanaConverter._hiraganaToRomaji(kana.letter))
+                    kana.letter?.let { it1 -> kanaConverter.hiraganaToRomaji(it1)?.let { it1 -> playAudio(it1) } }
                 }
 
                 val itemTabLayout = newView.findViewById<TabLayout>(R.id.itemTabLayout)

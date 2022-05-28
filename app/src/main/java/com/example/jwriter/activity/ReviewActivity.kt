@@ -1,7 +1,6 @@
 package com.example.jwriter.activity
 
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.TransitionDrawable
@@ -12,7 +11,6 @@ import android.text.SpannableStringBuilder
 import android.view.*
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -137,7 +135,7 @@ class ReviewActivity : AppCompatActivity() {
                 //else, show negative response, show correct answer, and make "next" button visible
 
                 if (userResponseEditText.text.toString()
-                        .lowercase() == kanaConverter._hiraganaToRomaji(letterTextView.text.toString())
+                        .lowercase() == kanaConverter.hiraganaToRomaji(letterTextView.text.toString())
                 ) {
                     correctAnswer()
                 } else {
@@ -442,8 +440,9 @@ class ReviewActivity : AppCompatActivity() {
         val view = LayoutInflater.from(this).inflate(R.layout.wrong_answer_dialog, null)
         val dialog = BottomSheetDialog(this)
 
-        val romaji = kanaConverter._hiraganaToRomaji(letterTextView.text.toString())
-        val colorizedText = romaji.colorizeText(romaji, ContextCompat.getColor(applicationContext, R.color.lime))
+        val romaji = kanaConverter.hiraganaToRomaji(letterTextView.text.toString())
+        val colorizedText =
+            romaji?.let { romaji.colorizeText(it, ContextCompat.getColor(applicationContext, R.color.lime)) }
 
         val correctString = SpannableStringBuilder()
             .append("The correct answer is: ")
