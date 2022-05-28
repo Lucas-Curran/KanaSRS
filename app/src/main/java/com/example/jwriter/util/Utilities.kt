@@ -3,7 +3,10 @@ package com.example.jwriter.util
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Build
 import android.text.SpannableString
@@ -17,16 +20,20 @@ import android.widget.EditText
 import android.widget.ViewAnimator
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import androidx.core.text.italic
 import androidx.core.view.marginBottom
+import com.example.jwriter.R
+import com.example.jwriter.notification.NotificationReceiver
 import com.takusemba.spotlight.OnTargetListener
 import com.takusemba.spotlight.Target
 import com.takusemba.spotlight.shape.RoundedRectangle
 import java.time.Duration
+import java.util.*
 
 /**
  * Utilities class for animations during program
@@ -184,6 +191,31 @@ class Utilities {
                 val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
             }
+        }
+
+        fun setAlarm(context: Context) {
+
+            val sharedPref = context.getSharedPreferences(context.getString(R.string.pref_key), Context.MODE_PRIVATE)
+
+            val calendar = Calendar.getInstance()
+            calendar[Calendar.HOUR_OF_DAY] = sharedPref.getInt("jwriterNotificationHour", 12)
+            calendar[Calendar.MINUTE] = sharedPref.getInt("jwriterNotificationMinute", 0)
+            calendar[Calendar.SECOND] = 0
+            if (calendar.time < Date()) calendar.add(Calendar.DAY_OF_MONTH, 1)
+            val intent = Intent(context.applicationContext, NotificationReceiver::class.java)
+            val pendingIntent = PendingIntent.getBroadcast(
+                context.applicationContext,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            val alarmManager = context.getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
+            alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.timeInMillis,
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent
+            )
         }
 
     }
