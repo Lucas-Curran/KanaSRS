@@ -42,8 +42,8 @@ class KanaConverter(useObsoleteKana: Boolean) {
 
     // Check if a character is within a Unicode range
     private fun isCharInRange(chr: Char, start: Int, end: Int): Boolean {
-        val code = chr.toInt()
-        return start <= code && code <= end
+        val code = chr.code
+        return code in start..end
     }
 
     private fun isCharVowel(chr: Char, includeY: Boolean): Boolean {
@@ -92,7 +92,7 @@ class KanaConverter(useObsoleteKana: Boolean) {
         for (_i in 0 until hira!!.length) {
             val hiraChar = hira[_i]
             if (isCharHiragana(hiraChar)) {
-                code = hiraChar.toInt()
+                code = hiraChar.code
                 code += KATAKANA_START - HIRAGANA_START
                 kata += String(Character.toChars(code))
             } else {
@@ -115,7 +115,7 @@ class KanaConverter(useObsoleteKana: Boolean) {
         var roma: String? = ""
         var romaChar: String? = null
         while (cursor < len) {
-            chunkSize = Math.min(maxChunk, len - cursor)
+            chunkSize = min(maxChunk, len - cursor)
             while (chunkSize > 0) {
                 chunk = hira.substring(cursor, cursor + chunkSize)
                 if (isKatakana(chunk)) {
