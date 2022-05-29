@@ -274,14 +274,23 @@ class StatsActivity : AppCompatActivity() {
                 setLabelSize(13f)
                 setLabelSpace(10f)
                 setLabelTypeface(Typeface.BOLD)
+                setColorBackground(ContextCompat.getColor(applicationContext, androidx.cardview.R.color.cardview_shadow_start_color))
             }
 
             myProgressView.setOnProgressClickListener {
-                KanaInfoView(this, kana).show()
+                if (kana.hasLearned) {
+                    KanaInfoView(this, kana).show()
+                } else {
+                    Toast.makeText(this, "${kana.letter} has not been learned yet, info is unavailable", Toast.LENGTH_SHORT).show()
+                }
             }
 
             myProgressView.setOnClickListener {
-                KanaInfoView(this, kana).show()
+                if (kana.hasLearned) {
+                    KanaInfoView(this, kana).show()
+                } else {
+                   Toast.makeText(this, "${kana.letter} has not been learned yet, info is unavailable", Toast.LENGTH_SHORT).show()
+                }
             }
 
             val params = LinearLayout.LayoutParams(
