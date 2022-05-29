@@ -29,6 +29,7 @@ import com.github.jinatonic.confetti.CommonConfetti
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 
+
 class LessonActivity : AppCompatActivity() {
 
     private lateinit var rootViewAnimator: ViewAnimator
@@ -129,6 +130,13 @@ class LessonActivity : AppCompatActivity() {
                     kana.letter?.let { it1 -> kanaConverter.hiraganaToRomaji(it1)?.let { it1 -> playAudio(it1) } }
                 }
 
+                val mnemonicText = newView.findViewById<TextView>(R.id.mnemonicTextView)
+
+                newView.findViewById<ImageView>(R.id.addMnemonicImageView).setOnClickListener {
+                    //Dialog to replace current mnemonic with edittext etc...
+                    //Make sure to add button to reset to default
+                }
+
                 val itemTabLayout = newView.findViewById<TabLayout>(R.id.itemTabLayout)
 
                 val constraintLayout = newView.findViewById<ConstraintLayout>(R.id.itemConstraintLayout)
@@ -173,7 +181,7 @@ class LessonActivity : AppCompatActivity() {
                 }
                 clearButton.height = 75
                 clearButton.setPadding(10)
-                clearButton.background = ContextCompat.getDrawable(this, R.drawable.pink_outline)
+                clearButton.background = ContextCompat.getDrawable(this, R.drawable.review_box)
                 val outValue = TypedValue()
                 theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
