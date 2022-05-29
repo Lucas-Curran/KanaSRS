@@ -31,7 +31,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:title="@string/app_name"
-                android:theme="@style/MyToolbarStyle"
+                app:popupTheme="@style/JWriter.Menu"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:titleTextAppearance="@style/Toolbar.Custom"
                 app:titleTextColor="@color/white" />
 
