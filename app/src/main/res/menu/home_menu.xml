@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/refresh"
         android:title="Refresh"
@@ -9,11 +10,19 @@
     <item
         android:id="@+id/faq"
         android:title="FAQ"
-        android:icon="@android:drawable/ic_menu_help"
+        android:icon="@drawable/ic_faq"
+        app:iconTint="@color/white"
         app:showAsAction="collapseActionView|withText"/>
     <item
         android:id="@+id/report"
         android:title="Contact"
-        android:icon="@android:drawable/ic_dialog_alert"
+        android:icon="@drawable/ic_contact"
+        app:iconTint="@color/white"
+        app:showAsAction="collapseActionView|withText"/>
+    <item
+        android:id="@+id/tutorial"
+        android:title="Tutorial"
+        android:icon="@drawable/ic_tutorial"
+        app:iconTint="@color/white"
         app:showAsAction="collapseActionView|withText"/>
 </menu>
