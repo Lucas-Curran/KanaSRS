@@ -4,6 +4,7 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.widget.RadioGroup
 import android.widget.TextView
@@ -15,6 +16,8 @@ import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.util.Utilities
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.min
+
 
 /*
 Could possibly include:
@@ -116,20 +119,10 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun formatTime(hour: Int, minute: Int): String {
-        val dt = if (hour <= 9) {
-            "0$hour:$minute"
-        } else {
-            "$hour:$minute"
-        }
-        val sdf = SimpleDateFormat("hh:mm")
-        val time = sdf.parse(dt)
-        val formattedTime = sdf.format(time)
-        val finalTime = if (formattedTime.equals(dt)) {
-            "$formattedTime AM";
-        } else {
-            "$formattedTime PM";
-        }
-        return finalTime
+        val sdf = SimpleDateFormat("KK:mm")
+        val sdfs = SimpleDateFormat("hh:mm a")
+        val date = sdf.parse("$hour:$minute")
+        return sdfs.format(date)
     }
 
 }
