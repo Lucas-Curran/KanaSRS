@@ -269,6 +269,7 @@ class MenuActivity : AppCompatActivity() {
             R.id.report -> showReportDialog()
             R.id.faq -> showFAQ()
             R.id.refresh -> refreshActivity()
+            R.id.tutorial -> startActivity(Intent(this, IntroActivity::class.java))
         }
         return super.onOptionsItemSelected(item)
     }
