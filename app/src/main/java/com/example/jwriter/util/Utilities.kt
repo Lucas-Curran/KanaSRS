@@ -3,6 +3,7 @@ package com.example.jwriter.util
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -10,28 +11,23 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Build
 import android.text.SpannableString
-import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ScrollView
 import android.widget.ViewAnimator
 import androidx.annotation.ColorInt
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.animation.doOnEnd
-import androidx.core.content.ContextCompat
-import androidx.core.text.bold
-import androidx.core.text.italic
 import androidx.core.view.marginBottom
 import com.example.jwriter.R
 import com.example.jwriter.notification.NotificationReceiver
-import com.takusemba.spotlight.OnTargetListener
-import com.takusemba.spotlight.Target
-import com.takusemba.spotlight.shape.RoundedRectangle
+import me.toptas.fancyshowcase.FancyShowCaseView
+import me.toptas.fancyshowcase.FocusShape
 import java.time.Duration
 import java.util.*
 
@@ -113,26 +109,34 @@ class Utilities {
             animationSet.start()
         }
 
-        fun newTarget(anchor: View, height: Float, width: Float, overlay: View, onStart: (() -> Unit)? = null, onEnd: (() -> Unit)? = null): Target {
-            val target = Target.Builder()
-                .setAnchor(anchor)
-                .setShape(RoundedRectangle(height, width, 30f))
-                .setOverlay(overlay)
-                .setOnTargetListener(object : OnTargetListener {
-                    override fun onEnded() {
-                        if (onEnd != null) {
-                            onEnd()
-                        }
-                    }
+        fun createShowcase(
+            view: View,
+            title: String,
+            enableTouch: Boolean,
+            activity: Activity
+        ): FancyShowCaseView {
+            return FancyShowCaseView.Builder(activity)
+                .focusOn(view)
+                .title(title)
+                .enableTouchOnFocusedView(enableTouch)
+                .enableAutoTextPosition()
+                .build()
+        }
 
-                    override fun onStarted() {
-                        if (onStart != null) {
-                            onStart()
-                        }
-                    }
-
-                }).build()
-            return target
+        fun createShowcaseRectangle(
+            view: View,
+            title: String,
+            enableTouch: Boolean,
+            activity: Activity
+        ): FancyShowCaseView {
+            return FancyShowCaseView.Builder(activity)
+                .focusOn(view)
+                .focusShape(FocusShape.ROUNDED_RECTANGLE)
+                .roundRectRadius(10)
+                .title(title)
+                .enableTouchOnFocusedView(enableTouch)
+                .enableAutoTextPosition()
+                .build()
         }
 
         fun setNextAnim(viewAnimator: ViewAnimator, animationIn: Animation, animationOut: Animation) {
@@ -183,6 +187,16 @@ class Utilities {
         fun View.disable() {
             isClickable = false
             isEnabled = false
+        }
+
+        @SuppressLint("ClickableViewAccessibility")
+        fun ScrollView.disableScroll() {
+            setOnTouchListener { _, _ -> true }
+        }
+
+        @SuppressLint("ClickableViewAccessibility")
+        fun ScrollView.enableScroll() {
+            setOnTouchListener { _, _ -> false }
         }
 
         fun EditText.showKeyboard() {
