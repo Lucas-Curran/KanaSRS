@@ -1,14 +1,14 @@
 package com.example.jwriter.activity
 
 import android.annotation.SuppressLint
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -23,12 +23,19 @@ import com.example.jwriter.R
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
 import com.example.jwriter.database.User
-import com.example.jwriter.notification.NotificationReceiver
 import com.example.jwriter.util.Utilities
 import com.example.jwriter.util.Utilities.Companion.colorizeText
+import com.example.jwriter.util.Utilities.Companion.createShowcase
+import com.example.jwriter.util.Utilities.Companion.createShowcaseRectangle
 import com.example.jwriter.util.Utilities.Companion.disable
+import com.example.jwriter.util.Utilities.Companion.disableScroll
+import com.example.jwriter.util.Utilities.Companion.enableScroll
 import com.example.jwriter.util.Utilities.Companion.formatTime
 import com.google.android.material.button.MaterialButton
+import me.toptas.fancyshowcase.FancyShowCaseQueue
+import me.toptas.fancyshowcase.FancyShowCaseView
+import me.toptas.fancyshowcase.FocusShape
+import me.toptas.fancyshowcase.listener.OnCompleteListener
 import java.util.*
 
 
@@ -46,6 +53,9 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var summaryButton: Button
     private lateinit var currentReviewsTextView: TextView
     private lateinit var remainingLessonsTextView: TextView
+    private lateinit var menuScrollView: ScrollView
+
+    private lateinit var showcaseQueue: FancyShowCaseQueue
 
     private var showMore = true
     private var moving = false
@@ -71,6 +81,16 @@ class MenuActivity : AppCompatActivity() {
         return rect.contains((view.left + x).toInt(), (view.top + y).toInt())
     }
 
+    private val refreshString = "The refresh button is useful for staying up-to-date on all new reviews and lessons in your queue!"
+    private val summaryString = "Here is the summary!"
+    private val lessonString = "To begin learning new kana, click here"
+
+    private lateinit var refreshShowcase: FancyShowCaseView
+    private lateinit var summaryShowcase: FancyShowCaseView
+    private lateinit var lessonShowcase: FancyShowCaseView
+
+    private val showcaseArray = mutableListOf<FancyShowCaseView>()
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +99,7 @@ class MenuActivity : AppCompatActivity() {
         db = JWriterDatabase.getInstance(this)
 
         if (1 == 2) {
-            startActivity(Intent(this, IntroActivity::class.java))
+
         } else {
             val user = db.userDao().getUser()
             for (kana in db.kanaDao().getKana()) {
@@ -252,12 +272,51 @@ class MenuActivity : AppCompatActivity() {
             settingsButton.setOnClickListener {
                 startActivity(Intent(this, SettingsActivity::class.java))
             }
+
+            menuScrollView = findViewById(R.id.menuScrollView)
+            showcaseQueue = FancyShowCaseQueue()
         }
     }
 
     @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_menu, menu)
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
+                showcaseArray.add(createShowcase(
+                    findViewById(R.id.refresh),
+                    refreshString,
+                    false,
+                    this
+                ))
+                showcaseArray.add(createShowcaseRectangle(
+                    summaryLayout,
+                    summaryString,
+                    false,
+                    this
+                ))
+                showcaseArray.add(createShowcaseRectangle(
+                    lessonButton,
+                    lessonString,
+                    true,
+                    this
+                ))
+
+                for (showcase in showcaseArray) {
+                    showcaseQueue.add(showcase)
+                }
+
+                //showcaseQueue.show()
+                if (showcaseQueue.current != null) {
+                    menuScrollView.disableScroll()
+                }
+                showcaseQueue.completeListener = object : OnCompleteListener {
+                    override fun onComplete() {
+                        menuScrollView.enableScroll()
+                    }
+                }
+
+            }, 50)
         if (menu is MenuBuilder) {
             menu.setOptionalIconsVisible(true)
         }
@@ -269,7 +328,12 @@ class MenuActivity : AppCompatActivity() {
             R.id.report -> showReportDialog()
             R.id.faq -> showFAQ()
             R.id.refresh -> refreshActivity()
-            R.id.tutorial -> startActivity(Intent(this, IntroActivity::class.java))
+            R.id.tutorial -> {
+                for (showcase in showcaseArray) {
+                    showcaseQueue.add(showcase)
+                }
+                showcaseQueue.show()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
