@@ -1,10 +1,13 @@
 package com.example.jwriter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.media.MediaPlayer
 import android.os.Build
+import android.text.method.ScrollingMovementMethod
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -15,16 +18,19 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
 import androidx.core.view.updateMargins
 import com.example.jwriter.activity.setOnSingleClickListener
+import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
+import com.example.jwriter.util.KanaConverter
 import com.example.jwriter.util.Utilities
 import com.example.jwriter.util.Utilities.Companion.mediaPlayer
 import com.example.jwriter.util.Utilities.Companion.setNextAnim
 import com.example.jwriter.util.Utilities.Companion.setPrevAnim
-import com.example.jwriter.util.KanaConverter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 
+
+@SuppressLint("ClickableViewAccessibility")
 class KanaInfoView(val context: Context, val kana: Kana) {
 
     private var animationIn: Animation
@@ -72,6 +78,68 @@ class KanaInfoView(val context: Context, val kana: Kana) {
         webStroke.webViewClient = WebViewClient()
         webStroke.loadUrl(kana.gif)
 
+        val mnemonicText = view.findViewById<TextView>(R.id.mnemonicTextView)
+        mnemonicText.text = kana.description
+
+        view.findViewById<ImageView>(R.id.addMnemonicImageView).setOnClickListener {
+            //Dialog to replace current mnemonic with edittext etc...
+            //Make sure to add button to reset to default
+            val mnemonicView = LayoutInflater.from(context).inflate(R.layout.mnemonic_dialog, null)
+            val dialog = BottomSheetDialog(context)
+
+            dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+            val currentText = mnemonicView.findViewById<TextView>(R.id.currentMnemonicTextView)
+            val editText = mnemonicView.findViewById<EditText>(R.id.newMnemonicEditText)
+
+            editText.setOnTouchListener { v, event ->
+                v.parent.requestDisallowInterceptTouchEvent(true)
+                when (event.action and MotionEvent.ACTION_MASK) {
+                    MotionEvent.ACTION_UP ->
+                        v.parent.requestDisallowInterceptTouchEvent(false)
+                }
+                false
+            }
+
+            currentText.text = kana.description
+
+            currentText.movementMethod = ScrollingMovementMethod()
+            currentText.setOnTouchListener { v, event ->
+                v.parent.requestDisallowInterceptTouchEvent(true)
+                when (event.action and MotionEvent.ACTION_MASK) {
+                    MotionEvent.ACTION_UP ->
+                        v.parent.requestDisallowInterceptTouchEvent(false)
+                }
+                false
+            }
+
+            mnemonicView.findViewById<Button>(R.id.cancelButton).setOnClickListener {
+                dialog.dismiss()
+            }
+            mnemonicView.findViewById<Button>(R.id.confirmMnemonicButton).setOnClickListener {
+                when {
+                    editText.text.length > 200 -> {
+                        Toast.makeText(context, "Please keep the mnemonic under 200 characters.", Toast.LENGTH_SHORT).show()
+                    }
+                    editText.text.isBlank() -> {
+                        Toast.makeText(context, "Please make sure you type something.", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {
+                        kana.description = editText.text.toString()
+                        mnemonicText.text = kana.description
+                        JWriterDatabase.getInstance(context).kanaDao().updateKana(kana)
+                        dialog.dismiss()
+                    }
+                }
+            }
+            mnemonicView.findViewById<TextView>(R.id.defaultResetTextView).setOnClickListener {
+
+            }
+
+            dialog.setContentView(mnemonicView)
+            dialog.show()
+        }
+
 
         val tabLayout = view.findViewById<TabLayout>(R.id.itemTabLayout)
         val viewAnimator = view.findViewById<ViewAnimator>(R.id.viewAnimator)
@@ -81,6 +149,16 @@ class KanaInfoView(val context: Context, val kana: Kana) {
         relativeLayout.background = ContextCompat.getDrawable(context, R.drawable.pink_outline)
 
         val drawingView = DrawingView(context)
+
+        drawingView.setOnTouchListener { v, event ->
+            v.parent.requestDisallowInterceptTouchEvent(true)
+            when (event.action and MotionEvent.ACTION_MASK) {
+                MotionEvent.ACTION_UP ->
+                    v.parent.requestDisallowInterceptTouchEvent(false)
+            }
+            false
+        }
+
         val clearButton = Button(context)
         clearButton.text = "Clear"
         clearButton.textSize = 12f
@@ -163,7 +241,6 @@ class KanaInfoView(val context: Context, val kana: Kana) {
             setNextAnim(viewAnimator, animationIn, animationOut)
             tabLayout.getTabAt(tabLayout.selectedTabPosition+1)?.select()
             if (tabLayout.selectedTabPosition == 2) {
-                dialog.behavior.isDraggable = false
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     nextButton.setImageResource(R.drawable.ic_checkmark)
                     nextButton.setBackgroundColor(context.resources.getColor(R.color.lime, context.theme))
@@ -174,7 +251,6 @@ class KanaInfoView(val context: Context, val kana: Kana) {
         previousButton.setOnSingleClickListener {
             setPrevAnim(viewAnimator, prevAnimIn, prevAnimOut)
             tabLayout.getTabAt(tabLayout.selectedTabPosition-1)?.select()
-            dialog.behavior.isDraggable = true
             if (tabLayout.selectedTabPosition == 1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 nextButton.setImageResource(R.drawable.ic_right_arrow)
                 nextButton.setBackgroundColor(context.resources.getColor(R.color.azure, context.theme))

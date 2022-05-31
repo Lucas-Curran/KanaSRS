@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_background">
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="New Mnemonic"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/dialogDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"
+        android:background="#AAAAAA"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:id="@+id/currentTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Current:"
+        android:textColor="@color/white"
+        android:layout_margin="10dp"
+        android:textSize="24sp"
+        app:layout_constraintTop_toBottomOf="@id/dialogDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/currentMnemonicTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength="225"
+        android:gravity="start"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:text="To remember this letter, think of the center as forming an 'A'. To remember this letter, think of the center as forming an 'A'. To remember this letter, think of the center as forming an 'A'. And here are the last characters."
+        android:textColor="@color/white"
+        android:background="@drawable/review_box"
+        android:layout_marginTop="10dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="16sp"
+        android:lines="6"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@id/currentTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/defaultResetTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#65abff"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:text="Reset to default"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        app:layout_constraintStart_toStartOf="@id/currentMnemonicTextView"
+        app:layout_constraintTop_toBottomOf="@id/currentMnemonicTextView"/>
+
+    <ImageView
+        android:id="@+id/arrow"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/currentMnemonicTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@color/white"
+        android:src="@drawable/ic_down_arrow2"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/newMnemonicLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:counterEnabled="true"
+        app:counterMaxLength="200"
+        app:counterTextColor="@color/white"
+        app:boxBackgroundMode="none"
+        app:hintEnabled="false"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp"
+        android:textColorHint="@android:color/darker_gray"
+        android:textColor="@color/white"
+        android:inputType="text|textMultiLine"
+        app:layout_constraintTop_toBottomOf="@id/arrow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/newMnemonicEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:layout_marginTop="20dp"
+            android:lines="6"
+            android:maxLines="6"
+            android:textCursorDrawable="@null"
+            android:textColorHint="@android:color/darker_gray"
+            android:hint="Write a new mnemonic here..."
+            android:textColor="@color/white"
+            android:inputType="text|textMultiLine"
+            android:background="@drawable/review_box"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textSize="16sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
+        app:layout_constraintTop_toBottomOf="@id/newMnemonicLayout"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:layout_constraintTop_toBottomOf="@id/newMnemonicLayout"
+            app:layout_constraintEnd_toStartOf="@id/confirmMnemonicButton"
+            android:background="@drawable/square_outline"
+            android:text="Cancel"
+            android:textSize="16sp"
+            app:backgroundTint="@null"/>
+
+        <Button
+            android:id="@+id/confirmMnemonicButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:layout_constraintTop_toBottomOf="@id/newMnemonicLayout"
+            app:layout_constraintEnd_toEndOf="@id/newMnemonicLayout"
+            android:background="@drawable/custom_button"
+            android:text="Confirm"
+            android:textSize="16sp"
+            app:backgroundTint="@color/azure"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

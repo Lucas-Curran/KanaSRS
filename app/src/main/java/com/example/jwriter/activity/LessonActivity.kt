@@ -5,7 +5,9 @@ import android.content.Intent
 import android.graphics.*
 import android.media.MediaPlayer
 import android.os.*
+import android.text.method.ScrollingMovementMethod
 import android.util.TypedValue
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
@@ -26,6 +28,8 @@ import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
 import com.example.jwriter.util.KanaConverter
 import com.github.jinatonic.confetti.CommonConfetti
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 
@@ -131,10 +135,64 @@ class LessonActivity : AppCompatActivity() {
                 }
 
                 val mnemonicText = newView.findViewById<TextView>(R.id.mnemonicTextView)
+                mnemonicText.text = kana.description
 
                 newView.findViewById<ImageView>(R.id.addMnemonicImageView).setOnClickListener {
                     //Dialog to replace current mnemonic with edittext etc...
                     //Make sure to add button to reset to default
+                    val view = layoutInflater.inflate(R.layout.mnemonic_dialog, null)
+                    val dialog = BottomSheetDialog(this)
+
+                    dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+                    val currentText = view.findViewById<TextView>(R.id.currentMnemonicTextView)
+                    val editText = view.findViewById<EditText>(R.id.newMnemonicEditText)
+
+                    editText.setOnTouchListener { v, event ->
+                        v.parent.requestDisallowInterceptTouchEvent(true)
+                        when (event.action and MotionEvent.ACTION_MASK) {
+                            MotionEvent.ACTION_UP ->
+                                v.parent.requestDisallowInterceptTouchEvent(false)
+                        }
+                        false
+                    }
+
+                    currentText.text = kana.description
+                    currentText.movementMethod = ScrollingMovementMethod()
+                    currentText.setOnTouchListener { v, event ->
+                        v.parent.requestDisallowInterceptTouchEvent(true)
+                        when (event.action and MotionEvent.ACTION_MASK) {
+                            MotionEvent.ACTION_UP ->
+                                v.parent.requestDisallowInterceptTouchEvent(false)
+                        }
+                        false
+                    }
+
+                    view.findViewById<Button>(R.id.cancelButton).setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    view.findViewById<Button>(R.id.confirmMnemonicButton).setOnClickListener {
+                        when {
+                            editText.text.length > 200 -> {
+                                Toast.makeText(this, "Please keep the mnemonic under 200 characters.", Toast.LENGTH_SHORT).show()
+                            }
+                            editText.text.isBlank() -> {
+                                Toast.makeText(this, "Please make sure you type something.", Toast.LENGTH_SHORT).show()
+                            }
+                            else -> {
+                                kana.description = editText.text.toString()
+                                mnemonicText.text = kana.description
+                                JWriterDatabase.getInstance(this).kanaDao().updateKana(kana)
+                                dialog.dismiss()
+                            }
+                        }
+                    }
+                    view.findViewById<TextView>(R.id.defaultResetTextView).setOnClickListener {
+
+                    }
+
+                    dialog.setContentView(view)
+                    dialog.show()
                 }
 
                 val itemTabLayout = newView.findViewById<TabLayout>(R.id.itemTabLayout)
