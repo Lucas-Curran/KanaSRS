@@ -64,6 +64,7 @@ class ReviewActivity : AppCompatActivity() {
 
     //Number correct out of total answered
     private var score = 0
+    private var incorrect = 0
     private var totalAnswered = 0
 
     //Japanese wrong answers is
@@ -220,6 +221,8 @@ class ReviewActivity : AppCompatActivity() {
 
             if (!incorrectReviewAnswers.contains(kana)) {
 
+                incorrect++
+
                 val levelText: String = when (kana.level?.minus(1)) {
                     0, 1, 2 -> "Rookie"
                     3 -> "Amateur"
@@ -262,7 +265,7 @@ class ReviewActivity : AppCompatActivity() {
             }
         }
 
-        incorrectTextView.text = (totalAnswered - score).toString()
+        incorrectTextView.text = incorrect.toString()
 
         userResponseEditText.background = incorrectTransition
         incorrectTransition.startTransition(300)
@@ -324,6 +327,8 @@ class ReviewActivity : AppCompatActivity() {
                 newLevelLayout.visibility = View.VISIBLE
                 newLevelLayout.alpha = 1F
 
+                score++
+
                 correctReviewAnswers.add(kana)
 
             } else {
@@ -341,6 +346,7 @@ class ReviewActivity : AppCompatActivity() {
 
         if (quiz) {
             val kana = kanaList[0]
+            score++
             kanaList.remove(kana)
             correctReviewAnswers.add(kana)
         }
@@ -349,7 +355,6 @@ class ReviewActivity : AppCompatActivity() {
         correctTransition.startTransition(300)
 
         responseImage.visibility = View.VISIBLE
-        score++
 
         numberCorrectTextView.text = score.toString()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
