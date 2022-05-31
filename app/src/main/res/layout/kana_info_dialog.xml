@@ -28,13 +28,15 @@
             android:id="@+id/viewAnimator"
             android:layout_width="match_parent"
             android:layout_margin="10dp"
-            android:layout_height="250dp">
+            android:layout_height="280dp">
 
             <TextView
                 android:id="@+id/kanaTextView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="200sp"
+                android:layout_height="match_parent"
+                android:autoSizeMaxTextSize="280sp"
+                android:autoSizeMinTextSize="180sp"
+                android:autoSizeTextType="uniform"
                 android:gravity="center"
                 android:text="あ"
                 android:textColor="@color/white"
@@ -42,9 +44,12 @@
 
             <WebView
                 android:id="@+id/strokeWebView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/square_outline" />
+                android:layout_width="320dp"
+                android:layout_height="240dp"
+                android:scrollbars="none"
+                android:layout_margin="0dp"
+                android:padding="0dp"
+                android:layout_gravity="center" />
 
         </ViewAnimator>
 
@@ -107,7 +112,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/lesson_box">
 
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/infoLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -116,31 +121,53 @@
                     android:id="@+id/mnemonicTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/lesson_box"
                     android:padding="10dp"
                     android:text="To remember this letter, think of the center as forming an 'A'."
                     android:textColor="@color/white"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/lessonDivider"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="#AAAAAA"
+                    android:layout_margin="5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/mnemonicTextView" />
 
                 <ImageView
                     android:id="@+id/kanaAudioImageView"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:layout_below="@id/mnemonicTextView"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="20dp"
                     android:background="@drawable/circle_shape"
-                    android:foreground="?attr/selectableItemBackground"
+                    android:foreground="@drawable/audio_ripple"
                     android:padding="10dp"
-                    android:src="@drawable/ic_audio" />
+                    android:src="@drawable/ic_audio"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/lessonDivider" />
 
-            </RelativeLayout>
+                <ImageView
+                    android:id="@+id/addMnemonicImageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:foreground="?actionBarItemBackground"
+                    android:src="@drawable/ic_plus"
+                    app:tint="@color/white"
+                    app:layout_constraintTop_toBottomOf="@id/lessonDivider"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
 
