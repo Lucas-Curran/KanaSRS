@@ -34,7 +34,6 @@ import com.example.jwriter.util.Utilities.Companion.formatTime
 import com.google.android.material.button.MaterialButton
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
-import me.toptas.fancyshowcase.FocusShape
 import me.toptas.fancyshowcase.listener.OnCompleteListener
 import java.util.*
 

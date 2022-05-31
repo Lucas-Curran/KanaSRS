@@ -6,7 +6,7 @@
     android:id="@+id/menuConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_dark_background"
+    android:background="@drawable/menu_background"
     android:theme="@style/Theme.JWriter"
     tools:context=".activity.MenuActivity">
 
@@ -55,6 +55,8 @@
         android:id="@+id/menuScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:requiresFadingEdge="vertical"
+        android:fadingEdgeLength="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,6 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
+            android:background="@drawable/menu_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -232,12 +235,19 @@
                     style="@style/Widget.MaterialComponents.Button.Icon"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_margin="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
                     android:background="@drawable/custom_button"
                     android:drawableTop="@drawable/ic_learn"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:paddingTop="40dp"
                     android:paddingBottom="40dp"
+                    android:shadowColor="@color/black"
+                    android:shadowDx="1.5"
+                    android:shadowDy="1.3"
+                    android:shadowRadius="1.6"
                     android:text="Learn"
                     android:textSize="20sp"
                     app:backgroundTint="@color/pink" />
@@ -276,6 +286,10 @@
                     android:foreground="?android:attr/selectableItemBackground"
                     android:paddingTop="40dp"
                     android:paddingBottom="40dp"
+                    android:shadowColor="@color/black"
+                    android:shadowDx="1.5"
+                    android:shadowDy="1.3"
+                    android:shadowRadius="1.6"
                     android:text="ひらがな・カタカナ\nReview"
                     android:textSize="20sp"
                     app:backgroundTint="#4599ff" />
@@ -295,6 +309,10 @@
                 android:paddingTop="60dp"
                 android:paddingBottom="40dp"
                 android:text="Statistics"
+                android:shadowColor="@color/black"
+                android:shadowDx="1.5"
+                android:shadowDy="1.3"
+                android:shadowRadius="1.6"
                 android:elevation="10dp"
                 android:textSize="20sp"
                 app:backgroundTint="#00AA00" />
@@ -312,8 +330,37 @@
                 android:paddingBottom="40dp"
                 android:elevation="10dp"
                 android:text="Settings"
+                android:shadowColor="@color/black"
+                android:shadowDx="1.5"
+                android:shadowDy="1.3"
+                android:shadowRadius="1.6"
                 android:textSize="20sp"
                 app:backgroundTint="#AAAAAA" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/bottomImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/half_circle"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="© 2022 | JWriter | All Rights Reserved"
+                    android:textColor="@color/white"
+                    android:layout_alignEnd="@id/bottomImageView"
+                    android:layout_alignStart="@id/bottomImageView"
+                    android:textAlignment="center"
+                    android:layout_alignBottom="@id/bottomImageView"
+                    android:layout_marginBottom="10dp"
+                    />
+
+            </RelativeLayout>
 
         </LinearLayout>
     </ScrollView>
