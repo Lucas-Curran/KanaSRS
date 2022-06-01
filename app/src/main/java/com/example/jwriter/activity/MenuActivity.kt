@@ -6,10 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -35,7 +39,6 @@ import com.google.android.material.button.MaterialButton
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import me.toptas.fancyshowcase.listener.OnCompleteListener
-import java.util.*
 
 
 class MenuActivity : AppCompatActivity() {
@@ -53,6 +56,8 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var currentReviewsTextView: TextView
     private lateinit var remainingLessonsTextView: TextView
     private lateinit var menuScrollView: ScrollView
+    private lateinit var githubImageView: ImageView
+    private lateinit var contactImageView: ImageView
 
     private lateinit var showcaseQueue: FancyShowCaseQueue
 
@@ -206,7 +211,7 @@ class MenuActivity : AppCompatActivity() {
                         moving = false
                         showMoreArrow.isEnabled = true
                     }
-                    showMoreArrow.setImageResource(android.R.drawable.arrow_up_float)
+                    showMoreArrow.setImageResource(R.drawable.ic_up_arrow_wide)
                 } else if (!showMore && !moving) {
                     moving = true
                     showMoreArrow.isEnabled = false
@@ -224,7 +229,7 @@ class MenuActivity : AppCompatActivity() {
                         showMore = true
                         showMoreArrow.isEnabled = true
                     }
-                    showMoreArrow.setImageResource(android.R.drawable.arrow_down_float)
+                    showMoreArrow.setImageResource(R.drawable.ic_down_arrow_wide)
                 }
             }
 
@@ -270,6 +275,20 @@ class MenuActivity : AppCompatActivity() {
             settingsButton = findViewById(R.id.settingsButton)
             settingsButton.setOnClickListener {
                 startActivity(Intent(this, SettingsActivity::class.java))
+            }
+
+            contactImageView = findViewById(R.id.emailContactImageView)
+            contactImageView.setOnClickListener {
+                showReportDialog()
+            }
+
+            githubImageView = findViewById(R.id.githubContactImageView)
+            githubImageView.setOnClickListener {
+                val githubIntent = Intent(
+                    "android.intent.action.VIEW",
+                    Uri.parse("https://github.com/Lucas-Curran/JWriter")
+                )
+                startActivity(githubIntent)
             }
 
             menuScrollView = findViewById(R.id.menuScrollView)
