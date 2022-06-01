@@ -18,4 +18,5 @@
     <color name="spotlight_background">#BF000000</color>
     <color name="disabled_button">#EBEBE4</color>
     <color name="wrong_answer">#ff5078</color>
+    <color name="review_shadow">#2e5984</color>
 </resources>
