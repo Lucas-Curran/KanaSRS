@@ -421,6 +421,7 @@ class ReviewActivity : AppCompatActivity() {
             val finishButton = endReviewLayout.findViewById<MaterialButton>(R.id.finishButton)
             finishButton.setOnClickListener {
                 startActivity(Intent(this, MenuActivity::class.java))
+                finish()
             }
             val linearLayout = endReviewLayout.findViewById<LinearLayout>(R.id.rootLinearLayout)
 
