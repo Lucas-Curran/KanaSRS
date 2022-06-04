@@ -85,10 +85,10 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginEnd="15dp"
                     android:layout_marginBottom="15dp"
-                    app:backgroundTint="@null"
                     android:background="@drawable/review_box"
                     android:enabled="false"
-                    android:translationZ="10dp" />
+                    android:translationZ="10dp"
+                    app:backgroundTint="@null" />
 
                 <TextView
                     android:id="@+id/summaryTitle"
@@ -126,7 +126,6 @@
                     android:layout_marginStart="50dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="50dp"
-                    android:background="@drawable/dialog_background"
                     android:orientation="vertical">
 
                     <TextView
@@ -139,6 +138,8 @@
                         android:paddingEnd="10dp"
                         android:layout_marginStart="2dp"
                         android:layout_marginEnd="2dp"
+                        android:background="@color/cardview_shadow_start_color"
+                        app:backgroundTint="@null"
                         android:text="Time to next review: none"
                         android:textColor="@color/white"
                         android:textSize="18sp"
@@ -153,7 +154,7 @@
                         android:layout_weight="1"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
-                        android:background="#4f4f4f"
+                        android:background="#11d3d3d3"
                         android:gravity="start|center_vertical"
                         android:text="Daily remaining lessons: 10"
                         android:textColor="@color/white"
@@ -170,6 +171,7 @@
                         android:layout_marginStart="2dp"
                         android:layout_marginEnd="2dp"
                         android:gravity="start|center_vertical"
+                        android:background="@color/cardview_shadow_start_color"
                         android:text="Current reviews: 0"
                         android:textColor="@color/white"
                         android:textSize="18sp"
