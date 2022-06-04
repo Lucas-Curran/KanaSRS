@@ -207,6 +207,27 @@ class Utilities {
             }
         }
 
+        fun getLevelColor(level: Int): Int {
+            return when(level) {
+                1, 2 ->  {
+                    R.color.rookie_pink
+                }
+                3 -> {
+                    R.color.amateur_purple
+                }
+                4 -> {
+                    R.color.expert_blue
+                }
+                5 -> {
+                    R.color.master_blue
+                }
+                6 -> {
+                    R.color.sensei_gold
+                }
+                else -> 0
+            }
+        }
+
         fun setAlarm(context: Context) {
 
             val sharedPref = context.getSharedPreferences(context.getString(R.string.pref_key), Context.MODE_PRIVATE)
