@@ -12,6 +12,12 @@ interface KanaDao {
     @Query("SELECT * FROM kana WHERE hasLearned = 0")
     fun getUnlearnedKana(): List<Kana>
 
+    @Query("SELECT * FROM kana WHERE hasLearned = 1 and isHiragana = 1")
+    fun getLearnedHiragana(): List<Kana>
+
+    @Query("SELECT * FROM kana WHERE hasLearned = 1 and isHiragana = 0")
+    fun getLearnedKatakana(): List<Kana>
+
     @Query("SELECT * FROM kana WHERE isHiragana = 1")
     fun getHiragana(): List<Kana>
 
