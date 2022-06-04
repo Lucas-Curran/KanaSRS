@@ -21,7 +21,7 @@
             <!--            Button TOP Color -->
             <gradient
                 android:angle="45"
-                android:endColor="#0da2ff"
+                android:endColor="#0dd2ff"
                 android:startColor="@color/azure"
                 android:type="linear" />
 
