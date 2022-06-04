@@ -2,161 +2,251 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/cardview_dark_background"
-    android:orientation="horizontal">
+    android:layout_height="match_parent"
+    android:background="@color/cardview_dark_background">
+
+    <!--  rookieNumKanaTextView, etc... and topTextView, reviewNumberTextView  -->
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="80dp"
+        android:background="#AAAAAA"
+        android:rotation="20"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toStartOf="@id/masteryBarLayout"
+        app:layout_constraintEnd_toEndOf="@id/rookie"
+        app:layout_constraintTop_toBottomOf="@id/masteryBarLayout"
+        app:layout_constraintBottom_toTopOf="@id/rookie"/>
+
+    <View
+        android:layout_width="80dp"
+        android:layout_height="1dp"
+        android:background="#AAAAAA"
+        android:rotation="40"
+        app:layout_constraintStart_toStartOf="@id/rookie"
+        app:layout_constraintEnd_toEndOf="@id/amateur"
+        app:layout_constraintTop_toBottomOf="@id/rookie"
+        app:layout_constraintBottom_toTopOf="@id/amateur"/>
+
+    <View
+        android:layout_width="80dp"
+        android:layout_height="1dp"
+        android:background="#AAAAAA"
+        android:rotation="140"
+        app:layout_constraintStart_toEndOf="@id/amateur"
+        app:layout_constraintEnd_toStartOf="@id/expert"
+        app:layout_constraintTop_toBottomOf="@id/expert"
+        app:layout_constraintBottom_toTopOf="@id/amateur"/>
+
+    <View
+        android:layout_width="80dp"
+        android:layout_height="1dp"
+        android:background="#AAAAAA"
+        android:rotation="50"
+        app:layout_constraintStart_toEndOf="@id/expert"
+        app:layout_constraintEnd_toStartOf="@id/master"
+        app:layout_constraintTop_toBottomOf="@id/expert"
+        app:layout_constraintBottom_toTopOf="@id/master"/>
+
+    <View
+        android:layout_width="80dp"
+        android:layout_height="1dp"
+        android:background="#AAAAAA"
+        android:rotation="140"
+        app:layout_constraintStart_toEndOf="@id/master"
+        app:layout_constraintEnd_toStartOf="@id/sensei"
+        app:layout_constraintTop_toBottomOf="@id/sensei"
+        app:layout_constraintBottom_toTopOf="@id/master"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="200dp"
+        android:background="#AAAAAA"
+        android:rotation="10"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="@id/sensei"
+        app:layout_constraintStart_toStartOf="@id/sensei"
+        app:layout_constraintTop_toBottomOf="@id/sensei"
+        app:layout_constraintBottom_toTopOf="@id/nextReviewTextView"
+        />
+
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/dialog_background"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Study Streak"
-            android:layout_margin="5dp"
-            android:gravity="center"
-            android:textSize="40sp"
-            android:textColor="@color/white"/>
-
-        <View
-            android:layout_width="100dp"
-            android:layout_height="2dp"
-            android:layout_margin="5dp"
-            android:background="@android:color/darker_gray"
-            android:layout_gravity="center"/>
-
-        <View
-            android:layout_width="50dp"
-            android:layout_height="2dp"
-            android:layout_margin="5dp"
-            android:background="@android:color/darker_gray"
-            android:layout_gravity="center"/>
+        android:id="@+id/hiraganaFractionLayout"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/stats_item_bubble"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:text="5 days"
-            android:background="@drawable/square_outline"
-            android:textStyle="bold"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="center"
-            android:textSize="40sp"
-            android:textColor="@color/white"/>
+            android:text="Hiragana"
+            android:textColor="@color/white"
+            android:textSize="26sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/white" />
 
         <LinearLayout
-            android:id="@+id/progressLinearLayout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_gravity="center">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/dialog_background"
-                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/dialog_background"
-                    android:text="Hiragana"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/hiraganaFraction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
                     android:text="0"
-                    android:textColor="#006666"
-                    android:textSize="50sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/white"
+                    android:textSize="40sp" />
 
                 <View
-                    android:layout_width="100dp"
-                    android:layout_height="2dp"
+                    android:layout_width="70dp"
+                    android:layout_height="1dp"
                     android:layout_gravity="center"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="46"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="50sp" />
+                    android:textColor="@color/white"
+                    android:textSize="40sp" />
+
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/dialog_background"
-                android:layout_margin="10dp"
-                android:orientation="vertical">
+            <TextView
+                android:id="@+id/currentHiraganaTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="60sp"
+                android:text="あ"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/dialog_background"
-                    android:text="Katakana"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="24sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/katakanaFractionLayout"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/stats_item_bubble"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hiraganaFractionLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Katakana"
+            android:textColor="@color/white"
+            android:textSize="26sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/white" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/katakanaFraction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:textStyle="bold"
                     android:text="0"
-                    android:textColor="#006666"
-                    android:textSize="50sp" />
+                    android:textColor="@color/white"
+                    android:textSize="40sp" />
 
                 <View
-                    android:layout_width="100dp"
-                    android:layout_height="2dp"
+                    android:layout_width="70dp"
+                    android:layout_height="1dp"
                     android:layout_gravity="center"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="46"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="50sp" />
+                    android:textColor="@color/white"
+                    android:textSize="40sp" />
+
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/currentKatakanaTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="60sp"
+                android:text="ア"
+                android:layout_gravity="center"
+                android:layout_marginStart="10dp"/>
+
         </LinearLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/masteryBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="20dp"
+        android:padding="10dp"
+        android:background="@drawable/stats_oval_background"
+        app:layout_constraintTop_toBottomOf="@id/katakanaFractionLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <com.skydoves.progressview.ProgressView
             android:id="@+id/kanaMasteryBar"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginBottom="20dp"
             app:progressView_labelText="0/92"
             app:progressView_labelColorInner="@color/white"
             app:progressView_labelColorOuter="@color/white"
@@ -164,239 +254,92 @@
             app:progressView_labelTypeface="bold"
             app:progressView_borderWidth="1dp"
             app:progressView_radius="0dp"
-            app:progressView_colorBackground="@color/cardview_dark_background"
             app:progressView_max="92"
+            app:progressView_colorBackground="@color/cardview_shadow_start_color"
             app:progressView_progress="0"
-            app:progressView_borderColor="@color/white"
-            app:progressView_colorProgress="#006666" />
+            app:progressView_borderColor="@color/black"
+            app:progressView_colorProgress="@color/sensei_gold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    </FrameLayout>
 
-            <LinearLayout
-                android:id="@+id/rookie"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                app:layout_constraintStart_toStartOf="parent"
-                android:gravity="center_vertical"
-                android:layout_margin="10dp"
-                android:clickable="true"
-                app:layout_constraintTop_toTopOf="parent"
-                android:focusable="true">
-
-                <TextView
-                    android:id="@+id/rookieNumKanaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/rounded_square"
-                    android:backgroundTint="#f200a0"
-                    android:gravity="center"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:text="0"
-                    android:textColor="@color/white"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/amateur"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintStart_toStartOf="parent"
-                android:gravity="center_vertical"
-                android:layout_margin="10dp"
-                android:clickable="true"
-                app:layout_constraintTop_toTopOf="parent"
-                android:focusable="true">
-
-                <TextView
-                    android:id="@+id/amateurNumKanaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="0"
-                    android:textStyle="bold"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:background="@drawable/rounded_square"
-                    android:backgroundTint="#9b34b4"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:textSize="30sp" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/expert"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                app:layout_constraintStart_toStartOf="parent"
-                android:gravity="center_vertical"
-                android:layout_margin="10dp"
-                android:clickable="true"
-                app:layout_constraintTop_toTopOf="parent"
-                android:focusable="true">
-
-                <TextView
-                    android:id="@+id/expertNumKanaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/rounded_square"
-                    android:backgroundTint="@color/expert_blue"
-                    android:gravity="center"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:text="0"
-                    android:textColor="@color/white"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/master"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintStart_toStartOf="parent"
-                android:gravity="center_vertical"
-                android:layout_margin="10dp"
-                android:clickable="true"
-                app:layout_constraintTop_toTopOf="parent"
-                android:focusable="true">
-
-                <TextView
-                    android:id="@+id/masterNumKanaTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="0"
-                    android:textStyle="bold"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:background="@drawable/rounded_square"
-                    android:backgroundTint="@color/master_blue"
-                    android:textColor="@color/white"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:textSize="30sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/sensei"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:gravity="center_vertical"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            android:clickable="true"
-            app:layout_constraintTop_toTopOf="parent"
-            android:focusable="true">
-
-            <TextView
-                android:id="@+id/senseiNumKanaTextView"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="0"
-                android:textStyle="bold"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:background="@drawable/rounded_square"
-                android:backgroundTint="@color/sensei_gold"
-                android:textColor="@color/white"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:textSize="30sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:background="@drawable/dialog_background"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:gravity="center"
-                    android:text="@string/next_review"
-                    android:textColor="@color/white"
-                    android:textSize="30sp" />
-
-                <TextView
-                    android:id="@+id/topTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:text="04:34:52"
-                    android:textColor="@color/white"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:background="@drawable/dialog_background"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:gravity="center"
-                    android:text="@string/num_review"
-                    android:textColor="@color/white"
-                    android:textSize="30sp" />
-
-                <TextView
-                    android:id="@+id/reviewNumberTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:text="12"
-                    android:textColor="@color/white"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/rookie"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:text="32"
+        android:gravity="center"
+        android:textSize="34sp"
+        android:textColor="@color/white"
+        android:background="@drawable/stats_item_bubble"
+        android:backgroundTint="@color/rookie_pink"
+        app:layout_constraintStart_toStartOf="@id/masteryBarLayout"
+        app:layout_constraintTop_toBottomOf="@id/masteryBarLayout"
+        android:layout_marginTop="30dp"/>
+    <TextView
+        android:id="@+id/amateur"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:text="8"
+        android:gravity="center"
+        android:textSize="34sp"
+        android:textColor="@color/white"
+        android:background="@drawable/stats_item_bubble"
+        android:backgroundTint="@color/amateur_purple"
+        app:layout_constraintStart_toEndOf="@id/rookie"
+        app:layout_constraintTop_toBottomOf="@id/rookie"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:id="@+id/expert"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:text="15"
+        android:gravity="center"
+        android:textSize="34sp"
+        android:textColor="@color/white"
+        android:background="@drawable/stats_item_bubble"
+        android:backgroundTint="@color/expert_blue"
+        app:layout_constraintStart_toEndOf="@id/amateur"
+        app:layout_constraintTop_toBottomOf="@id/masteryBarLayout"
+        android:layout_marginTop="30dp"/>
+    <TextView
+        android:id="@+id/master"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:text="14"
+        android:gravity="center"
+        android:textSize="34sp"
+        android:textColor="@color/white"
+        android:background="@drawable/stats_item_bubble"
+        android:backgroundTint="@color/master_blue"
+        app:layout_constraintStart_toEndOf="@id/expert"
+        app:layout_constraintTop_toBottomOf="@id/expert"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:id="@+id/sensei"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:text="19"
+        android:gravity="center"
+        android:textSize="34sp"
+        android:textColor="@color/white"
+        android:background="@drawable/stats_item_bubble"
+        android:backgroundTint="@color/sensei_gold"
+        app:layout_constraintStart_toEndOf="@id/master"
+        app:layout_constraintTop_toBottomOf="@id/masteryBarLayout"
+        android:layout_marginTop="30dp"/>
+    <TextView
+        android:id="@+id/nextReviewTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next Review: \n4:05:39"
+        android:padding="10dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:background="@drawable/stats_oval_background"
+        android:layout_marginEnd="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/master"
+        android:layout_marginTop="70dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
