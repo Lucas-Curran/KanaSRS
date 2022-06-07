@@ -3,81 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_dark_background">
-
-    <!--  rookieNumKanaTextView, etc... and topTextView, reviewNumberTextView  -->
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="80dp"
-        android:background="#AAAAAA"
-        android:rotation="20"
-        android:layout_marginStart="10dp"
-        app:layout_constraintStart_toStartOf="@id/masteryBarLayout"
-        app:layout_constraintEnd_toEndOf="@id/rookie"
-        app:layout_constraintTop_toBottomOf="@id/masteryBarLayout"
-        app:layout_constraintBottom_toTopOf="@id/rookie"/>
-
-    <View
-        android:layout_width="80dp"
-        android:layout_height="1dp"
-        android:background="#AAAAAA"
-        android:rotation="40"
-        app:layout_constraintStart_toStartOf="@id/rookie"
-        app:layout_constraintEnd_toEndOf="@id/amateur"
-        app:layout_constraintTop_toBottomOf="@id/rookie"
-        app:layout_constraintBottom_toTopOf="@id/amateur"/>
-
-    <View
-        android:layout_width="80dp"
-        android:layout_height="1dp"
-        android:background="#AAAAAA"
-        android:rotation="140"
-        app:layout_constraintStart_toEndOf="@id/amateur"
-        app:layout_constraintEnd_toStartOf="@id/expert"
-        app:layout_constraintTop_toBottomOf="@id/expert"
-        app:layout_constraintBottom_toTopOf="@id/amateur"/>
-
-    <View
-        android:layout_width="80dp"
-        android:layout_height="1dp"
-        android:background="#AAAAAA"
-        android:rotation="50"
-        app:layout_constraintStart_toEndOf="@id/expert"
-        app:layout_constraintEnd_toStartOf="@id/master"
-        app:layout_constraintTop_toBottomOf="@id/expert"
-        app:layout_constraintBottom_toTopOf="@id/master"/>
-
-    <View
-        android:layout_width="80dp"
-        android:layout_height="1dp"
-        android:background="#AAAAAA"
-        android:rotation="140"
-        app:layout_constraintStart_toEndOf="@id/master"
-        app:layout_constraintEnd_toStartOf="@id/sensei"
-        app:layout_constraintTop_toBottomOf="@id/sensei"
-        app:layout_constraintBottom_toTopOf="@id/master"/>
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="200dp"
-        android:background="#AAAAAA"
-        android:rotation="10"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="@id/sensei"
-        app:layout_constraintStart_toStartOf="@id/sensei"
-        app:layout_constraintTop_toBottomOf="@id/sensei"
-        app:layout_constraintBottom_toTopOf="@id/nextReviewTextView"
-        />
-
+    android:clipToPadding="false"
+    android:background="@drawable/stats_background">
 
     <LinearLayout
         android:id="@+id/hiraganaFractionLayout"
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="200dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
-        android:background="@drawable/stats_item_bubble"
+        android:background="@drawable/ic_cloud"
         android:orientation="vertical"
         android:paddingTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Hiragana"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="26sp" />
 
         <View
@@ -98,7 +33,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="3dp"
             android:layout_marginEnd="20dp"
-            android:background="@color/white" />
+            android:background="@color/black" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -117,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="0"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="40sp" />
 
                 <View
@@ -131,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="46"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="40sp" />
 
 
@@ -152,11 +87,11 @@
 
     <LinearLayout
         android:id="@+id/katakanaFractionLayout"
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="200dp"
         android:layout_marginEnd="30dp"
         android:layout_marginTop="30dp"
-        android:background="@drawable/stats_item_bubble"
+        android:background="@drawable/ic_cloud"
         android:orientation="vertical"
         android:paddingTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -167,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Katakana"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="26sp" />
 
         <View
@@ -177,7 +112,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="3dp"
             android:layout_marginEnd="20dp"
-            android:background="@color/white" />
+            android:background="@color/black" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -196,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="0"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="40sp" />
 
                 <View
@@ -210,7 +145,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="46"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="40sp" />
 
 
@@ -238,6 +173,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="20dp"
         android:padding="10dp"
+        android:elevation="10dp"
         android:background="@drawable/stats_oval_background"
         app:layout_constraintTop_toBottomOf="@id/katakanaFractionLayout"
         app:layout_constraintStart_toStartOf="parent"
@@ -270,8 +206,10 @@
         android:gravity="center"
         android:textSize="34sp"
         android:textColor="@color/white"
+        android:foreground="@drawable/stats_level_ripple"
         android:background="@drawable/stats_item_bubble"
         android:backgroundTint="@color/rookie_pink"
+        android:elevation="10dp"
         app:layout_constraintStart_toStartOf="@id/masteryBarLayout"
         app:layout_constraintTop_toBottomOf="@id/masteryBarLayout"
         android:layout_marginTop="30dp"/>
@@ -283,8 +221,10 @@
         android:gravity="center"
         android:textSize="34sp"
         android:textColor="@color/white"
+        android:foreground="@drawable/stats_level_ripple"
         android:background="@drawable/stats_item_bubble"
         android:backgroundTint="@color/amateur_purple"
+        android:elevation="10dp"
         app:layout_constraintStart_toEndOf="@id/rookie"
         app:layout_constraintTop_toBottomOf="@id/rookie"
         android:layout_marginTop="10dp"/>
@@ -296,8 +236,10 @@
         android:gravity="center"
         android:textSize="34sp"
         android:textColor="@color/white"
+        android:foreground="@drawable/stats_level_ripple"
         android:background="@drawable/stats_item_bubble"
         android:backgroundTint="@color/expert_blue"
+        android:elevation="10dp"
         app:layout_constraintStart_toEndOf="@id/amateur"
         app:layout_constraintTop_toBottomOf="@id/masteryBarLayout"
         android:layout_marginTop="30dp"/>
@@ -309,6 +251,8 @@
         android:gravity="center"
         android:textSize="34sp"
         android:textColor="@color/white"
+        android:elevation="10dp"
+        android:foreground="@drawable/stats_level_ripple"
         android:background="@drawable/stats_item_bubble"
         android:backgroundTint="@color/master_blue"
         app:layout_constraintStart_toEndOf="@id/expert"
@@ -322,24 +266,45 @@
         android:gravity="center"
         android:textSize="34sp"
         android:textColor="@color/white"
+        android:elevation="10dp"
+        android:foreground="@drawable/stats_level_ripple"
         android:background="@drawable/stats_item_bubble"
         android:backgroundTint="@color/sensei_gold"
         app:layout_constraintStart_toEndOf="@id/master"
         app:layout_constraintTop_toBottomOf="@id/masteryBarLayout"
         android:layout_marginTop="30dp"/>
+
     <TextView
         android:id="@+id/nextReviewTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next Review: \n4:05:39"
-        android:padding="10dp"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        android:background="@drawable/stats_oval_background"
         android:layout_marginEnd="40dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/stats_oval_background"
+        android:gravity="center"
+        android:padding="10dp"
+        android:elevation="10dp"
+        android:text="Next Review: \n4:05:39"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/master"
-        android:layout_marginTop="70dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/master" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/bamboo"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:src="@drawable/ic_bamboo"
+        app:layout_constraintTop_toBottomOf="@id/nextReviewTextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/panda"
+        android:layout_width="167dp"
+        android:layout_height="180dp"
+        android:src="@drawable/ic_panda"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

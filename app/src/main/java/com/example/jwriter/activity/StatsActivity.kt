@@ -12,8 +12,9 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.animation.doOnEnd
-import androidx.core.animation.doOnRepeat
 import androidx.core.content.ContextCompat
 import com.example.jwriter.KanaInfoView
 import com.example.jwriter.R
@@ -112,14 +113,14 @@ class StatsActivity : AppCompatActivity() {
         val hiraganaLayout = overallView.findViewById<LinearLayout>(R.id.hiraganaFractionLayout)
         val katakanaLayout = overallView.findViewById<LinearLayout>(R.id.katakanaFractionLayout)
 
-        hiraganaFraction.text = masteredHiragana.toString()
-        katakanaFraction.text = masteredKatakana.toString()
-
         val hiraBounce = AnimationUtils.loadAnimation(this, R.anim.bounce)
         val kataBounce = AnimationUtils.loadAnimation(this, R.anim.bounce)
 
         val learnedHiragana = JWriterDatabase.getInstance(this).kanaDao().getLearnedHiragana()
         val learnedKatakana = JWriterDatabase.getInstance(this).kanaDao().getLearnedKatakana()
+
+        hiraganaFraction.text = learnedHiragana.size.toString()
+        katakanaFraction.text = learnedKatakana.size.toString()
 
         val currentHiraganaText = overallView.findViewById<TextView>(R.id.currentHiraganaTextView)
         val currentKatakanaText = overallView.findViewById<TextView>(R.id.currentKatakanaTextView)
@@ -136,6 +137,19 @@ class StatsActivity : AppCompatActivity() {
         } else {
             currentKatakanaText.setTextColor(ContextCompat.getColor(this, getLevelColor(learnedKatakana[currentKatakana].level!!)))
             currentKatakanaText.text = learnedKatakana[currentHiragana].letter
+        }
+
+        hiraganaLayout.setOnLongClickListener {
+            if (learnedHiragana.isNotEmpty()) {
+                KanaInfoView(this, learnedHiragana[currentHiragana]).show()
+            }
+            false
+        }
+        katakanaLayout.setOnLongClickListener {
+            if (learnedKatakana.isNotEmpty()) {
+                KanaInfoView(this, learnedKatakana[currentKatakana]).show()
+            }
+            false
         }
 
         hiraganaLayout.setOnClickListener {
@@ -210,6 +224,7 @@ class StatsActivity : AppCompatActivity() {
 
         //overallView.findViewById<TextView>(R.id.reviewNumberTextView).text = "$numItemsToReview"
 
+        var startDelay = 0L
         for ((index, level) in levelsArray.withIndex()) {
             val name = level.resources.getResourceEntryName(level.id)
             level.text = levelsItemArray[index].toString()
@@ -218,6 +233,8 @@ class StatsActivity : AppCompatActivity() {
                 intent.putExtra("level", name)
                 startActivity(intent)
             }
+            startDelay+=1000
+            animateWave(level, startDelay)
         }
 
         loadUserStats()
@@ -260,6 +277,17 @@ class StatsActivity : AppCompatActivity() {
     private fun overallTab() {
         progressLinearLayout.removeAllViewsInLayout()
         progressLinearLayout.addView(overallView)
+        val constraintLayout = findViewById<ConstraintLayout>(R.id.rootConstraintLayout)
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(constraintLayout)
+        constraintSet.connect(
+            progressScrollView.id,
+            ConstraintSet.TOP,
+            constraintLayout.id,
+            ConstraintSet.TOP,
+            0
+        )
+        constraintSet.applyTo(constraintLayout)
     }
 
     /**
@@ -272,6 +300,18 @@ class StatsActivity : AppCompatActivity() {
             progressLinearLayout.addView(view)
         }
         progressScrollView.fullScroll(ScrollView.FOCUS_UP)
+
+        val constraintLayout = findViewById<ConstraintLayout>(R.id.rootConstraintLayout)
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(constraintLayout)
+        constraintSet.connect(
+            progressScrollView.id,
+            ConstraintSet.TOP,
+            tabLayout.id,
+            ConstraintSet.BOTTOM,
+            0
+        )
+        constraintSet.applyTo(constraintLayout)
     }
 
     /**
@@ -284,6 +324,17 @@ class StatsActivity : AppCompatActivity() {
             progressLinearLayout.addView(view)
         }
         progressScrollView.fullScroll(ScrollView.FOCUS_UP)
+        val constraintLayout = findViewById<ConstraintLayout>(R.id.rootConstraintLayout)
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(constraintLayout)
+        constraintSet.connect(
+            progressScrollView.id,
+            ConstraintSet.TOP,
+            tabLayout.id,
+            ConstraintSet.BOTTOM,
+            0
+        )
+        constraintSet.applyTo(constraintLayout)
     }
 
     /**
@@ -294,8 +345,8 @@ class StatsActivity : AppCompatActivity() {
     private fun loadBars(barList: List<Kana>) {
         for (kana in barList) {
 
-            var color: Int = 0
-            var progress: Float = 0f
+            var color = 0
+            var progress = 0f
 
             if (kana.level != null) {
                 when (kana.level) {
@@ -383,6 +434,21 @@ class StatsActivity : AppCompatActivity() {
                 myProgressView
             )
         }
+    }
+
+    private fun animateWave(view: View, startDelay: Long) {
+        val downAnimation = ObjectAnimator.ofFloat(view, "translationY", 30f)
+        val upAnimation = ObjectAnimator.ofFloat(view, "translationY", -30f)
+        val animationSet = AnimatorSet()
+        animationSet.duration = 1500
+        animationSet.startDelay = startDelay
+        animationSet.playSequentially(downAnimation, upAnimation)
+        animationSet.childAnimations.forEach {
+            val animation = it as ObjectAnimator
+            animation.repeatCount = Animation.INFINITE
+            animation.repeatMode = ValueAnimator.REVERSE
+        }
+        animationSet.start()
     }
 
     private fun animateInPlace(view: View) {
