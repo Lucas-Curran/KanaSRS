@@ -141,7 +141,7 @@ class LessonActivity : AppCompatActivity() {
                     //Dialog to replace current mnemonic with edittext etc...
                     //Make sure to add button to reset to default
                     val view = layoutInflater.inflate(R.layout.mnemonic_dialog, null)
-                    val dialog = BottomSheetDialog(this)
+                    val dialog = BottomSheetDialog(this, R.style.BottomDialogTheme)
 
                     dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
