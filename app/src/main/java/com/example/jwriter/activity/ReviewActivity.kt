@@ -196,7 +196,7 @@ class ReviewActivity : AppCompatActivity() {
                 userResponseEditText.setText("")
                 responseImage.animate().alpha(0F).duration = 300
                 newLevelLayout.animate().alpha(0F).duration = 300
-                userResponseEditText.inputType = InputType.TYPE_CLASS_TEXT
+                userResponseEditText.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
                 userResponseEditText.isEnabled = true
                 submitButton.isEnabled = true
                 //Make cursor invisible and back to visible because of UI glitch
@@ -444,7 +444,7 @@ class ReviewActivity : AppCompatActivity() {
 
     private fun showWrongDialog(kana: Kana) {
         val view = LayoutInflater.from(this).inflate(R.layout.wrong_answer_dialog, null)
-        val dialog = BottomSheetDialog(this)
+        val dialog = BottomSheetDialog(this, R.style.BottomDialogTheme)
 
         val romaji = kanaConverter.hiraganaToRomaji(letterTextView.text.toString())
         val colorizedText =
@@ -562,11 +562,15 @@ class ReviewActivity : AppCompatActivity() {
                 }
 
                 // If it's a quiz, just send user back to menu without learning the kana
-                // If it's review, then complete what they have done
+                // If it's review, then complete what they have done, or if they have not answered yet, send them to menu
                 if (quiz) {
                     startActivity(Intent(this, MenuActivity::class.java))
                 } else if (review && !reviewOver) {
-                    completedSet()
+                    if (totalAnswered == 0) {
+                        startActivity(Intent(this, MenuActivity::class.java))
+                    } else {
+                        completedSet()
+                    }
                 }
                 dialog.dismiss()
             }
