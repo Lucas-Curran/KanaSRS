@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -58,6 +57,7 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var menuScrollView: ScrollView
     private lateinit var githubImageView: ImageView
     private lateinit var contactImageView: ImageView
+    private lateinit var writingReviewButton: Button
 
     private lateinit var showcaseQueue: FancyShowCaseQueue
 
@@ -289,6 +289,11 @@ class MenuActivity : AppCompatActivity() {
                     Uri.parse("https://github.com/Lucas-Curran/JWriter")
                 )
                 startActivity(githubIntent)
+            }
+
+            writingReviewButton = findViewById(R.id.writingReviewButton)
+            writingReviewButton.setOnClickListener {
+
             }
 
             menuScrollView = findViewById(R.id.menuScrollView)
