@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.text.SpannableStringBuilder
+import android.text.method.DigitsKeyListener
 import android.view.*
 import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.EditorInfo
@@ -196,6 +197,7 @@ class ReviewActivity : AppCompatActivity() {
                 userResponseEditText.setText("")
                 responseImage.animate().alpha(0F).duration = 300
                 newLevelLayout.animate().alpha(0F).duration = 300
+                //TODO: Set digits again programmatically
                 userResponseEditText.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
                 userResponseEditText.isEnabled = true
                 submitButton.isEnabled = true
