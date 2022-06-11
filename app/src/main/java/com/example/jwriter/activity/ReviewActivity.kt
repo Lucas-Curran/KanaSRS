@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.jwriter.*
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
@@ -42,7 +43,7 @@ import kotlin.random.Random
  */
 class ReviewActivity : AppCompatActivity() {
 
-    private lateinit var responseImage: ImageView
+    private lateinit var responseImage: LottieAnimationView
     private lateinit var letterTextView: TextView
     private lateinit var submitButton: Button
     private lateinit var userResponseEditText: EditText
@@ -191,11 +192,15 @@ class ReviewActivity : AppCompatActivity() {
         letterTextView.animate().translationXBy((rootLayout.width).toFloat()).withEndAction {
             letterTextView.x = (-rootLayout.width).toFloat() / 2
             letterTextView.text = kanaList[0].letter
+
             letterTextView.animate().translationXBy(rootLayout.width.toFloat() + letterTextView.width / 2).withEndAction {
+                if (!incorrect) {
+                    responseImage.reverseAnimationSpeed()
+                    responseImage.playAnimation()
+                }
                 letterTextView.animate().translationXBy(-(letterTextView.width).toFloat()).duration = 500
                 correctTransition.reverseTransition(300)
                 userResponseEditText.setText("")
-                responseImage.animate().alpha(0F).duration = 300
                 newLevelLayout.animate().alpha(0F).duration = 300
                 //TODO: Set digits again programmatically
                 userResponseEditText.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
@@ -275,9 +280,12 @@ class ReviewActivity : AppCompatActivity() {
         responseImage.visibility = View.VISIBLE
 
         //Set image as x, and start animation
+        if (responseImage.speed < 0) {
+            responseImage.reverseAnimationSpeed()
+        }
         responseImage.alpha = 1F
-        responseImage.setImageResource(R.drawable.animated_incorrect)
-        (responseImage.drawable as Animatable).start()
+        responseImage.setAnimation(R.raw.wrong)
+        responseImage.playAnimation()
         userResponseEditText.isEnabled = false
     }
 
@@ -369,9 +377,11 @@ class ReviewActivity : AppCompatActivity() {
         }
 
         //Set image as checkmark, and start animation
-        responseImage.alpha = 1F
-        responseImage.setImageResource(R.drawable.animated_check)
-        (responseImage.drawable as Animatable).start()
+        if (responseImage.speed < 0) {
+            responseImage.reverseAnimationSpeed()
+        }
+        responseImage.setAnimation(R.raw.correct)
+        responseImage.playAnimation()
         //when animation is done, move to next letter
         moveToNext(incorrect = false)
     }
@@ -470,7 +480,8 @@ class ReviewActivity : AppCompatActivity() {
         dialog.setOnDismissListener {
             moveToNext(incorrect = true)
             userResponseEditText.setText("")
-            responseImage.animate().alpha(0F).duration = 300
+            responseImage.reverseAnimationSpeed()
+            responseImage.playAnimation()
             newLevelLayout.animate().alpha(0F).duration = 300
         }
 
