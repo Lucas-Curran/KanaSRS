@@ -230,6 +230,19 @@
                     android:layout_alignBottom="@id/lessonButton"
                     android:layout_marginBottom="10dp"/>
 
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/bulb"
+                    app:lottie_autoPlay="true"
+                    app:lottie_renderMode="hardware"
+                    app:lottie_speed=".8"
+                    android:paddingBottom="90dp"
+                    android:layout_alignTop="@id/lessonButton"
+                    android:elevation="20dp"
+                    android:layout_centerHorizontal="true" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/lessonButton"
                     style="@style/Widget.MaterialComponents.Button.Icon"
@@ -240,9 +253,7 @@
                     android:layout_marginEnd="15dp"
                     android:layout_marginBottom="15dp"
                     android:background="@drawable/lesson_button_selector"
-                    android:drawableTop="@drawable/ic_learn"
-                    android:paddingTop="40dp"
-                    android:paddingBottom="40dp"
+                    android:paddingTop="60dp"
                     android:shadowColor="@color/black"
                     android:shadowDx="1.5"
                     android:shadowDy="1.3"
@@ -270,6 +281,16 @@
                     android:gravity="center"
                     android:text="0" />
 
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    app:lottie_rawRes="@raw/quiz"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_renderMode="hardware"
+                    android:elevation="20dp"
+                    android:layout_centerHorizontal="true" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/reviewButton"
                     style="@style/Widget.MaterialComponents.Button.Icon"
@@ -280,10 +301,7 @@
                     android:layout_marginEnd="15dp"
                     android:layout_marginBottom="15dp"
                     android:background="@drawable/review_button_selector"
-                    android:drawableTop="@drawable/ic_review"
-                    android:drawableTint="@color/black"
-                    android:paddingTop="40dp"
-                    android:paddingBottom="40dp"
+                    android:paddingTop="60dp"
                     android:shadowColor="@color/black"
                     android:shadowDx="1.5"
                     android:shadowDy="1.3"
@@ -295,60 +313,102 @@
 
             </RelativeLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/writingReviewButton"
-                style="@style/Widget.MaterialComponents.Button.Icon"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_margin="15dp"
-                android:background="@drawable/extra_button_selector"
-                android:drawableTop="@drawable/ic_write"
-                android:drawableTint="@color/black"
-                android:paddingTop="60dp"
-                android:paddingBottom="40dp"
-                android:text="Writing Review"
-                android:shadowColor="@color/black"
-                android:shadowDx="1.5"
-                android:shadowDy="1.3"
-                android:shadowRadius="1.6"
-                android:textSize="20sp"
-                app:backgroundTint="@null" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/statsButton"
-                style="@style/Widget.MaterialComponents.Button.Icon"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_margin="15dp"
-                android:background="@drawable/statistics_button_selector"
-                android:drawableTop="@drawable/ic_graph"
-                android:paddingTop="60dp"
-                android:paddingBottom="40dp"
-                android:text="Statistics"
-                android:shadowColor="@color/black"
-                android:shadowDx="1.5"
-                android:shadowDy="1.3"
-                android:shadowRadius="1.6"
-                android:textSize="20sp"
-                app:backgroundTint="@null" />
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    app:lottie_rawRes="@raw/writing"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_renderMode="hardware"
+                    android:elevation="20dp"
+                    android:layout_centerHorizontal="true" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/settingsButton"
-                style="@style/Widget.MaterialComponents.Button.Icon"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_margin="15dp"
-                android:background="@drawable/settings_button_selector"
-                android:drawableTop="@drawable/ic_settings"
-                android:paddingTop="60dp"
-                android:paddingBottom="40dp"
-                android:text="Settings"
-                android:shadowColor="@color/black"
-                android:shadowDx="1.5"
-                android:shadowDy="1.3"
-                android:shadowRadius="1.6"
-                android:textSize="20sp"
-                app:backgroundTint="@null" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/writingReviewButton"
+                    style="@style/Widget.MaterialComponents.Button.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_margin="15dp"
+                    android:background="@drawable/extra_button_selector"
+                    android:paddingTop="60dp"
+                    android:text="Writing"
+                    android:shadowColor="@color/black"
+                    android:shadowDx="1.5"
+                    android:shadowDy="1.3"
+                    android:shadowRadius="1.6"
+                    android:textSize="20sp"
+                    app:backgroundTint="@null" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    app:lottie_rawRes="@raw/stats"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_renderMode="hardware"
+                    android:elevation="20dp"
+                    android:layout_centerHorizontal="true" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/statsButton"
+                    style="@style/Widget.MaterialComponents.Button.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_margin="15dp"
+                    android:background="@drawable/statistics_button_selector"
+                    android:paddingTop="60dp"
+                    android:text="Statistics"
+                    android:shadowColor="@color/black"
+                    android:shadowDx="1.5"
+                    android:shadowDy="1.3"
+                    android:shadowRadius="1.6"
+                    android:textSize="20sp"
+                    app:backgroundTint="@null" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:elevation="20dp"
+                    android:layout_marginTop="20dp"
+                    app:lottie_renderMode="hardware"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/settings" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/settingsButton"
+                    style="@style/Widget.MaterialComponents.Button.Icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_margin="15dp"
+                    android:background="@drawable/settings_button_selector"
+                    android:paddingTop="60dp"
+                    android:shadowColor="@color/black"
+                    android:shadowDx="1.5"
+                    android:shadowDy="1.3"
+                    android:shadowRadius="1.6"
+                    android:text="Settings"
+                    android:textSize="20sp"
+                    app:backgroundTint="@null" />
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
