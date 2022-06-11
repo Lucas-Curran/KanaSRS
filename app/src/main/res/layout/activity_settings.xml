@@ -9,6 +9,16 @@
     android:background="@color/cardview_dark_background"
     tools:context=".activity.SettingsActivity">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:lottie_rawRes="@raw/sushi_belt"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:layout_constraintTop_toBottomOf="@id/lessonNumberRadioGroup"
+        app:layout_constraintBottom_toTopOf="@id/resetAccountTextView" />
+
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/setTimeTextView"
         android:layout_width="match_parent"
