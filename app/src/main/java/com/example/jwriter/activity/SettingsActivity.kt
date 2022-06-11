@@ -71,6 +71,7 @@ class SettingsActivity : AppCompatActivity() {
             view.findViewById<TextView>(R.id.resetAccountTextView).setOnClickListener {
                 this.deleteDatabase("jwriter.db")
                 JWriterDatabase.destroyInstance()
+                this.getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE).edit().clear().apply()
                 val toast = Toast(this)
                 toast.setGravity(Gravity.CENTER, 0, 0)
                 toast.setText(resources.getText(R.string.clear_account))
