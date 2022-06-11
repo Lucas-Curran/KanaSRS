@@ -6,163 +6,198 @@
     android:clipToPadding="false"
     android:background="@drawable/stats_background">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/hiraganaFractionLayout"
-        android:layout_width="250dp"
-        android:layout_height="200dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
-        android:background="@drawable/ic_cloud"
-        android:orientation="vertical"
-        android:paddingTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Hiragana"
-            android:textColor="@color/black"
-            android:textSize="26sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="20dp"
-            android:background="@color/black" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            app:lottie_rawRes="@raw/cloud"
+            app:lottie_speed=".2"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:layout_width="200dp"
+            android:layout_height="250dp"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:paddingTop="60dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Hiragana"
+                android:layout_marginStart="15dp"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="100dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="30dp"
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:layout_gravity="center">
 
-                <TextView
-                    android:id="@+id/hiraganaFraction"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="0"
-                    android:textColor="@color/black"
-                    android:textSize="40sp" />
+                    android:orientation="vertical">
 
-                <View
-                    android:layout_width="70dp"
-                    android:layout_height="1dp"
-                    android:layout_gravity="center"
-                    android:background="@color/black" />
+                    <TextView
+                        android:id="@+id/hiraganaFraction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="0"
+                        android:textColor="@color/black"
+                        android:textSize="40sp" />
+
+                    <View
+                        android:layout_width="70dp"
+                        android:layout_height="1dp"
+                        android:layout_gravity="center"
+                        android:background="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="46"
+                        android:textColor="@color/black"
+                        android:textSize="40sp" />
+
+
+                </LinearLayout>
 
                 <TextView
+                    android:id="@+id/currentHiraganaTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="60sp"
+                    android:text="あ"
                     android:layout_gravity="center"
-                    android:text="46"
-                    android:textColor="@color/black"
-                    android:textSize="40sp" />
-
+                    android:layout_marginStart="10dp"/>
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/currentHiraganaTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="60sp"
-                android:text="あ"
-                android:layout_gravity="center"
-                android:layout_marginStart="10dp"/>
-
         </LinearLayout>
 
-    </LinearLayout>
+    </FrameLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/katakanaFractionLayout"
-        android:layout_width="250dp"
-        android:layout_height="200dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/ic_cloud"
-        android:orientation="vertical"
-        android:paddingTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:layout_marginStart="70dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/hiraganaFractionLayout">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Katakana"
-            android:textColor="@color/black"
-            android:textSize="26sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="20dp"
-            android:background="@color/black" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            app:lottie_speed=".4"
+            app:lottie_rawRes="@raw/cloud"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:layout_width="200dp"
+            android:layout_height="250dp"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:paddingTop="60dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Katakana"
+                android:layout_marginStart="15dp"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="100dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="30dp"
+                android:background="@color/black" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:layout_gravity="center">
 
-                <TextView
-                    android:id="@+id/katakanaFraction"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="0"
-                    android:textColor="@color/black"
-                    android:textSize="40sp" />
+                    android:orientation="vertical">
 
-                <View
-                    android:layout_width="70dp"
-                    android:layout_height="1dp"
-                    android:layout_gravity="center"
-                    android:background="@color/black" />
+                    <TextView
+                        android:id="@+id/katakanaFraction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="0"
+                        android:textColor="@color/black"
+                        android:textSize="40sp" />
+
+                    <View
+                        android:layout_width="70dp"
+                        android:layout_height="1dp"
+                        android:layout_gravity="center"
+                        android:background="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="46"
+                        android:textColor="@color/black"
+                        android:textSize="40sp" />
+
+
+                </LinearLayout>
 
                 <TextView
+                    android:id="@+id/currentKatakanaTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="60sp"
+                    android:text="ア"
                     android:layout_gravity="center"
-                    android:text="46"
-                    android:textColor="@color/black"
-                    android:textSize="40sp" />
-
+                    android:layout_marginStart="10dp"/>
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/currentKatakanaTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="60sp"
-                android:text="ア"
-                android:layout_gravity="center"
-                android:layout_marginStart="10dp"/>
-
         </LinearLayout>
 
-    </LinearLayout>
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/masteryBarLayout"
