@@ -7,8 +7,14 @@
         <item name="android:textStyle">bold</item>
     </style>
     <style name="JWriter.Menu" parent="Widget.Material3.PopupMenu">
-        <item name="popupMenuBackground">@drawable/dialog_background</item>
+        <item name="popupMenuBackground">@drawable/menu_overflow_background</item>
         <item name="android:textColor">@color/white</item>
+        <item name="actionOverflowMenuStyle">@style/Popup.Style</item>
+        <item name="android:itemBackground">@drawable/menu_overflow_background</item>
+    </style>
+    <style name="Popup.Style" parent="Widget.Material3.PopupMenu.Overflow">
+        <item name="android:dropDownHorizontalOffset">0dp</item>
+        <item name="android:dropDownVerticalOffset">0dp</item>
     </style>
     <style name="DialogTheme" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
