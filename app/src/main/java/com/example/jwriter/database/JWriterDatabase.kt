@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 // TODO: Give preset kana data a description column, gif link column, drawable int, mp3 int
 
 
-@Database(entities = [User::class, Kana::class], version = 4)
+@Database(entities = [User::class, Kana::class], version = 5)
 abstract class JWriterDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
@@ -31,7 +31,16 @@ abstract class JWriterDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context): JWriterDatabase {
 
             // Note for future, if you need to change the db file in assets,
-            // use migration and exec sql statements
+            // use migration and exec sql statements, for example:
+
+//            val MIGRATION_4_5 = object : Migration(4, 5) {
+//                override fun migrate(database: SupportSQLiteDatabase) {
+//                    database.execSQL("ALTER TABLE Kana ADD COLUMN mnemonicDescription TEXT")
+//                    database.execSQL("ALTER TABLE Kana ADD COLUMN writingLevel INTEGER")
+//                    database.execSQL("ALTER TABLE Kana ADD COLUMN totalAnswered INTEGER")
+//                    database.execSQL("ALTER TABLE Kana ADD COLUMN totalCorrect INTEGER")
+//                }
+//            }
 
             return Room.databaseBuilder(context, JWriterDatabase::class.java, "jwriter.db").createFromAsset("jwriter.db")
                 .fallbackToDestructiveMigration()

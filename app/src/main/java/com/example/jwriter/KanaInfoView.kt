@@ -31,7 +31,6 @@ import com.example.jwriter.util.Utilities.Companion.setPrevAnim
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
-import kotlin.concurrent.thread
 
 
 @SuppressLint("ClickableViewAccessibility")
@@ -88,7 +87,7 @@ class KanaInfoView(val context: Context, val kana: Kana) {
             webStroke.loadUrl(kana.gif)
 
             val mnemonicText = view.findViewById<TextView>(R.id.mnemonicTextView)
-            mnemonicText.text = kana.description
+            mnemonicText.text = kana.mnemonic
 
             view.findViewById<ImageView>(R.id.addMnemonicImageView).setOnClickListener {
                 //Dialog to replace current mnemonic with edittext etc...
@@ -111,7 +110,7 @@ class KanaInfoView(val context: Context, val kana: Kana) {
                     false
                 }
 
-                currentText.text = kana.description
+                currentText.text = kana.mnemonic
 
                 currentText.movementMethod = ScrollingMovementMethod()
                 currentText.setOnTouchListener { v, event ->
@@ -143,8 +142,8 @@ class KanaInfoView(val context: Context, val kana: Kana) {
                             ).show()
                         }
                         else -> {
-                            kana.description = editText.text.toString()
-                            mnemonicText.text = kana.description
+                            kana.mnemonic = editText.text.toString()
+                            mnemonicText.text = kana.mnemonic
                             JWriterDatabase.getInstance(context).kanaDao().updateKana(kana)
                             dialog.dismiss()
                         }

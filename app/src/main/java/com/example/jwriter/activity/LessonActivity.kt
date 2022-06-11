@@ -135,7 +135,7 @@ class LessonActivity : AppCompatActivity() {
                 }
 
                 val mnemonicText = newView.findViewById<TextView>(R.id.mnemonicTextView)
-                mnemonicText.text = kana.description
+                mnemonicText.text = kana.mnemonic
 
                 newView.findViewById<ImageView>(R.id.addMnemonicImageView).setOnClickListener {
                     //Dialog to replace current mnemonic with edittext etc...
@@ -157,7 +157,7 @@ class LessonActivity : AppCompatActivity() {
                         false
                     }
 
-                    currentText.text = kana.description
+                    currentText.text = kana.mnemonic
                     currentText.movementMethod = ScrollingMovementMethod()
                     currentText.setOnTouchListener { v, event ->
                         v.parent.requestDisallowInterceptTouchEvent(true)
@@ -180,8 +180,8 @@ class LessonActivity : AppCompatActivity() {
                                 Toast.makeText(this, "Please make sure you type something.", Toast.LENGTH_SHORT).show()
                             }
                             else -> {
-                                kana.description = editText.text.toString()
-                                mnemonicText.text = kana.description
+                                kana.mnemonic = editText.text.toString()
+                                mnemonicText.text = kana.mnemonic
                                 JWriterDatabase.getInstance(this).kanaDao().updateKana(kana)
                                 dialog.dismiss()
                             }

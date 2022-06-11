@@ -16,5 +16,9 @@ data class Kana(
     @ColumnInfo(name = "isHiragana") val isHiragana: Boolean,
     @ColumnInfo(name = "hasLearned") var hasLearned: Boolean,
     @ColumnInfo(name = "gif") val gif: String,
-    @ColumnInfo(name = "description") var description: String
+    @ColumnInfo(name = "description") var mnemonic: String,
+    @ColumnInfo(name = "mnemonicDescription") var customMnemonic: String?,
+    @ColumnInfo(name = "writingLevel") var writingLevel: Int?,
+    @ColumnInfo(name = "totalAnswered") var totalAnswered: Int?,
+    @ColumnInfo(name = "totalCorrect") var totalCorrect: Int?,
 ) : Parcelable
