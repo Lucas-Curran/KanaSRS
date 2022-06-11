@@ -238,12 +238,21 @@ class Utilities {
             calendar[Calendar.SECOND] = 0
             if (calendar.time < Date()) calendar.add(Calendar.DAY_OF_MONTH, 1)
             val intent = Intent(context.applicationContext, NotificationReceiver::class.java)
-            val pendingIntent = PendingIntent.getBroadcast(
-                context.applicationContext,
-                0,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
+            val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.getBroadcast(
+                    context.applicationContext,
+                    0,
+                    intent,
+                    PendingIntent.FLAG_IMMUTABLE
+                )
+            } else {
+                PendingIntent.getBroadcast(
+                    context.applicationContext,
+                    0,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+            }
             val alarmManager = context.getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
             alarmManager.setRepeating(
                 AlarmManager.RTC_WAKEUP,
