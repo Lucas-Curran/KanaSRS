@@ -15,7 +15,7 @@
         <item name="android:windowEnableSplitTouch">false</item>
         <item name="android:splitMotionEvents">false</item>
     </style>
-    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen.IconBackground">
         <item name="windowSplashScreenBackground">@color/cardview_dark_background</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/jwriter_logo_splash</item>
         <item name="postSplashScreenTheme">@style/Theme.JWriter</item>
