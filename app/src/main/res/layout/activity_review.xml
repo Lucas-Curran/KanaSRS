@@ -171,16 +171,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/letterToGuess" />
 
-    <ImageView
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/responseImageView"
         android:layout_width="125dp"
         android:layout_height="125dp"
         android:layout_marginTop="10dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/responseEditText"
-        app:srcCompat="@drawable/animated_check" />
+        app:lottie_rawRes="@raw/correct" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
