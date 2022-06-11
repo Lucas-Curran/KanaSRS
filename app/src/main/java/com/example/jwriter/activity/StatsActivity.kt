@@ -110,8 +110,8 @@ class StatsActivity : AppCompatActivity() {
 
         val hiraganaFraction = overallView.findViewById<TextView>(R.id.hiraganaFraction)
         val katakanaFraction = overallView.findViewById<TextView>(R.id.katakanaFraction)
-        val hiraganaLayout = overallView.findViewById<LinearLayout>(R.id.hiraganaFractionLayout)
-        val katakanaLayout = overallView.findViewById<LinearLayout>(R.id.katakanaFractionLayout)
+        val hiraganaLayout = overallView.findViewById<FrameLayout>(R.id.hiraganaFractionLayout)
+        val katakanaLayout = overallView.findViewById<FrameLayout>(R.id.katakanaFractionLayout)
 
         val hiraBounce = AnimationUtils.loadAnimation(this, R.anim.bounce)
         val kataBounce = AnimationUtils.loadAnimation(this, R.anim.bounce)
