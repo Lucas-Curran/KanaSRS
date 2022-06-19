@@ -20,6 +20,10 @@ import com.example.jwriter.KanaInfoView
 import com.example.jwriter.R
 import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
+import com.example.jwriter.util.Utilities
+import com.example.jwriter.util.Utilities.Companion.AMATEUR
+import com.example.jwriter.util.Utilities.Companion.ROOKIE1
+import com.example.jwriter.util.Utilities.Companion.ROOKIE2
 import com.example.jwriter.util.Utilities.Companion.formatTime
 import com.example.jwriter.util.Utilities.Companion.getLevelColor
 import com.google.android.material.tabs.TabLayout
@@ -47,8 +51,7 @@ class StatsActivity : AppCompatActivity() {
 
     private var mostRecentReview = Long.MAX_VALUE
 
-    private var masteredHiragana = 0
-    private var masteredKatakana = 0
+    private var kanaLearned = 0
     private var currentHiragana = 0
     private var currentKatakana = 0
 
@@ -77,34 +80,27 @@ class StatsActivity : AppCompatActivity() {
 
         overallView = layoutInflater.inflate(R.layout.stats_overall_tab, null)
 
-
         progressLinearLayout = findViewById(R.id.progressLinearLayout)
         tabLayout = findViewById(R.id.statsTabLayout)
         progressScrollView = findViewById(R.id.progressScrollView)
 
-        val rookie = overallView.findViewById<TextView>(R.id.rookie)
-        val amateur = overallView.findViewById<TextView>(R.id.amateur)
-        val expert = overallView.findViewById<TextView>(R.id.expert)
-        val master = overallView.findViewById<TextView>(R.id.master)
-        val sensei = overallView.findViewById<TextView>(R.id.sensei)
+        val rookie = overallView.findViewById<ProgressView>(R.id.rookie)
+        val amateur = overallView.findViewById<ProgressView>(R.id.amateur)
+        val expert = overallView.findViewById<ProgressView>(R.id.expert)
+        val master = overallView.findViewById<ProgressView>(R.id.master)
+        val sensei = overallView.findViewById<ProgressView>(R.id.sensei)
         val levelsArray = arrayOf(rookie, amateur, expert, master, sensei)
 
         for (kana in JWriterDatabase.getInstance(this).kanaDao().getKana()) {
-            if (kana.level != null) {
+            if (kana.hasLearned) {
                 when (kana.level) {
-                    1, 2 -> levelsItemArray[ROOKIE] += 1
-                    3 -> levelsItemArray[AMATEUR] += 1
-                    4 -> levelsItemArray[EXPERT] += 1
-                    5 -> levelsItemArray[MASTER] += 1
-                    6 -> {
-                        levelsItemArray[SENSEI] += 1
-                        if (kana.isHiragana) {
-                            masteredHiragana++
-                        } else {
-                            masteredKatakana++
-                        }
-                    }
+                    ROOKIE1, ROOKIE2 -> levelsItemArray[ROOKIE] += 1
+                    Utilities.AMATEUR -> levelsItemArray[AMATEUR] += 1
+                    Utilities.EXPERT -> levelsItemArray[EXPERT] += 1
+                    Utilities.MASTER -> levelsItemArray[MASTER] += 1
+                    Utilities.SENSEI -> levelsItemArray[SENSEI] += 1
                 }
+                kanaLearned++
             }
         }
 
@@ -141,13 +137,13 @@ class StatsActivity : AppCompatActivity() {
 
         hiraganaLayout.setOnLongClickListener {
             if (learnedHiragana.isNotEmpty()) {
-                KanaInfoView(this, learnedHiragana[currentHiragana]).show()
+                KanaInfoView(this, learnedHiragana[currentHiragana], true).show()
             }
             false
         }
         katakanaLayout.setOnLongClickListener {
             if (learnedKatakana.isNotEmpty()) {
-                KanaInfoView(this, learnedKatakana[currentKatakana]).show()
+                KanaInfoView(this, learnedKatakana[currentKatakana], true).show()
             }
             false
         }
@@ -179,24 +175,24 @@ class StatsActivity : AppCompatActivity() {
         animateInPlace(katakanaLayout)
 
 
-        val progressView = overallView.findViewById<ProgressView>(R.id.kanaMasteryBar)
+        val progressView = overallView.findViewById<ProgressView>(R.id.kanaLearnedBar)
 
-        val totalMastered = masteredHiragana + masteredKatakana
+        val totalMastered = kanaLearned
         progressView.progress = totalMastered.toFloat()
 
         progressView.setOnClickListener {
-            Toast.makeText(this, "$totalMastered kana mastered", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "$totalMastered kana learned", Toast.LENGTH_SHORT).show()
         }
         progressView.setOnProgressClickListener {
-            Toast.makeText(this, "$totalMastered kana mastered", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "$totalMastered kana learned", Toast.LENGTH_SHORT).show()
         }
 
         if (totalMastered == 92) {
-            progressView.labelText = "All Mastered!"
+            progressView.labelText = "All Learned!"
             progressView.labelConstraints = ProgressLabelConstraints.ALIGN_CONTAINER
             progressView.labelGravity = Gravity.CENTER
         } else {
-            progressView.labelText = "%.2f".format((totalMastered.toFloat() / 92) * 100) + "%"
+            progressView.labelText = "$kanaLearned kana learned"
         }
 
         for (kana in JWriterDatabase.getInstance(this).kanaDao().getKana()) {
@@ -222,19 +218,26 @@ class StatsActivity : AppCompatActivity() {
             nextReviewTime.text = "Next Review:\n${formatTime(mostRecentReview)}"
         }
 
-        //overallView.findViewById<TextView>(R.id.reviewNumberTextView).text = "$numItemsToReview"
+        overallView.findViewById<TextView>(R.id.reviewNumberTextView).text = "Current reviews:\n$numItemsToReview"
 
-        var startDelay = 0L
+        //var startDelay = 0L
         for ((index, level) in levelsArray.withIndex()) {
             val name = level.resources.getResourceEntryName(level.id)
-            level.text = levelsItemArray[index].toString()
             level.setOnClickListener {
                 val intent = Intent(this, KanaGridActivity::class.java)
                 intent.putExtra("level", name)
                 startActivity(intent)
             }
-            startDelay+=1000
-            animateWave(level, startDelay)
+            level.setOnProgressClickListener {
+                val intent = Intent(this, KanaGridActivity::class.java)
+                intent.putExtra("level", name)
+                startActivity(intent)
+            }
+            level.max = kanaLearned.toFloat()
+            level.progress = levelsItemArray[index].toFloat()
+            level.labelText = "${levelsItemArray[index]}"
+//            startDelay+=1000
+//            animateWave(level, startDelay)
         }
 
         loadUserStats()
@@ -402,7 +405,7 @@ class StatsActivity : AppCompatActivity() {
 
             myProgressView.setOnProgressClickListener {
                 if (kana.hasLearned) {
-                    KanaInfoView(this, kana).show()
+                    KanaInfoView(this, kana, true).show()
                 } else {
                     Toast.makeText(
                         this,
@@ -414,7 +417,7 @@ class StatsActivity : AppCompatActivity() {
 
             myProgressView.setOnClickListener {
                 if (kana.hasLearned) {
-                    KanaInfoView(this, kana).show()
+                    KanaInfoView(this, kana, true).show()
                 } else {
                     Toast.makeText(
                         this,
