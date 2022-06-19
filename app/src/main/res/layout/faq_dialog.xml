@@ -4,10 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/faqAnimation"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:elevation="20dp"
+        android:visibility="gone"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="30dp"
+        app:lottie_rawRes="@raw/faq"
+        android:layout_alignParentTop="true"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/faqConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="100dp"
         android:background="@drawable/dialog_background">
 
         <TextView
@@ -16,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
+            android:layout_marginEnd="50dp"
             android:text="FAQ"
             android:textColor="@color/white"
             android:textSize="30sp"
@@ -56,14 +71,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </LinearLayout>
 
         </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </RelativeLayout>
