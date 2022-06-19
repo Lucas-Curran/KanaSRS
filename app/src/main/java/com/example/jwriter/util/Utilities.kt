@@ -38,6 +38,13 @@ class Utilities {
 
     companion object {
 
+        const val ROOKIE1 = 1
+        const val ROOKIE2 = 2
+        const val AMATEUR = 3
+        const val EXPERT = 4
+        const val MASTER = 5
+        const val SENSEI = 6
+
         var mediaPlayer = MediaPlayer()
 
         fun animateUp(view: View, startDelay: Long) {
@@ -225,6 +232,27 @@ class Utilities {
                     R.color.sensei_gold
                 }
                 else -> 0
+            }
+        }
+
+        fun levelToTitle(level: Int): String {
+            return when(level) {
+                1, 2 ->  {
+                    "Rookie"
+                }
+                3 -> {
+                    "Amateur"
+                }
+                4 -> {
+                    "Expert"
+                }
+                5 -> {
+                    "Master"
+                }
+                6 -> {
+                    "Sensei"
+                }
+                else -> ""
             }
         }
 
