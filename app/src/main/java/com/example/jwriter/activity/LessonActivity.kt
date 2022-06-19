@@ -135,7 +135,12 @@ class LessonActivity : AppCompatActivity() {
                 }
 
                 val mnemonicText = newView.findViewById<TextView>(R.id.mnemonicTextView)
-                mnemonicText.text = kana.mnemonic
+
+                if (kana.customMnemonic != null) {
+                    mnemonicText.text = kana.customMnemonic
+                } else {
+                    mnemonicText.text = kana.mnemonic
+                }
 
                 newView.findViewById<ImageView>(R.id.addMnemonicImageView).setOnClickListener {
                     //Dialog to replace current mnemonic with edittext etc...
@@ -157,7 +162,11 @@ class LessonActivity : AppCompatActivity() {
                         false
                     }
 
-                    currentText.text = kana.mnemonic
+                    if (kana.customMnemonic != null) {
+                        currentText.text = kana.customMnemonic
+                    } else {
+                        currentText.text = kana.mnemonic
+                    }
                     currentText.movementMethod = ScrollingMovementMethod()
                     currentText.setOnTouchListener { v, event ->
                         v.parent.requestDisallowInterceptTouchEvent(true)
@@ -180,15 +189,18 @@ class LessonActivity : AppCompatActivity() {
                                 Toast.makeText(this, "Please make sure you type something.", Toast.LENGTH_SHORT).show()
                             }
                             else -> {
-                                kana.mnemonic = editText.text.toString()
-                                mnemonicText.text = kana.mnemonic
+                                kana.customMnemonic = editText.text.toString()
+                                mnemonicText.text = kana.customMnemonic
                                 JWriterDatabase.getInstance(this).kanaDao().updateKana(kana)
                                 dialog.dismiss()
                             }
                         }
                     }
                     view.findViewById<TextView>(R.id.defaultResetTextView).setOnClickListener {
-
+                        kana.customMnemonic = null
+                        mnemonicText.text = kana.mnemonic
+                        JWriterDatabase.getInstance(this).kanaDao().updateKana(kana)
+                        dialog.dismiss()
                     }
 
                     dialog.setContentView(view)
