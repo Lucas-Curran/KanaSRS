@@ -136,9 +136,6 @@ class MenuActivity : AppCompatActivity() {
 
         Utilities.setAlarm(this)
 
-        //Pre cache loading animation
-        LottieCompositionFactory.fromRawRes(this, R.raw.loading)
-
         val numReviewTextView = findViewById<TextView>(R.id.numItemsTextView)
         numReviewTextView.text = numItemsToReview.toString()
 
@@ -395,6 +392,11 @@ class MenuActivity : AppCompatActivity() {
         val view = layoutInflater.inflate(R.layout.faq_dialog, null)
         val builder = AlertDialog.Builder(this, R.style.DialogTheme).setView(view).create()
 
+        val faqAnimation = view.findViewById<LottieAnimationView>(R.id.faqAnimation)
+        faqAnimation.setOnSingleClickListener {
+            faqAnimation.playAnimation()
+        }
+
         Handler(Looper.getMainLooper()).post {
 
             builder.window?.setBackgroundDrawableResource(android.R.color.transparent)
@@ -465,6 +467,8 @@ class MenuActivity : AppCompatActivity() {
                 }
                 linearLayout.addView(faqItem)
                 if (index == questions.lastIndex) {
+                    faqAnimation.visibility = View.VISIBLE
+                    faqAnimation.playAnimation()
                     linearLayout.removeView(view.findViewById<ProgressBar>(R.id.faqProgressBar))
                 }
             }
