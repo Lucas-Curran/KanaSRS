@@ -2,6 +2,7 @@ package com.example.jwriter.activity
 
 import android.animation.ObjectAnimator
 import android.content.Intent
+import android.graphics.Typeface
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.TransitionDrawable
 import android.os.Build
@@ -229,6 +230,12 @@ class ReviewActivity : AppCompatActivity() {
             if (!incorrectReviewAnswers.contains(kana)) {
 
                 incorrect++
+                if (kana.totalAnswered == null) {
+                    kana.totalAnswered = 1
+                } else {
+                    kana.totalAnswered = kana.totalAnswered?.plus(1)
+                }
+                JWriterDatabase.getInstance(this).kanaDao().updateKana(kana)
 
                 val levelText: String = when (kana.level?.minus(1)) {
                     0, 1, 2 -> "Rookie"
@@ -245,6 +252,8 @@ class ReviewActivity : AppCompatActivity() {
                 newLevelLayout.backgroundTintList = AppCompatResources.getColorStateList(this, R.color.wrong_answer)
                 newLevelLayout.visibility = View.VISIBLE
                 newLevelLayout.alpha = 1F
+
+                calculateNextReviewTime(kana, correct = false)
 
                 incorrectReviewAnswers.add(kana)
             }
@@ -302,7 +311,22 @@ class ReviewActivity : AppCompatActivity() {
             //If the answer wasn't previously answered incorrectly, show the new level.
             // If it was, the new level was shown previously, therefore just give a nice job :)
             if (!incorrectReviewAnswers.contains(kana)) {
+
                 calculateNextReviewTime(kana = kana, correct = true)
+
+                if (kana.totalCorrect == null) {
+                    kana.totalCorrect = 1
+                    if (kana.totalAnswered == null) {
+                        kana.totalAnswered = 1
+                    } else {
+                        kana.totalAnswered = kana.totalAnswered?.plus(1)
+                    }
+                } else {
+                    kana.totalCorrect = kana.totalCorrect?.plus(1)
+                    kana.totalAnswered = kana.totalAnswered?.plus(1)
+                }
+
+                JWriterDatabase.getInstance(this).kanaDao().updateKana(kana)
 
                 var levelText = ""
                 var color = 0
@@ -342,10 +366,8 @@ class ReviewActivity : AppCompatActivity() {
                 correctReviewAnswers.add(kana)
 
             } else {
-                calculateNextReviewTime(kana = kana, correct = false)
                 arrowIndicator.setImageResource(R.drawable.ic_checkmark)
                 newLevelTextView.text = "Corrected!"
-
                 newLevelLayout.backgroundTintList = AppCompatResources.getColorStateList(this, android.R.color.darker_gray)
                 newLevelLayout.visibility = View.VISIBLE
                 newLevelLayout.alpha = 1F
@@ -368,7 +390,7 @@ class ReviewActivity : AppCompatActivity() {
 
         numberCorrectTextView.text = score.toString()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val animation = ObjectAnimator.ofInt(reviewProgressBar, "progress", reviewProgressBar.progress, score * 100)
+            val animation = ObjectAnimator.ofInt(reviewProgressBar, "progress", reviewProgressBar.progress, reviewProgressBar.progress+100)
             animation.duration = 1000
             animation.interpolator = DecelerateInterpolator()
             animation.start()
@@ -469,7 +491,7 @@ class ReviewActivity : AppCompatActivity() {
         view.findViewById<TextView>(R.id.correctAnswerTextView).text = correctString
 
         view.findViewById<TextView>(R.id.moreInfoTextView).setOnClickListener {
-            val kanaInfo = KanaInfoView(this, kana)
+            val kanaInfo = KanaInfoView(this, kana, true)
             kanaInfo.setReviewToGone()
             kanaInfo.show()
         }
@@ -566,14 +588,6 @@ class ReviewActivity : AppCompatActivity() {
             }
 
             view.findViewById<TextView>(R.id.endReviewTextView).setOnClickListener {
-                //If user gets kana incorrect, it will be added to incorrect review answers list
-                //If user later gets it correct, it will be removed from the list, and the review time for incorrect kana is then calculated.
-                //If user gets it incorrect, but backs out of the session before getting it correct,
-                //the review time for all kana in the list will be calculated, so they cannot cheat the system
-                for (kana in incorrectReviewAnswers) {
-                    calculateNextReviewTime(kana, correct = false)
-                }
-
                 // If it's a quiz, just send user back to menu without learning the kana
                 // If it's review, then complete what they have done, or if they have not answered yet, send them to menu
                 if (quiz) {
