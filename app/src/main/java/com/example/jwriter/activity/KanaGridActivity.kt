@@ -2,6 +2,7 @@ package com.example.jwriter.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -59,6 +60,14 @@ class KanaGridActivity : AppCompatActivity() {
                 titleTextView.text = "SENSEI"
                 titleTextView.setTextColor(ContextCompat.getColor(this, R.color.sensei_gold))
             }
+        }
+
+        val closeActivityImage = findViewById<ImageView>(R.id.closeActivityImage)
+
+        closeActivityImage.translationY = 300f
+        closeActivityImage.animate().translationYBy(-300f).setDuration(1000L).start()
+        closeActivityImage.setOnClickListener {
+            finish()
         }
 
         kanaGridAdapter.setDataList(dataList)
