@@ -21,4 +21,4 @@ data class Kana(
     @ColumnInfo(name = "writingLevel") var writingLevel: Int?,
     @ColumnInfo(name = "totalAnswered") var totalAnswered: Int?,
     @ColumnInfo(name = "totalCorrect") var totalCorrect: Int?,
-) : Parcelable
+): Parcelable
