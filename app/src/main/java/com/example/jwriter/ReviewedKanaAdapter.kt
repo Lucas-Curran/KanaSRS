@@ -63,9 +63,7 @@ class ReviewedKanaAdapter(private val kanaList: List<Kana>, private val mContext
         viewHolder.japaneseLetter.text = kanaList[position].letter
         viewHolder.japaneseLetter.backgroundTintList = AppCompatResources.getColorStateList(mContext, color)
         viewHolder.japaneseLetter.setOnClickListener {
-            val kanaInfo = KanaInfoView(mContext, kanaList[position])
-            kanaInfo.setTextToLevel()
-            kanaInfo.show()
+            KanaInfoView(mContext, kanaList[position], false).show()
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.jwriter
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.media.MediaPlayer
 import android.os.Build
@@ -17,6 +18,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.setPadding
 import androidx.core.view.updateMargins
 import com.example.jwriter.activity.setOnSingleClickListener
@@ -24,17 +26,25 @@ import com.example.jwriter.database.JWriterDatabase
 import com.example.jwriter.database.Kana
 import com.example.jwriter.util.KanaConverter
 import com.example.jwriter.util.Utilities
+import com.example.jwriter.util.Utilities.Companion.AMATEUR
+import com.example.jwriter.util.Utilities.Companion.EXPERT
+import com.example.jwriter.util.Utilities.Companion.MASTER
+import com.example.jwriter.util.Utilities.Companion.ROOKIE1
+import com.example.jwriter.util.Utilities.Companion.ROOKIE2
+import com.example.jwriter.util.Utilities.Companion.SENSEI
 import com.example.jwriter.util.Utilities.Companion.getLevelColor
+import com.example.jwriter.util.Utilities.Companion.levelToTitle
 import com.example.jwriter.util.Utilities.Companion.mediaPlayer
 import com.example.jwriter.util.Utilities.Companion.setNextAnim
 import com.example.jwriter.util.Utilities.Companion.setPrevAnim
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
+import java.text.NumberFormat
 
 
 @SuppressLint("ClickableViewAccessibility")
-class KanaInfoView(val context: Context, val kana: Kana) {
+class KanaInfoView(val context: Context, val kana: Kana, val showReviewTime: Boolean) {
 
     private lateinit var animationIn: Animation
     private lateinit var animationOut: Animation
@@ -57,19 +67,23 @@ class KanaInfoView(val context: Context, val kana: Kana) {
 
         Handler(Looper.getMainLooper()).post {
 
-            if (kana.reviewTime != null) {
-                if (kana.reviewTime!! > System.currentTimeMillis()) {
-                    val timeUntilReview = kana.reviewTime!! - System.currentTimeMillis()
-                    topTextView.text = "Review -> ${Utilities.formatTime(timeUntilReview)}"
+            if (showReviewTime) {
+                if (kana.reviewTime != null) {
+                    if (kana.reviewTime!! > System.currentTimeMillis()) {
+                        val timeUntilReview = kana.reviewTime!! - System.currentTimeMillis()
+                        topTextView.text = "Review -> ${Utilities.formatTime(timeUntilReview)}"
+                    } else {
+                        topTextView.text = "Review -> now"
+                    }
                 } else {
-                    topTextView.text = "Review -> now"
+                    if (!kana.hasLearned) {
+                        topTextView.text = "Need to learn"
+                    } else {
+                        topTextView.text = "Already mastered!"
+                    }
                 }
             } else {
-                if (!kana.hasLearned) {
-                    topTextView.text = "Need to learn"
-                } else {
-                    topTextView.text = "Already mastered!"
-                }
+                setTextToLevel()
             }
 
             val kanaConverter = KanaConverter(false)
@@ -87,7 +101,11 @@ class KanaInfoView(val context: Context, val kana: Kana) {
             webStroke.loadUrl(kana.gif)
 
             val mnemonicText = view.findViewById<TextView>(R.id.mnemonicTextView)
-            mnemonicText.text = kana.mnemonic
+            if (kana.customMnemonic != null) {
+                mnemonicText.text = kana.customMnemonic
+            } else {
+                mnemonicText.text = kana.mnemonic
+            }
 
             view.findViewById<ImageView>(R.id.addMnemonicImageView).setOnClickListener {
                 //Dialog to replace current mnemonic with edittext etc...
@@ -110,7 +128,11 @@ class KanaInfoView(val context: Context, val kana: Kana) {
                     false
                 }
 
-                currentText.text = kana.mnemonic
+                if (kana.customMnemonic != null) {
+                    currentText.text = kana.customMnemonic
+                } else {
+                    currentText.text = kana.mnemonic
+                }
 
                 currentText.movementMethod = ScrollingMovementMethod()
                 currentText.setOnTouchListener { v, event ->
@@ -142,18 +164,119 @@ class KanaInfoView(val context: Context, val kana: Kana) {
                             ).show()
                         }
                         else -> {
-                            kana.mnemonic = editText.text.toString()
-                            mnemonicText.text = kana.mnemonic
+                            kana.customMnemonic = editText.text.toString()
+                            mnemonicText.text = kana.customMnemonic
                             JWriterDatabase.getInstance(context).kanaDao().updateKana(kana)
                             dialog.dismiss()
                         }
                     }
                 }
                 mnemonicView.findViewById<TextView>(R.id.defaultResetTextView).setOnClickListener {
-
+                    kana.customMnemonic = null
+                    mnemonicText.text = kana.mnemonic
+                    JWriterDatabase.getInstance(context).kanaDao().updateKana(kana)
+                    dialog.dismiss()
                 }
 
                 dialog.setContentView(mnemonicView)
+                dialog.show()
+            }
+
+            view.findViewById<ImageView>(R.id.extraStatsImageView).setOnClickListener {
+                val view = LayoutInflater.from(context).inflate(R.layout.kana_stats_dialog, null)
+                val dialog = BottomSheetDialog(context, R.style.BottomDialogTheme)
+                dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+                /*
+                    - Kana header
+                    - Accuracy progress bar and fraction
+                    - Streak
+                    - Level and writing level
+                    - Next review
+                 */
+
+                val kanaLetter = view.findViewById<TextView>(R.id.kanaLetterTextView)
+                kanaLetter.text = kana.letter
+                kanaLetter.background.setTint(ContextCompat.getColor(context, getLevelColor(kana.level!!)))
+                val progressBar = view.findViewById<ProgressBar>(R.id.accuracyProgressBar)
+                val progressText = view.findViewById<TextView>(R.id.accuracyText)
+                val correctText = view.findViewById<TextView>(R.id.accuracyCorrect)
+                val totalText = view.findViewById<TextView>(R.id.accuracyTotal)
+                val accuracyImage = view.findViewById<ImageView>(R.id.accuracyImageView)
+
+                val progressBackgroundId = context.resources.getIdentifier("${levelToTitle(kana.level!!).lowercase()}_gradient", "drawable", context.packageName)
+                progressBar.progressDrawable = ContextCompat.getDrawable(context, progressBackgroundId)
+
+                val totalAnswered = kana.totalAnswered ?: 0
+                val totalCorrect = kana.totalCorrect ?: 0
+                var percent = 0.0
+
+                progressBar.max = totalAnswered
+                progressBar.progress = totalCorrect
+//                    val df = DecimalFormat("##.##%")
+                if (totalAnswered != 0) {
+                    percent = totalCorrect / totalAnswered.toDouble()
+                }
+//                    val formattedPercent = df.format(percent)
+                val percentageFormat = NumberFormat.getPercentInstance()
+                percentageFormat.minimumFractionDigits = 2
+                progressText.text = percentageFormat.format(percent)
+
+                correctText.text = totalCorrect.toString()
+                totalText.text = totalAnswered.toString()
+
+                when {
+                    percent * 100 >= 70 -> {
+                        accuracyImage.setImageResource(R.drawable.ic_positive_face)
+                    }
+                    percent * 100 >= 40 -> {
+                        accuracyImage.setImageResource(R.drawable.ic_neutral_face)
+                    }
+                    percent * 100 >= 0 -> {
+                        accuracyImage.setImageResource(R.drawable.ic_negative_face)
+                    }
+                }
+
+                if (totalAnswered == 0) {
+                    progressBar.max = 0
+                    progressBar.progress = 0
+                    progressText.text = "---"
+                    correctText.text = "0"
+                    totalText.text = "0"
+                    accuracyImage.setImageResource(android.R.color.transparent)
+                }
+
+                //TODO: Streak data
+                view.findViewById<TextView>(R.id.streakTextView).text = "0"
+
+                val levelTextView = view.findViewById<TextView>(R.id.levelTextView)
+                levelTextView.setTextColor(ContextCompat.getColor(context, getLevelColor(kana.level!!)))
+                levelTextView.text = levelToTitle(kana.level!!)
+                val writingLevelTextView = view.findViewById<TextView>(R.id.writingLevelTextView)
+                writingLevelTextView.setTextColor(ContextCompat.getColor(context, getLevelColor(kana.level!!)))
+                writingLevelTextView.text = levelToTitle(kana.level!!)
+
+                val nextReview = view.findViewById<TextView>(R.id.reviewTextView)
+                if (kana.reviewTime != null) {
+                    if (kana.reviewTime!! > System.currentTimeMillis()) {
+                        val timeUntilReview = kana.reviewTime!! - System.currentTimeMillis()
+                        nextReview.text = "${Utilities.formatTime(timeUntilReview)}"
+                    } else {
+                        nextReview.text = "Now"
+                    }
+                } else {
+                    if (!kana.hasLearned) {
+                        nextReview.text = "Need to learn"
+                    } else {
+                        nextReview.setTextColor(ContextCompat.getColor(context, R.color.sensei_gold))
+                        nextReview.text = "Already mastered!"
+                    }
+                }
+                view.findViewById<ImageView>(R.id.closeButton).setOnClickListener {
+                    dialog.dismiss()
+                }
+
+                dialog.setContentView(view)
                 dialog.show()
             }
 

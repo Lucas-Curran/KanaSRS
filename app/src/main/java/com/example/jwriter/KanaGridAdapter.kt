@@ -52,7 +52,7 @@ class KanaGridAdapter(var context: Context): RecyclerView.Adapter<KanaGridAdapte
             6 -> drawable.color = AppCompatResources.getColorStateList(context, R.color.sensei_gold)
         }
         holder.itemView.setOnClickListener {
-            KanaInfoView(parent.context, data).show()
+            KanaInfoView(parent.context, data, true).show()
         }
     }
 
