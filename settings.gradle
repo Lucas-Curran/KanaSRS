@@ -18,5 +18,5 @@ dependencyResolutionManagement {
         jcenter()
     }
 }
-rootProject.name = "JWriter"
+rootProject.name = "KanaSRS"
 include ':app'

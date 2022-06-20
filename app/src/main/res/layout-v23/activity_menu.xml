@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/menu_background"
-    android:theme="@style/Theme.JWriter"
+    android:theme="@style/Theme.KanaSRS"
     tools:context=".activity.MenuActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -32,7 +32,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:title="@string/app_name"
-                app:popupTheme="@style/JWriter.Menu"
+                app:popupTheme="@style/KanaSRS.Menu"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:titleTextAppearance="@style/Toolbar.Custom"
                 app:titleTextColor="@color/white" />
@@ -41,7 +41,7 @@
                 android:id="@+id/toolbarLogo"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/jwriter_logo"
+                android:src="@drawable/kanasrs_logo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/toolbar"
                 app:layout_constraintTop_toTopOf="parent" />

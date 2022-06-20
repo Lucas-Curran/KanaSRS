@@ -6,7 +6,7 @@
         <item name="font">@font/aldrich</item>
         <item name="android:textStyle">bold</item>
     </style>
-    <style name="JWriter.Menu" parent="Widget.Material3.PopupMenu">
+    <style name="KanaSRS.Menu" parent="Widget.Material3.PopupMenu">
         <item name="popupMenuBackground">@drawable/menu_overflow_background</item>
         <item name="android:textColor">@color/white</item>
         <item name="actionOverflowMenuStyle">@style/Popup.Style</item>
