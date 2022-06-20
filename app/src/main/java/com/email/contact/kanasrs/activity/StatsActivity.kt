@@ -1,5 +1,6 @@
 package com.email.contact.kanasrs.activity
 
+import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
@@ -16,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
+import com.airbnb.lottie.LottieAnimationView
 import com.email.contact.kanasrs.KanaInfoView
 import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.database.KanaSRSDatabase
@@ -63,6 +65,8 @@ class StatsActivity : AppCompatActivity() {
     private val EXPERT = 2
     private val MASTER = 3
     private val SENSEI = 4
+
+    private var fading = false
 
     object TabConstants {
         const val OVERALL = 0
@@ -167,6 +171,33 @@ class StatsActivity : AppCompatActivity() {
             if (learnedKatakana.isNotEmpty()) {
                 currentKatakanaText.setTextColor(ContextCompat.getColor(this, getLevelColor(learnedKatakana[currentKatakana].level!!)))
                 currentKatakanaText.text = learnedKatakana[currentKatakana].letter
+            }
+        }
+
+        val smileAnimation = overallView.findViewById<LottieAnimationView>(R.id.smileAnimation)
+        smileAnimation.addAnimatorListener(object : Animator.AnimatorListener{
+            override fun onAnimationStart(p0: Animator?) {
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                smileAnimation.animate().alpha(0f).setDuration(1000L).withEndAction {
+                    fading = false
+                }.start()
+                fading = true
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+            }
+
+            override fun onAnimationRepeat(p0: Animator?) {
+            }
+
+        })
+
+        overallView.findViewById<LottieAnimationView>(R.id.statsAnimation1).setOnClickListener {
+            if (!smileAnimation.isAnimating && !fading) {
+                smileAnimation.alpha = 1f
+                smileAnimation.playAnimation()
             }
         }
 

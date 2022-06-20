@@ -413,4 +413,15 @@
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/spirited_away" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/smileAnimation"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="@id/statsAnimation1"
+        app:layout_constraintEnd_toEndOf="@id/statsAnimation1"
+        app:layout_constraintStart_toStartOf="@id/statsAnimation1"
+        app:lottie_rawRes="@raw/smile"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="100dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
