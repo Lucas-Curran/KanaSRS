@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.view.Menu
@@ -67,8 +68,6 @@ class MenuActivity : AppCompatActivity() {
     private var numItemsToReview: Int = 0
     private var numHiraganaMastered: Float = 0f
     private var numKatakanaMastered: Float = 0f
-    private var mostRecentReview = Long.MAX_VALUE
-    private var nextKanaToReview = ""
     private var kanaToReview = ArrayList<Kana>()
     private var levelsArray = ArrayList<View>()
     private var levelsItemArray = IntArray(5)
@@ -94,6 +93,11 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var summaryShowcase: FancyShowCaseView
     private lateinit var lessonShowcase: FancyShowCaseView
 
+    private lateinit var nextReviewTime: TextView
+    private lateinit var numReviewTextView: TextView
+
+    private var kanaReviewQueue = mutableListOf<Kana>()
+
     private val showcaseArray = mutableListOf<FancyShowCaseView>()
 
     @SuppressLint("ClickableViewAccessibility")
@@ -113,11 +117,12 @@ class MenuActivity : AppCompatActivity() {
                     numItemsToReview++
                     kanaToReview.add(kana)
                 } else {
-                    val millisecondsUntilReview = kana.reviewTime!! - System.currentTimeMillis()
-                    if (millisecondsUntilReview < mostRecentReview) {
-                        mostRecentReview = millisecondsUntilReview
-                        nextKanaToReview = kana.letter!!
-                    }
+                    kanaReviewQueue.add(kana)
+//                    val millisecondsUntilReview = kana.reviewTime!! - System.currentTimeMillis()
+//                    if (millisecondsUntilReview < mostRecentReview) {
+//                        mostRecentReview = millisecondsUntilReview
+//                        nextKanaToReview = kana.letter!!
+//                    }
                 }
             }
             if (kana.level == 6 && kana.isHiragana) {
@@ -127,19 +132,20 @@ class MenuActivity : AppCompatActivity() {
             }
         }
 
+        kanaReviewQueue.sortBy { it.reviewTime }
+
         setContentView(R.layout.activity_menu)
 
         Utilities.setAlarm(this)
 
-        val numReviewTextView = findViewById<TextView>(R.id.numItemsTextView)
+        numReviewTextView = findViewById(R.id.numItemsTextView)
         numReviewTextView.text = numItemsToReview.toString()
 
-        val nextReviewTime = findViewById<TextView>(R.id.nextReviewText)
-        if (mostRecentReview == Long.MAX_VALUE) {
-            nextReviewTime.text = "Next review: none"
+        nextReviewTime = findViewById(R.id.nextReviewText)
+        if (kanaReviewQueue.isNotEmpty()) {
+            startReviewTimer(kanaReviewQueue[0])
         } else {
-            nextReviewTime.text =
-                "Next review: \n\t$nextKanaToReview -> ${formatTime(mostRecentReview)}"
+            nextReviewTime.text = "Next review: none"
         }
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
@@ -258,8 +264,28 @@ class MenuActivity : AppCompatActivity() {
         val refreshTimeText = findViewById<TextView>(R.id.lessonRefreshTime)
         if (user.lessonRefreshTime != null) {
             refreshTimeText.visibility = View.VISIBLE
-            refreshTimeText.text =
-                "Lessons refresh in ${formatTime(user.lessonRefreshTime!! - System.currentTimeMillis())}"
+            object : CountDownTimer(user.lessonRefreshTime!! - System.currentTimeMillis(), 1000) {
+                override fun onTick(millisLeft: Long) {
+                    refreshTimeText.text = "Lessons refresh in ${formatTime(millisLeft)}"
+                }
+
+                override fun onFinish() {
+                    val sharedPref = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE)
+                    val lessonNumber = sharedPref.getInt("jwriterLessonNumber", 10)
+                    if (db.kanaDao().getUnlearnedKana().size in 1..9) {
+                        user.lessonsNumber = db.kanaDao().getUnlearnedKana().size
+                    } else {
+                        user.lessonsNumber = lessonNumber
+                    }
+                    user.lessonRefreshTime = null
+                    refreshTimeText.visibility = View.INVISIBLE
+                    remainingLessonsTextView.text = "Daily remaining lessons: $lessonNumber".colorizeText(user.lessonsNumber.toString(), ContextCompat.getColor(this@MenuActivity, R.color.pink))
+                    db.userDao().updateUser(user)
+                }
+
+            }.start()
+//            refreshTimeText.text =
+//                "Lessons refresh in ${formatTime(user.lessonRefreshTime!! - System.currentTimeMillis())}"
         }
 
         reviewButton = findViewById(R.id.reviewButton)
@@ -374,6 +400,31 @@ class MenuActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun startReviewTimer(kana: Kana) {
+        object : CountDownTimer(kana.reviewTime!! - System.currentTimeMillis(), 1000) {
+            override fun onTick(millisLeft: Long) {
+                nextReviewTime.text =
+                    "Next review: \n\t${kana.letter} -> ${formatTime(millisLeft)}"
+            }
+
+            override fun onFinish() {
+                kanaReviewQueue.removeFirstOrNull()
+                numItemsToReview++
+                currentReviewsTextView.text = "Current Reviews: $numItemsToReview".colorizeText(
+                    numItemsToReview.toString(),
+                    ContextCompat.getColor(this@MenuActivity, R.color.azure)
+                )
+                numReviewTextView.text = numItemsToReview.toString()
+                kanaToReview.add(kana)
+                if (kanaReviewQueue.isEmpty()) {
+                    nextReviewTime.text = "Next review: none"
+                } else {
+                    startReviewTimer(kanaReviewQueue[0])
+                }
+            }
+        }.start()
     }
 
     private fun refreshActivity() {
