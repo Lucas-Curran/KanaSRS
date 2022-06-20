@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:text="Review -> 04:57:34"
+            android:text="Review -> 00:00:00"
             android:layout_gravity="center"
             android:padding="5dp"
             android:background="@drawable/review_box"
