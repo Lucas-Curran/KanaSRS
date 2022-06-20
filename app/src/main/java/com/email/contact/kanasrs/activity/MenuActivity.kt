@@ -338,6 +338,24 @@ class MenuActivity : AppCompatActivity() {
 
         }
 
+        if (intent.getBooleanExtra("openKanaNotification", false) && numItemsToReview > 0) {
+            intent.removeExtra("openKanaNotification")
+            val view = layoutInflater.inflate(R.layout.notification_review_dialog, null)
+            val dialog = AlertDialog.Builder(this).setView(view).create()
+
+            view.findViewById<TextView>(R.id.beginReviewTextView).setOnClickListener {
+                val intent = Intent(this, ReviewActivity::class.java)
+                intent.putExtra("review", true)
+                intent.putExtra("kana", kanaToReview)
+                startActivity(intent)
+            }
+            view.findViewById<TextView>(R.id.cancelButton).setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.show()
+        }
+
         menuScrollView = findViewById(R.id.menuScrollView)
         showcaseQueue = FancyShowCaseQueue()
     }
@@ -406,7 +424,7 @@ class MenuActivity : AppCompatActivity() {
         object : CountDownTimer(kana.reviewTime!! - System.currentTimeMillis(), 1000) {
             override fun onTick(millisLeft: Long) {
                 nextReviewTime.text =
-                    "Next review: \n\t${kana.letter} -> ${formatTime(millisLeft)}"
+                    "Next review: \n\t\t${formatTime(millisLeft)}"
             }
 
             override fun onFinish() {

@@ -35,6 +35,7 @@ internal class NotificationHelper(context: Context) {
         }
 
         val intent = Intent(mContext, MenuActivity::class.java)
+        intent.putExtra("openKanaNotification", true)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         val resultPendingIntent = PendingIntent.getActivity(
             mContext,
