@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.email.contact.kanasrs.KanaGridAdapter
+import com.email.contact.kanasrs.adapter.KanaGridAdapter
 import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.database.KanaSRSDatabase
 import com.email.contact.kanasrs.database.Kana

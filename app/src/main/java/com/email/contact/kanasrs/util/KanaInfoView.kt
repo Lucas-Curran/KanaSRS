@@ -1,9 +1,10 @@
-package com.email.contact.kanasrs
+package com.email.contact.kanasrs.util
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.media.MediaPlayer
 import android.os.Build
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.text.method.ScrollingMovementMethod
@@ -19,11 +20,10 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
 import androidx.core.view.updateMargins
+import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.activity.setOnSingleClickListener
 import com.email.contact.kanasrs.database.KanaSRSDatabase
 import com.email.contact.kanasrs.database.Kana
-import com.email.contact.kanasrs.util.KanaConverter
-import com.email.contact.kanasrs.util.Utilities
 import com.email.contact.kanasrs.util.Utilities.Companion.getLevelColor
 import com.email.contact.kanasrs.util.Utilities.Companion.levelToTitle
 import com.email.contact.kanasrs.util.Utilities.Companion.mediaPlayer
@@ -63,7 +63,15 @@ class KanaInfoView(val context: Context, val kana: Kana, val showReviewTime: Boo
                 if (kana.reviewTime != null) {
                     if (kana.reviewTime!! > System.currentTimeMillis()) {
                         val timeUntilReview = kana.reviewTime!! - System.currentTimeMillis()
-                        topTextView.text = "Review -> ${Utilities.formatTime(timeUntilReview)}"
+                        object : CountDownTimer(timeUntilReview, 1000) {
+                            override fun onTick(millisLeft: Long) {
+                                topTextView.text = "Review -> ${Utilities.formatTime(millisLeft)}"
+                            }
+
+                            override fun onFinish() {
+                                topTextView.text = "Review -> now"
+                            }
+                        }.start()
                     } else {
                         topTextView.text = "Review -> now"
                     }

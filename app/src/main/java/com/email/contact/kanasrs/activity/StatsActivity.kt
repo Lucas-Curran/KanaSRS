@@ -18,7 +18,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import com.airbnb.lottie.LottieAnimationView
-import com.email.contact.kanasrs.KanaInfoView
+import com.email.contact.kanasrs.util.KanaInfoView
 import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.database.KanaSRSDatabase
 import com.email.contact.kanasrs.database.Kana

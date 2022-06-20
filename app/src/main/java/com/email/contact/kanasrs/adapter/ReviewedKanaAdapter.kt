@@ -1,4 +1,4 @@
-package com.email.contact.kanasrs
+package com.email.contact.kanasrs.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
+import com.email.contact.kanasrs.util.KanaInfoView
+import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.database.Kana
 
 

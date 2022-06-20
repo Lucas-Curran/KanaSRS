@@ -1,4 +1,4 @@
-package com.email.contact.kanasrs
+package com.email.contact.kanasrs.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,6 +10,8 @@ import android.view.animation.Animation
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
+import com.email.contact.kanasrs.util.KanaInfoView
+import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.database.Kana
 
 
@@ -45,8 +47,12 @@ class KanaGridAdapter(var context: Context): RecyclerView.Adapter<KanaGridAdapte
         val drawable = (holder.linearLayout.background as GradientDrawable)
         drawable.setStroke(2, AppCompatResources.getColorStateList(context, R.color.white))
         when (data.level) {
-            1, 2 -> drawable.color = AppCompatResources.getColorStateList(context, R.color.rookie_pink)
-            3 -> drawable.color = AppCompatResources.getColorStateList(context, R.color.amateur_purple)
+            1, 2 -> drawable.color = AppCompatResources.getColorStateList(context,
+                R.color.rookie_pink
+            )
+            3 -> drawable.color = AppCompatResources.getColorStateList(context,
+                R.color.amateur_purple
+            )
             4 -> drawable.color = AppCompatResources.getColorStateList(context, R.color.expert_blue)
             5 -> drawable.color = AppCompatResources.getColorStateList(context, R.color.master_blue)
             6 -> drawable.color = AppCompatResources.getColorStateList(context, R.color.sensei_gold)

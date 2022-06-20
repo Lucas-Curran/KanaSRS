@@ -1,4 +1,4 @@
-package com.email.contact.kanasrs
+package com.email.contact.kanasrs.util
 
 import android.content.Context
 import android.graphics.*
