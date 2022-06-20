@@ -144,6 +144,7 @@ class MenuActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         currentReviewsTextView = findViewById(R.id.currentReviewsTextView)
         remainingLessonsTextView = findViewById(R.id.remainingLessonsTextView)

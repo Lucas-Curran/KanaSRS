@@ -31,11 +31,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:title="@string/app_name"
                 app:popupTheme="@style/KanaSRS.Menu"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:titleTextAppearance="@style/Toolbar.Custom"
-                app:titleTextColor="@color/white" />
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:gravity="center"
+                    android:src="@drawable/logo_text"/>
+
+            </com.google.android.material.appbar.MaterialToolbar>
 
             <ImageView
                 android:id="@+id/toolbarLogo"

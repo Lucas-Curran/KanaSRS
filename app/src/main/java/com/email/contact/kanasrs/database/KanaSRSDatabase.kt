@@ -47,7 +47,7 @@ abstract class KanaSRSDatabase : RoomDatabase() {
 
             // Code below is for manual data entry
 
-//            return Room.databaseBuilder(context, JWriterDatabase::class.java, "kanasrs.db")
+//            return Room.databaseBuilder(context, KanaSRSDatabase::class.java, "kanasrs.db")
 //                .addCallback(object : RoomDatabase.Callback() {
 //                    override fun onCreate(db: SupportSQLiteDatabase) {
 //                        super.onCreate(db)
