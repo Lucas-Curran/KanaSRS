@@ -1,8 +1,9 @@
-# JWriter
+# KanaSRS
 
-![jwriter_logo](https://user-images.githubusercontent.com/74155090/161449445-8d538afe-cb02-45e4-8090-bf857ff7bf1c.png)
+![kanasrs_logo](https://user-images.githubusercontent.com/74155090/174512418-c583bf20-3f9f-48b3-b3d8-f6ec38889ac9.png)
 
-JWriter is an android application for helping new Japanese learners on memorizing the phonetic Japanese alphabets: Hiragana (ひらがな) and Katakana (カタカナ). 
+
+KanaSRS is an android application for helping new Japanese learners on memorizing the phonetic Japanese alphabets: Hiragana (ひらがな) and Katakana (カタカナ). 
 
 # Features
 - Hiragana and Katakana study sets for the normal 46 phonetic letters.
@@ -16,7 +17,7 @@ JWriter is an android application for helping new Japanese learners on memorizin
   - Mastery of each kana based on a level system
 - Option for timed modes that encourage quick thinking of characters
 
-## What makes JWriter different from all the other hundreds of Japanese learning apps?
+## What makes KanaSRS different from all the other hundreds of Japanese learning apps?
 
 - Completely free, no subscription based fees or advertisements
 - Built in spaced repetition system to encourage best study practices
