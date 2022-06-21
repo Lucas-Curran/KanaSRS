@@ -5,7 +5,8 @@
         <shape android:shape="rectangle">
 
             <stroke android:width="2dp" android:color="@color/pink" />
-            <solid android:color="@color/cardview_shadow_start_color"/>
+            <solid android:color="#99000000"/>
+            <corners android:radius="10dp"/>
 
         </shape>
     </item>
@@ -14,7 +15,8 @@
         <shape android:shape="rectangle">
 
             <stroke android:width="2dp" android:color="@color/pink" />
-            <solid android:color="@color/cardview_shadow_start_color"/>
+            <solid android:color="#99000000"/>
+            <corners android:radius="10dp"/>
 
         </shape>
     </item>
@@ -22,7 +24,8 @@
         <shape android:shape="rectangle">
 
             <stroke android:width="2dp" />
-            <solid android:color="@color/cardview_shadow_start_color"/>
+            <solid android:color="#99000000"/>
+            <corners android:radius="10dp"/>
 
         </shape>
     </item>
