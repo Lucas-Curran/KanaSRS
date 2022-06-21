@@ -125,9 +125,9 @@ class MenuActivity : AppCompatActivity() {
 //                    }
                 }
             }
-            if (kana.level == 6 && kana.isHiragana) {
+            if (kana.level == Utilities.SENSEI && kana.isHiragana) {
                 numHiraganaMastered++
-            } else if (kana.level == 6 && !kana.isHiragana) {
+            } else if (kana.level == Utilities.SENSEI && !kana.isHiragana) {
                 numKatakanaMastered++
             }
         }
@@ -328,7 +328,7 @@ class MenuActivity : AppCompatActivity() {
         githubImageView.setOnClickListener {
             val githubIntent = Intent(
                 "android.intent.action.VIEW",
-                Uri.parse("https://github.com/Lucas-Curran/JWriter")
+                Uri.parse("https://github.com/Lucas-Curran/KanaSRS")
             )
             startActivity(githubIntent)
         }
@@ -453,92 +453,7 @@ class MenuActivity : AppCompatActivity() {
     }
 
     private fun showFAQ() {
-
-        val view = layoutInflater.inflate(R.layout.faq_dialog, null)
-        val builder = AlertDialog.Builder(this, R.style.DialogTheme).setView(view).create()
-
-        val faqAnimation = view.findViewById<LottieAnimationView>(R.id.faqAnimation)
-        faqAnimation.setOnSingleClickListener {
-            faqAnimation.playAnimation()
-        }
-
-        Handler(Looper.getMainLooper()).post {
-
-            builder.window?.setBackgroundDrawableResource(android.R.color.transparent)
-
-            val contents = this.assets.open("faq.txt").bufferedReader().use { it.readText() }
-            val questions = contents.split("\n")
-
-            val linearLayout = view.findViewById<LinearLayout>(R.id.faqLinearLayout)
-
-            for ((index, question) in questions.withIndex()) {
-
-                val list = question.split("* ")
-                val faqItem = layoutInflater.inflate(R.layout.faq_item, null)
-                val questionTextView = faqItem.findViewById<TextView>(R.id.questionTextView)
-                val relativeLayout = faqItem.findViewById<RelativeLayout>(R.id.faqRelativeLayout)
-                val answerTextView = faqItem.findViewById<TextView>(R.id.answerTextView)
-                val divider = faqItem.findViewById<View>(R.id.faqDivider)
-
-                var open = false
-                var moving = false
-
-                //First index is kanji number, second index is question, third index is answer
-
-                faqItem.findViewById<TextView>(R.id.numberTextView).text = list[0]
-                questionTextView.text = list[1]
-                answerTextView.text = list[2]
-
-                faqItem.setOnSingleClickListener {
-
-                    val shiftSpace =
-                        answerTextView.measuredHeight + answerTextView.marginBottom + divider.measuredHeight + divider.marginTop + divider.marginBottom
-
-                    if (!moving) {
-                        moving = true
-                        faqItem.isSelected = !faqItem.isSelected
-                        if (!open) {
-                            Utilities.slideView(
-                                relativeLayout,
-                                relativeLayout.measuredHeight,
-                                relativeLayout.measuredHeight + shiftSpace
-                            ) {
-                            }
-                            Utilities.slideView(
-                                questionTextView,
-                                questionTextView.measuredHeight,
-                                questionTextView.measuredHeight + shiftSpace
-                            ) {
-                                open = true
-                                moving = false
-                            }
-                        } else {
-                            Utilities.slideView(
-                                relativeLayout,
-                                relativeLayout.measuredHeight,
-                                relativeLayout.measuredHeight - shiftSpace
-                            ) {
-                            }
-                            Utilities.slideView(
-                                questionTextView,
-                                questionTextView.measuredHeight,
-                                questionTextView.measuredHeight - shiftSpace
-                            ) {
-                                open = false
-                                moving = false
-                            }
-                        }
-                    }
-                }
-                linearLayout.addView(faqItem)
-                if (index == questions.lastIndex) {
-                    faqAnimation.visibility = View.VISIBLE
-                    faqAnimation.playAnimation()
-                    linearLayout.removeView(view.findViewById<ProgressBar>(R.id.faqProgressBar))
-                }
-            }
-        }
-        builder.show()
+        startActivity(Intent(this, FaqActivity::class.java))
     }
 
     private fun showReportDialog() {
@@ -556,7 +471,7 @@ class MenuActivity : AppCompatActivity() {
                 val text = view.findViewById<TextView>(R.id.reportTextView).text
                 val email = Intent(Intent.ACTION_VIEW)
                 val data =
-                    Uri.parse("mailto:?subject=JWriter email&body=$text&to=contact.kanasrs@gmail.com")
+                    Uri.parse("mailto:?subject=KanaSRS email&body=$text&to=contact.kanasrs@gmail.com")
                 email.data = data
                 try {
                     startActivity(Intent.createChooser(email, "Send mail..."))
