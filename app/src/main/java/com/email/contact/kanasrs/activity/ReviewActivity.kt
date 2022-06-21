@@ -181,8 +181,42 @@ class ReviewActivity : AppCompatActivity() {
             incorrectTransition.reverseTransition(300)
         }
 
-        if (kanaList.size == 0) {
+        if (kanaList.size == 0 && review) {
             completedSet()
+            return
+        } else if (kanaList.size == 0 && quiz) {
+
+            learnQuizKana()
+            submitButton.isEnabled = false
+            userResponseEditText.isEnabled = false
+            val view = layoutInflater.inflate(R.layout.end_quiz_dialog, null)
+            val dialog = AlertDialog.Builder(this, R.style.DialogTheme).setView(view).create()
+
+            dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+            dialog.setCancelable(false)
+
+            val moreLessonsButton = view.findViewById<MaterialButton>(R.id.moreLessonsButton)
+            val endLessonButton = view.findViewById<MaterialButton>(R.id.endLessonButton)
+
+            if (KanaSRSDatabase.getInstance(this).userDao().getUser().lessonsNumber!! > 0) {
+                moreLessonsButton.setOnClickListener {
+                    startActivity(Intent(this, LessonActivity::class.java))
+                    finish()
+                }
+            } else {
+                moreLessonsButton.visibility = View.GONE
+                view.findViewById<TextView>(R.id.descriptionText).text = "No more lessons are available for now. Good work!"
+                endLessonButton.text = "Back to menu"
+            }
+
+            endLessonButton.setOnClickListener {
+                startActivity(Intent(this, MenuActivity::class.java))
+                finish()
+            }
+
+            dialog.show()
+
             return
         }
 
@@ -417,23 +451,6 @@ class ReviewActivity : AppCompatActivity() {
         submitButton.isEnabled = false
         userResponseEditText.isEnabled = false
 
-        if (quiz) {
-            for (kana in correctReviewAnswers) {
-                learnKana(kana)
-            }
-
-            val user = KanaSRSDatabase.getInstance(this).userDao().getUser()
-            // Subtract remaining lessons for the day by the quiz size, and
-            // then if the lesson refresh time isn't set, make it one day from now
-            user.lessonsNumber = user.lessonsNumber?.minus(correctReviewAnswers.size)
-            if (user.lessonRefreshTime == null) {
-                val oneDay = 24 * 1000L * 60 * 60
-                //val oneMinute = 1000 * 60
-                user.lessonRefreshTime = System.currentTimeMillis() + oneDay
-            }
-            KanaSRSDatabase.getInstance(this).userDao().updateUser(user)
-        }
-
         // Animate views off the screen and then animate the end screen onto screen
 
         Utilities.animateUp(reviewProgressBar, 100)
@@ -546,9 +563,9 @@ class ReviewActivity : AppCompatActivity() {
         val millisecondsInHours = 1000L * 60 * 60
         val millisecondsInDays = millisecondsInHours * 24
 //        return when(level) {
-//            1 -> (millisecondsInHours * 73) // Level 1 is 8 hours after review
+//            1 -> (millisecondsInHours * 8) // Level 1 is 8 hours after review
 //            2 -> (millisecondsInDays * 1) // Level 2 is 1 day after review
-//            3 -> (millisecondsInDays * 3) // Level 3 is 2 days after review
+//            3 -> (millisecondsInDays * 3) // Level 3 is 3 days after review
 //            4 -> (millisecondsInDays * 7) // Level 4 is 7 days (1 week) after review
 //            5 -> (millisecondsInDays * 14) // Level 5 is 14 day (2 weeks) after review
 //            6 -> (millisecondsInDays * 30) // Level 6 is 30 days (1 month) after review
@@ -564,6 +581,23 @@ class ReviewActivity : AppCompatActivity() {
             6 -> oneMinute * 6
             else -> 0
         }
+    }
+
+    private fun learnQuizKana() {
+        for (kana in correctReviewAnswers) {
+            learnKana(kana)
+        }
+
+        val user = KanaSRSDatabase.getInstance(this).userDao().getUser()
+        // Subtract remaining lessons for the day by the quiz size, and
+        // then if the lesson refresh time isn't set, make it one day from now
+        user.lessonsNumber = user.lessonsNumber?.minus(correctReviewAnswers.size)
+        if (user.lessonRefreshTime == null) {
+            val oneDay = 24 * 1000L * 60 * 60
+            //val oneMinute = 1000 * 60
+            user.lessonRefreshTime = System.currentTimeMillis() + oneDay
+        }
+        KanaSRSDatabase.getInstance(this).userDao().updateUser(user)
     }
 
     override fun onBackPressed() {
