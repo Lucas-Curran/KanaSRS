@@ -19,4 +19,9 @@
     <color name="disabled_button">#EBEBE4</color>
     <color name="wrong_answer">#ff5078</color>
     <color name="review_shadow">#2e5984</color>
+    <color name="night_gradient_1">#131862</color>
+    <color name="night_gradient_2">#2e4482</color>
+    <color name="night_gradient_3">#546bab</color>
+    <color name="night_gradient_4">#87889c</color>
+    <color name="night_gradient_5">#bea9de</color>
 </resources>
