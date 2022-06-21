@@ -32,7 +32,7 @@ import java.time.Duration
 import java.util.*
 
 /**
- * Utilities class for animations during program
+ * Utilities class for methods used across the program
  */
 class Utilities {
 
