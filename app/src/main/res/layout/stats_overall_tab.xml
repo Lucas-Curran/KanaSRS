@@ -241,13 +241,12 @@
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/masteryBarLayout">
+        app:layout_constraintTop_toBottomOf="@id/cutTreeAnimation">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="30dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:elevation="3dp"
@@ -271,7 +270,7 @@
             app:progressView_labelConstraints="align_progress"
             app:progressView_labelSize="24sp"
             app:progressView_colorProgress="@color/rookie_pink"
-            app:progressView_borderColor="@color/black"
+            app:progressView_borderColor="@color/rookie_pink"
             app:progressView_borderWidth="2dp"
             app:progressView_colorBackground="@color/cardview_shadow_start_color"
             app:progressView_radius="10dp" />
@@ -288,7 +287,7 @@
             app:progressView_labelConstraints="align_progress"
             app:progressView_labelSize="24sp"
             app:progressView_colorProgress="@color/amateur_purple"
-            app:progressView_borderColor="@color/black"
+            app:progressView_borderColor="@color/amateur_purple"
             app:progressView_borderWidth="2dp"
             app:progressView_colorBackground="@color/cardview_shadow_start_color"
             app:progressView_radius="10dp" />
@@ -305,7 +304,7 @@
             app:progressView_labelConstraints="align_progress"
             app:progressView_labelSize="24sp"
             app:progressView_colorProgress="@color/expert_blue"
-            app:progressView_borderColor="@color/black"
+            app:progressView_borderColor="@color/expert_blue"
             app:progressView_borderWidth="2dp"
             app:progressView_colorBackground="@color/cardview_shadow_start_color"
             app:progressView_radius="10dp" />
@@ -322,7 +321,7 @@
             app:progressView_labelConstraints="align_progress"
             app:progressView_labelSize="24sp"
             app:progressView_colorProgress="@color/master_blue"
-            app:progressView_borderColor="@color/black"
+            app:progressView_borderColor="@color/master_blue"
             app:progressView_borderWidth="2dp"
             app:progressView_colorBackground="@color/cardview_shadow_start_color"
             app:progressView_radius="10dp" />
@@ -339,7 +338,7 @@
             app:progressView_labelConstraints="align_progress"
             app:progressView_labelSize="24sp"
             app:progressView_colorProgress="@color/sensei_gold"
-            app:progressView_borderColor="@color/black"
+            app:progressView_borderColor="@color/sensei_gold"
             app:progressView_borderWidth="2dp"
             app:progressView_colorBackground="@color/cardview_shadow_start_color"
             app:progressView_radius="10dp" />
@@ -403,11 +402,26 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/cutTreeAnimation"
+        android:layout_width="160dp"
+        android:layout_height="120dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/masteryBarLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="80dp"
+        android:layout_marginTop="30dp"
+        android:scaleY="1.1"
+        android:scaleX="1.1"
+        app:lottie_rawRes="@raw/cutting_tree"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"/>
+
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/statsAnimation1"
         android:layout_width="200dp"
         android:layout_height="200dp"
         app:layout_constraintEnd_toEndOf="@id/masteryBarLayout"
-        app:layout_constraintBottom_toTopOf="@id/levelBarsLayout"
+        app:layout_constraintBottom_toBottomOf="@id/masteryBarLayout"
         android:layout_marginBottom="10dp"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
