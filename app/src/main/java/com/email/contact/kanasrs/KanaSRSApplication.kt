@@ -16,13 +16,13 @@ class KanaSRSApplication : Application() {
             reportFormat = StringFormat.KEY_VALUE_LIST
             mailSender {
                 //required
-                mailTo = "report.jwriter@gmail.com"
+                mailTo = "contact.kanasrs@gmail.com"
                 //defaults to true
                 reportAsFile = true
                 //defaults to ACRA-report.stacktrace
                 reportFileName = "Crash.txt"
                 //defaults to "<applicationId> Crash Report"
-                subject = "JWriter Crash Report"
+                subject = "KanaSRS Crash Report"
                 //defaults to empty
                 //body = getString(R.string.mail_body)
             }

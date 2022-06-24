@@ -271,7 +271,7 @@ class MenuActivity : AppCompatActivity() {
 
                 override fun onFinish() {
                     val sharedPref = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE)
-                    val lessonNumber = sharedPref.getInt("jwriterLessonNumber", 10)
+                    val lessonNumber = sharedPref.getInt("kanasrsLessonNumber", 10)
                     if (db.kanaDao().getUnlearnedKana().size in 1..9) {
                         user.lessonsNumber = db.kanaDao().getUnlearnedKana().size
                     } else {
@@ -492,7 +492,7 @@ class MenuActivity : AppCompatActivity() {
 
     private fun checkLessonTimer(user: User) {
         val sharedPref = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE)
-        val lessonNumber = sharedPref.getInt("jwriterLessonNumber", 10)
+        val lessonNumber = sharedPref.getInt("kanasrsLessonNumber", 10)
         if (user.lessonRefreshTime != null) {
             //If current clock time is greater than time set to refresh, reset lesson number and make refresh time null
             if (System.currentTimeMillis() > user.lessonRefreshTime!!) {

@@ -261,8 +261,8 @@ class Utilities {
             val sharedPref = context.getSharedPreferences(context.getString(R.string.pref_key), Context.MODE_PRIVATE)
 
             val calendar = Calendar.getInstance()
-            calendar[Calendar.HOUR_OF_DAY] = sharedPref.getInt("jwriterNotificationHour", 12)
-            calendar[Calendar.MINUTE] = sharedPref.getInt("jwriterNotificationMinute", 0)
+            calendar[Calendar.HOUR_OF_DAY] = sharedPref.getInt("kanasrsNotificationHour", 12)
+            calendar[Calendar.MINUTE] = sharedPref.getInt("kanasrsNotificationMinute", 0)
             calendar[Calendar.SECOND] = 0
             if (calendar.time < Date()) calendar.add(Calendar.DAY_OF_MONTH, 1)
             val intent = Intent(context.applicationContext, NotificationReceiver::class.java)

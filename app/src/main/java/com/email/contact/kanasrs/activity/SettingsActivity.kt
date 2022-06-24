@@ -36,13 +36,13 @@ class SettingsActivity : AppCompatActivity() {
         TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
             val sharedPref = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE) ?: return@OnTimeSetListener
             with (sharedPref.edit()) {
-                putInt("jwriterNotificationHour", hourOfDay)
-                putInt("jwriterNotificationMinute", minute)
+                putInt("kanasrsNotificationHour", hourOfDay)
+                putInt("kanasrsNotificationMinute", minute)
                 apply()
             }
             Utilities.setAlarm(this)
 
-            "Daily notifications are currently sent at ${formatTime(sharedPref.getInt("jwriterNotificationHour", 12), sharedPref.getInt("jwriterNotificationMinute", 0))}".also { sentAtTextView.text = it }
+            "Daily notifications are currently sent at ${formatTime(sharedPref.getInt("kanasrsNotificationHour", 12), sharedPref.getInt("kanasrsNotificationMinute", 0))}".also { sentAtTextView.text = it }
             Toast.makeText(this, "Notifications will now be sent at ${formatTime(hourOfDay, minute)}", Toast.LENGTH_SHORT).show()
         }
 
@@ -84,8 +84,8 @@ class SettingsActivity : AppCompatActivity() {
             val timePicker = TimePickerDialog(
                 this,
                 timePickerDialogListener,
-                sharedPref.getInt("jwriterNotificationHour", 12),
-                sharedPref.getInt("jwriterNotificationMinute", 0),
+                sharedPref.getInt("kanasrsNotificationHour", 12),
+                sharedPref.getInt("kanasrsNotificationMinute", 0),
                 false
             )
             timePicker.setOnCancelListener { Toast.makeText(this, "Canceled", Toast.LENGTH_SHORT).show() }
@@ -101,19 +101,19 @@ class SettingsActivity : AppCompatActivity() {
                 else -> 10
             }
             with (sharedPref.edit()) {
-                putInt("jwriterLessonNumber", numLesson)
+                putInt("kanasrsLessonNumber", numLesson)
                 apply()
             }
         }
 
-        when(sharedPref.getInt("jwriterLessonNumber", 10)) {
+        when(sharedPref.getInt("kanasrsLessonNumber", 10)) {
             5 -> lessonNumberRadioGroup.check(R.id.fiveLessonButton)
             10 -> lessonNumberRadioGroup.check(R.id.tenLessonButton)
             15 -> lessonNumberRadioGroup.check(R.id.fifteenLessonButton)
             else -> lessonNumberRadioGroup.check(R.id.tenLessonButton)
         }
 
-        "Daily notifications are currently sent at ${formatTime(sharedPref.getInt("jwriterNotificationHour", 12), sharedPref.getInt("jwriterNotificationMinute", 0))}".also { sentAtTextView.text = it }
+        "Daily notifications are currently sent at ${formatTime(sharedPref.getInt("kanasrsNotificationHour", 12), sharedPref.getInt("kanasrsNotificationMinute", 0))}".also { sentAtTextView.text = it }
     }
 
     private fun formatTime(hour: Int, minute: Int): String {
