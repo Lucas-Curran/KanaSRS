@@ -72,6 +72,7 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             android:background="@drawable/menu_background"
+            android:layoutAnimation="@anim/layout_appear"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -238,11 +239,11 @@
                     android:layout_marginBottom="20dp"/>
 
                 <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lessonAnimation"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
                     app:lottie_loop="true"
                     app:lottie_rawRes="@raw/bulb"
-                    app:lottie_autoPlay="true"
                     app:lottie_renderMode="hardware"
                     app:lottie_speed=".8"
                     android:paddingBottom="90dp"
@@ -289,10 +290,10 @@
                     android:text="0" />
 
                 <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/reviewAnimation"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     app:lottie_rawRes="@raw/quiz"
-                    app:lottie_autoPlay="true"
                     app:lottie_loop="true"
                     app:lottie_renderMode="hardware"
                     android:elevation="20dp"

@@ -60,6 +60,8 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var githubImageView: ImageView
     private lateinit var contactImageView: ImageView
     private lateinit var writingReviewButton: Button
+    private lateinit var reviewAnimation: LottieAnimationView
+    private lateinit var lessonAnimation: LottieAnimationView
 
     private lateinit var showcaseQueue: FancyShowCaseQueue
 
@@ -281,23 +283,37 @@ class MenuActivity : AppCompatActivity() {
                     refreshTimeText.visibility = View.INVISIBLE
                     remainingLessonsTextView.text = "Daily remaining lessons: $lessonNumber".colorizeText(user.lessonsNumber.toString(), ContextCompat.getColor(this@MenuActivity, R.color.pink))
                     db.userDao().updateUser(user)
+
+                    if (!lessonButton.isEnabled) {
+                        lessonButton.isEnabled = true
+                        lessonButton.isClickable = true
+                        lessonAnimation.setAnimation(R.raw.bulb)
+                        lessonAnimation.playAnimation()
+                    }
+
                 }
 
             }.start()
-//            refreshTimeText.text =
-//                "Lessons refresh in ${formatTime(user.lessonRefreshTime!! - System.currentTimeMillis())}"
         }
 
         reviewButton = findViewById(R.id.reviewButton)
+        reviewAnimation = findViewById(R.id.reviewAnimation)
+        lessonAnimation = findViewById(R.id.lessonAnimation)
 
         if (numItemsToReview == 0) {
             reviewButton.disable()
+            reviewAnimation.setAnimation(R.raw.quiz_disabled)
             numReviewTextView.background =
                 ContextCompat.getDrawable(this, R.drawable.no_review_items_background)
+        } else {
+            reviewAnimation.playAnimation()
         }
 
         if (user.lessonsNumber == 0) {
+            lessonAnimation.setAnimation(R.raw.bulb_disabled)
             lessonButton.disable()
+        } else {
+            lessonAnimation.playAnimation()
         }
 
         reviewButton.setOnClickListener {
@@ -430,6 +446,13 @@ class MenuActivity : AppCompatActivity() {
             override fun onFinish() {
                 kanaReviewQueue.removeFirstOrNull()
                 numItemsToReview++
+                if (numItemsToReview == 1) {
+                    numReviewTextView.background = ContextCompat.getDrawable(this@MenuActivity, R.drawable.items_review_background)
+                    reviewButton.isEnabled = true
+                    reviewButton.isClickable = true
+                    reviewAnimation.setAnimation(R.raw.quiz)
+                    reviewAnimation.playAnimation()
+                }
                 currentReviewsTextView.text = "Current Reviews: $numItemsToReview".colorizeText(
                     numItemsToReview.toString(),
                     ContextCompat.getColor(this@MenuActivity, R.color.azure)
