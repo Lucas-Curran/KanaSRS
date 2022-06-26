@@ -481,10 +481,12 @@ class ReviewActivity : AppCompatActivity() {
             val correctRecyclerView = endReviewLayout.findViewById<RecyclerView>(R.id.correctRecyclerView)
             val incorrectRecyclerView = endReviewLayout.findViewById<RecyclerView>(R.id.incorrectRecyclerView)
 
-            correctRecyclerView.adapter = ReviewedKanaAdapter(correctReviewAnswers, this, true)
-            incorrectRecyclerView.adapter = ReviewedKanaAdapter(incorrectReviewAnswers, this, false)
             correctRecyclerView.layoutManager = LinearLayoutManager(this)
             incorrectRecyclerView.layoutManager = LinearLayoutManager(this)
+            correctRecyclerView.adapter = ReviewedKanaAdapter(correctReviewAnswers, this, true)
+            incorrectRecyclerView.adapter = ReviewedKanaAdapter(incorrectReviewAnswers, this, false)
+            correctRecyclerView.layoutAnimation.animation.startOffset = 1500L
+            incorrectRecyclerView.layoutAnimation.animation.startOffset = 1500L
 
             Utilities.animateFromTop(linearLayout, rootLayout, 200)
             Utilities.animateFromTop(endReviewLayout.findViewById(R.id.layoutDivider), rootLayout, 300)
@@ -572,7 +574,7 @@ class ReviewActivity : AppCompatActivity() {
 //            else -> 0
 //        }
         //For debugging
-        return when(level) {
+        return when (level) {
             1 -> oneMinute * 1
             2 -> oneMinute * 2
             3 -> oneMinute * 3

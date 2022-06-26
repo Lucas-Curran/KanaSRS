@@ -10,9 +10,9 @@
 
     <View
         android:id="@+id/layoutDivider"
-        android:layout_width="2dp"
+        android:layout_width="10dp"
         android:layout_height="0dp"
-        android:background="#AAAAAA"
+        android:background="@color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,6 +71,7 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                android:layoutAnimation="@anim/layout_appear"
                 app:layout_constraintTop_toBottomOf="@id/correctLinearLayout"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -121,6 +122,7 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                android:layoutAnimation="@anim/layout_appear"
                 app:layout_constraintTop_toBottomOf="@id/incorrectLinearLayout"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -139,9 +141,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:backgroundTint="@null"
-        android:background="@drawable/review_box"
+        android:background="@drawable/end_review_button_background"
         android:drawableBottom="@drawable/end_review_check"
-        android:foreground="?android:attr/selectableItemBackground"
+        android:foreground="?android:attr/selectableItemBackgroundBorderless"
         android:paddingTop="40dp"
         android:paddingBottom="40dp"/>
 
