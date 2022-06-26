@@ -21,15 +21,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/levelNumeralTextView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Beginner"
-        android:textSize="40sp"
-        android:gravity="center"
-        android:textColor="#2f2f2f"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/kanaRecyclerView"
         android:layout_width="0dp"
