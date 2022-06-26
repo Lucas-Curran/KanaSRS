@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:drawable="@drawable/pill_shape"
         android:width="100dp"
-        android:height="100dp"/>
+        android:height="100dp">
+
+    </item>
     <item
-        android:drawable="@drawable/ic_checkmark"
-        android:width="70dp"
-        android:height="70dp"
-        android:gravity="center"/>
-
-
+        android:width="50dp"
+        android:height="50dp"
+        android:gravity="center">
+        <bitmap
+            android:tint="@color/white"
+            android:src="@drawable/ic_home"/>
+    </item>
 
 </layer-list>
