@@ -257,130 +257,103 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <com.skydoves.progressview.ProgressView
-            android:id="@+id/rookie"
+        <com.email.contact.kanasrs.util.DistributionBar
             android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:elevation="3dp"
-            app:progressView_labelColorInner="@color/white"
-            app:progressView_labelColorOuter="@color/white"
-            app:progressView_labelTypeface="bold"
-            app:progressView_labelConstraints="align_progress"
-            app:progressView_labelSize="24sp"
-            app:progressView_colorProgress="@color/rookie_pink"
-            app:progressView_borderColor="@color/rookie_pink"
-            app:progressView_borderWidth="2dp"
-            app:progressView_colorBackground="@color/cardview_shadow_start_color"
-            app:progressView_radius="10dp" />
+            android:layout_height="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="40dp"/>
 
-        <com.skydoves.progressview.ProgressView
-            android:id="@+id/amateur"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="20dp"
-            android:elevation="3dp"
-            app:progressView_labelColorInner="@color/white"
-            app:progressView_labelColorOuter="@color/white"
-            app:progressView_labelTypeface="bold"
-            app:progressView_labelConstraints="align_progress"
-            app:progressView_labelSize="24sp"
-            app:progressView_colorProgress="@color/amateur_purple"
-            app:progressView_borderColor="@color/amateur_purple"
-            app:progressView_borderWidth="2dp"
-            app:progressView_colorBackground="@color/cardview_shadow_start_color"
-            app:progressView_radius="10dp" />
-
-        <com.skydoves.progressview.ProgressView
-            android:id="@+id/expert"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="20dp"
-            android:elevation="3dp"
-            app:progressView_labelColorInner="@color/white"
-            app:progressView_labelColorOuter="@color/white"
-            app:progressView_labelTypeface="bold"
-            app:progressView_labelConstraints="align_progress"
-            app:progressView_labelSize="24sp"
-            app:progressView_colorProgress="@color/expert_blue"
-            app:progressView_borderColor="@color/expert_blue"
-            app:progressView_borderWidth="2dp"
-            app:progressView_colorBackground="@color/cardview_shadow_start_color"
-            app:progressView_radius="10dp" />
-
-        <com.skydoves.progressview.ProgressView
-            android:id="@+id/master"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="20dp"
-            android:elevation="3dp"
-            app:progressView_labelColorInner="@color/white"
-            app:progressView_labelColorOuter="@color/white"
-            app:progressView_labelTypeface="bold"
-            app:progressView_labelConstraints="align_progress"
-            app:progressView_labelSize="24sp"
-            app:progressView_colorProgress="@color/master_blue"
-            app:progressView_borderColor="@color/master_blue"
-            app:progressView_borderWidth="2dp"
-            app:progressView_colorBackground="@color/cardview_shadow_start_color"
-            app:progressView_radius="10dp" />
-
-        <com.skydoves.progressview.ProgressView
-            android:id="@+id/sensei"
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="20dp"
-            android:elevation="3dp"
-            app:progressView_labelColorInner="@color/white"
-            app:progressView_labelColorOuter="@color/white"
-            app:progressView_labelTypeface="bold"
-            app:progressView_labelConstraints="align_progress"
-            app:progressView_labelSize="24sp"
-            app:progressView_colorProgress="@color/sensei_gold"
-            app:progressView_borderColor="@color/sensei_gold"
-            app:progressView_borderWidth="2dp"
-            app:progressView_colorBackground="@color/cardview_shadow_start_color"
-            app:progressView_radius="10dp" />
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/nextReviewTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/stats_oval_background"
-                android:elevation="2dp"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="Current reviews:\n5"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:text="Overall Accuracy"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:background="@drawable/small_pill"
+                android:backgroundTint="@color/cardview_shadow_start_color"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:elevation="10dp"
+                android:layout_centerHorizontal="true"/>
 
-            <TextView
-                android:id="@+id/reviewNumberTextView"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/accuracyConstraint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/stats_oval_background"
-                android:elevation="2dp"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="Next Review: \n05:41:32"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:background="@drawable/rounded_square"
+                android:backgroundTint="@color/cardview_shadow_start_color">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/totalCorrectText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_toStartOf="@id/middleText"
+                    android:text="104"
+                    android:textColor="@color/white"
+                    android:textSize="50sp"
+                    app:layout_constraintBottom_toBottomOf="@id/middleText"
+                    app:layout_constraintEnd_toStartOf="@id/middleText"
+                    app:layout_constraintTop_toTopOf="@id/middleText" />
+
+                <TextView
+                    android:id="@+id/middleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:padding="30dp"
+                    android:text="out of"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toTopOf="@id/totalAccuracyProgress"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/totalText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_toStartOf="@id/middleText"
+                    android:text="197"
+                    android:textColor="@color/white"
+                    android:textSize="50sp"
+                    app:layout_constraintBottom_toBottomOf="@id/middleText"
+                    app:layout_constraintStart_toEndOf="@id/middleText"
+                    app:layout_constraintTop_toTopOf="@id/middleText" />
+
+                <com.skydoves.progressview.ProgressView
+                    android:id="@+id/totalAccuracyProgress"
+                    android:layout_width="320dp"
+                    android:layout_height="20dp"
+                    android:layout_margin="10dp"
+                    android:elevation="3dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:progressView_colorBackground="@color/cardview_shadow_start_color"
+                    app:progressView_colorProgress="@color/pink"
+                    app:progressView_labelColorInner="@color/white"
+                    app:progressView_labelColorOuter="@color/white"
+                    app:progressView_labelConstraints="align_progress"
+                    app:progressView_labelSize="24sp"
+                    app:progressView_labelTypeface="bold"
+                    app:progressView_radius="30dp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </RelativeLayout>
+
 
     </LinearLayout>
 

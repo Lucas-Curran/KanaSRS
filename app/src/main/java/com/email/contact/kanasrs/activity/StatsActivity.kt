@@ -22,6 +22,7 @@ import com.email.contact.kanasrs.util.KanaInfoView
 import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.database.KanaSRSDatabase
 import com.email.contact.kanasrs.database.Kana
+import com.email.contact.kanasrs.util.DistributionBar
 import com.email.contact.kanasrs.util.Utilities
 import com.email.contact.kanasrs.util.Utilities.Companion.ROOKIE1
 import com.email.contact.kanasrs.util.Utilities.Companion.ROOKIE2
@@ -86,13 +87,6 @@ class StatsActivity : AppCompatActivity() {
         progressLinearLayout = findViewById(R.id.progressLinearLayout)
         tabLayout = findViewById(R.id.statsTabLayout)
         progressScrollView = findViewById(R.id.progressScrollView)
-
-        val rookie = overallView.findViewById<ProgressView>(R.id.rookie)
-        val amateur = overallView.findViewById<ProgressView>(R.id.amateur)
-        val expert = overallView.findViewById<ProgressView>(R.id.expert)
-        val master = overallView.findViewById<ProgressView>(R.id.master)
-        val sensei = overallView.findViewById<ProgressView>(R.id.sensei)
-        val levelsArray = arrayOf(rookie, amateur, expert, master, sensei)
 
         for (kana in KanaSRSDatabase.getInstance(this).kanaDao().getKana()) {
             if (kana.hasLearned) {
@@ -240,35 +234,12 @@ class StatsActivity : AppCompatActivity() {
             }
         }
 
-        val nextReviewTime = overallView.findViewById<TextView>(R.id.nextReviewTextView)
 
-        if (mostRecentReview == Long.MAX_VALUE) {
-            nextReviewTime.text = "Next Review: \nNo reviews currently"
-        } else {
-            nextReviewTime.text = "Next Review:\n${formatTime(mostRecentReview)}"
-        }
-
-        overallView.findViewById<TextView>(R.id.reviewNumberTextView).text = "Current reviews:\n$numItemsToReview"
-
-        //var startDelay = 0L
-        for ((index, level) in levelsArray.withIndex()) {
-            val name = level.resources.getResourceEntryName(level.id)
-            level.setOnClickListener {
-                val intent = Intent(this, KanaGridActivity::class.java)
-                intent.putExtra("level", name)
-                startActivity(intent)
-            }
-            level.setOnProgressClickListener {
-                val intent = Intent(this, KanaGridActivity::class.java)
-                intent.putExtra("level", name)
-                startActivity(intent)
-            }
-            level.max = kanaLearned.toFloat()
-            level.progress = levelsItemArray[index].toFloat()
-            level.labelText = "${levelsItemArray[index]}"
-//            startDelay+=1000
-//            animateWave(level, startDelay)
-        }
+        val accuracyProgressBar = overallView.findViewById<ProgressView>(R.id.totalAccuracyProgress)
+        accuracyProgressBar.max = KanaSRSDatabase.getInstance(this).kanaDao().sumAnswered().toFloat()
+        accuracyProgressBar.progress = KanaSRSDatabase.getInstance(this).kanaDao().sumCorrect().toFloat()
+        overallView.findViewById<TextView>(R.id.totalCorrectText).text = KanaSRSDatabase.getInstance(this).kanaDao().sumCorrect().toString()
+        overallView.findViewById<TextView>(R.id.totalText).text = KanaSRSDatabase.getInstance(this).kanaDao().sumAnswered().toString()
 
         loadUserStats()
         overallTab()
