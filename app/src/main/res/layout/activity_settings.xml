@@ -1,130 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:theme="@style/Theme.KanaSRS"
-    android:background="@color/cardview_dark_background"
-    tools:context=".activity.SettingsActivity">
+    android:layout_height="match_parent">
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:lottie_rawRes="@raw/sushi_belt"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:layout_constraintTop_toBottomOf="@id/lessonNumberRadioGroup"
-        app:layout_constraintBottom_toTopOf="@id/resetAccountTextView" />
-
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/setTimeTextView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Set Notification Time"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="15dp"
-        android:paddingEnd="50dp"
-        android:paddingStart="30dp"
-        android:background="@drawable/review_box"
-        app:backgroundTint="@null"
-        android:drawableTint="@color/white"
-        android:drawableEnd="@drawable/ic_clock"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="#65abff"/>
+        android:background="@color/cardview_dark_background"
+        android:theme="@style/Theme.KanaSRS"
+        tools:context=".activity.SettingsActivity">
 
-    <TextView
-        android:id="@+id/sentAtTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@id/setTimeTextView"
-        app:layout_constraintTop_toBottomOf="@id/setTimeTextView"
-        android:text="Daily notification are currently sent at 12:00 PM"
-        android:textColor="@color/white"
-        android:layout_marginTop="5dp"
-        android:textSize="12sp"/>
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="match_parent"
+            android:layout_height="410dp"
+            app:layout_constraintBottom_toTopOf="@id/resetAccountTextView"
+            app:layout_constraintTop_toBottomOf="@id/lessonNumberRadioGroup"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/sushi_belt" />
 
-    <TextView
-        android:id="@+id/lessonsGroupDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Number of lessons per day:"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sentAtTextView"/>
 
-    <RadioGroup
-        android:id="@+id/lessonNumberRadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:checkedButton="@id/tenLessonButton"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/lessonsGroupDescription"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <RadioButton
-            android:id="@+id/fiveLessonButton"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:button="@null"
-            android:text="5"
-            android:gravity="center"
-            android:textColor="@drawable/pressed_text_color"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/setTimeTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="@drawable/review_box"
+            android:drawableEnd="@drawable/ic_clock"
+            android:drawableTint="@color/white"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:paddingStart="30dp"
+            android:paddingEnd="50dp"
+            android:text="Set Notification Time"
+            android:textColor="#65abff"
             android:textSize="24sp"
-            android:background="@drawable/toggle_widget_background"/>
-        <RadioButton
-            android:id="@+id/tenLessonButton"
-            android:layout_width="0dp"
+            android:textStyle="bold"
+            app:backgroundTint="@null"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/sentAtTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Daily notification are currently sent at 12:00 PM"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@id/setTimeTextView"
+            app:layout_constraintTop_toBottomOf="@id/setTimeTextView" />
+
+        <TextView
+            android:id="@+id/lessonsGroupDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:text="Number of lessons per day:"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sentAtTextView" />
+
+        <RadioGroup
+            android:id="@+id/lessonNumberRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:checkedButton="@id/tenLessonButton"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lessonsGroupDescription">
+
+            <RadioButton
+                android:id="@+id/fiveLessonButton"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_widget_background"
+                android:button="@null"
+                android:gravity="center"
+                android:text="5"
+                android:textColor="@drawable/pressed_text_color"
+                android:textSize="24sp" />
+
+            <RadioButton
+                android:id="@+id/tenLessonButton"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_widget_background"
+                android:button="@null"
+                android:gravity="center"
+                android:text="10"
+                android:textColor="@drawable/pressed_text_color"
+                android:textSize="24sp" />
+
+            <RadioButton
+                android:id="@+id/fifteenLessonButton"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_widget_background"
+                android:button="@null"
+                android:gravity="center"
+                android:text="15"
+                android:textColor="@drawable/pressed_text_color"
+                android:textSize="24sp" />
+
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/resetAccountTextView"
+            android:layout_width="200dp"
             android:layout_height="50dp"
-            android:layout_weight="1"
-            android:button="@null"
-            android:text="10"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/pink_outline"
+            android:foreground="?android:attr/selectableItemBackground"
             android:gravity="center"
-            android:textColor="@drawable/pressed_text_color"
-            android:textSize="24sp"
-            android:background="@drawable/toggle_widget_background"/>
-        <RadioButton
-            android:id="@+id/fifteenLessonButton"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:button="@null"
-            android:text="15"
-            android:gravity="center"
-            android:textColor="@drawable/pressed_text_color"
-            android:textSize="24sp"
-            android:background="@drawable/toggle_widget_background"/>
+            android:text="Reset Account"
+            android:textColor="#FF4F4B"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-
-    </RadioGroup>
-
-    <TextView
-        android:id="@+id/resetAccountTextView"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:background="@drawable/pink_outline"
-        android:text="Reset Account"
-        android:textStyle="bold"
-        android:textColor="#FF4F4B"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

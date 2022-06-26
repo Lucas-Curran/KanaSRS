@@ -27,6 +27,7 @@ import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.database.KanaSRSDatabase
 import com.email.contact.kanasrs.database.Kana
 import com.email.contact.kanasrs.util.KanaConverter
+import com.email.contact.kanasrs.util.Utilities.Companion.colorizeText
 import com.github.jinatonic.confetti.CommonConfetti
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -140,6 +141,24 @@ class LessonActivity : AppCompatActivity() {
                     mnemonicText.text = kana.customMnemonic
                 } else {
                     mnemonicText.text = kana.mnemonic
+                    if (mnemonicText.text.contains("(${kanaConverter.hiraganaToRomaji(kana.letter!!)})")) {
+                        mnemonicText.text = mnemonicText.text.colorizeText(
+                            "(${kanaConverter.hiraganaToRomaji(kana.letter)})",
+                            ContextCompat.getColor(this, R.color.pink)
+                        )
+                    }
+                    if (mnemonicText.text.contains("'${kanaConverter.hiraganaToRomaji(kana.letter)}'")) {
+                        mnemonicText.text = mnemonicText.text.colorizeText(
+                            "'${kanaConverter.hiraganaToRomaji(kana.letter)}'",
+                            ContextCompat.getColor(this, R.color.pink)
+                        )
+                    }
+                    if (mnemonicText.text.contains("'${kanaConverter.hiraganaToRomaji(kana.letter)?.uppercase()}'")) {
+                        mnemonicText.text = mnemonicText.text.colorizeText(
+                            "'${kanaConverter.hiraganaToRomaji(kana.letter)?.uppercase()}'",
+                            ContextCompat.getColor(this, R.color.pink)
+                        )
+                    }
                 }
 
                 newView.findViewById<ImageView>(R.id.addMnemonicImageView).setOnClickListener {
@@ -322,6 +341,7 @@ class LessonActivity : AppCompatActivity() {
                             intent.putExtra("quiz", true)
                             intent.putExtra("kana", subList.toTypedArray())
                             startActivity(intent)
+                            finish()
                         }
                         builder.show()
                         startConfetti(rootView)

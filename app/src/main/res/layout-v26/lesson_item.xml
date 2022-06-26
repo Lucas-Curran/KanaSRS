@@ -1,129 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/itemConstraintLayout">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/topRelativeLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/itemConstraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/lessonLinearLayout">
+        android:layout_height="wrap_content">
 
-        <ViewAnimator
-            android:id="@+id/viewAnimator"
+        <RelativeLayout
+            android:id="@+id/topRelativeLayout"
             android:layout_width="match_parent"
-            android:layout_margin="10dp"
-            android:layout_centerInParent="true"
-            android:layout_height="280dp">
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/lessonLinearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ViewAnimator
+                android:id="@+id/viewAnimator"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:layout_centerInParent="true"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:id="@+id/kanaTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autoSizeMaxTextSize="280sp"
+                    android:autoSizeMinTextSize="180sp"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="center"
+                    android:text="あ"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <WebView
+                    android:id="@+id/strokeWebView"
+                    android:layout_width="320dp"
+                    android:layout_height="240dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="0dp"
+                    android:padding="0dp"
+                    android:scrollbars="none" />
+
+            </ViewAnimator>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/itemTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_below="@id/viewAnimator"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@android:color/transparent"
+                app:tabBackground="@drawable/item_tab_selector"
+                app:tabGravity="center"
+                app:tabIndicatorHeight="0dp"
+                app:tabMinWidth="100dp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/lessonLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/infoLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topRelativeLayout">
+
+            <ImageButton
+                android:id="@+id/previousItemButton"
+                android:layout_width="90dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:background="#4599ff"
+                android:foreground="?attr/selectableItemBackground"
+                android:src="@drawable/ic_left_arrow"
+                app:layout_constraintStart_toEndOf="@+id/englishTextView"
+                app:layout_constraintTop_toBottomOf="@+id/kanaTextView"
+                app:tint="@color/white" />
 
             <TextView
-                android:id="@+id/kanaTextView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:autoSizeMaxTextSize="280sp"
-                android:autoSizeMinTextSize="180sp"
-                android:autoSizeTextType="uniform"
+                android:id="@+id/englishTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_weight="6"
+                android:background="@color/pink"
                 android:gravity="center"
-                android:text="あ"
+                android:text="A"
                 android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:textSize="60sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/kanaTextView" />
 
-            <WebView
-                android:id="@+id/strokeWebView"
-                android:layout_width="320dp"
-                android:layout_height="240dp"
-                android:scrollbars="none"
-                android:layout_margin="0dp"
-                android:padding="0dp"
-                android:layout_gravity="center" />
+            <ImageButton
+                android:id="@+id/nextItemButton"
+                android:layout_width="90dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:background="#4599ff"
+                android:foreground="?attr/selectableItemBackground"
+                android:src="@drawable/ic_right_arrow"
+                app:layout_constraintStart_toEndOf="@+id/englishTextView"
+                app:layout_constraintTop_toBottomOf="@+id/kanaTextView"
+                app:tint="@color/white" />
 
-        </ViewAnimator>
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/itemTabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:layout_below="@id/viewAnimator"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="@android:color/transparent"
-            app:tabBackground="@drawable/item_tab_selector"
-            app:tabGravity="center"
-            app:tabIndicatorHeight="0dp"
-            app:tabMinWidth="100dp" />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/lessonLinearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@id/infoScrollView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topRelativeLayout">
-
-        <ImageButton
-            android:id="@+id/previousItemButton"
-            android:layout_width="90dp"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:background="#4599ff"
-            android:foreground="?attr/selectableItemBackground"
-            android:src="@drawable/ic_left_arrow"
-            app:layout_constraintStart_toEndOf="@+id/englishTextView"
-            app:layout_constraintTop_toBottomOf="@+id/kanaTextView"
-            app:tint="@color/white" />
-
-        <TextView
-            android:id="@+id/englishTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_weight="6"
-            android:background="@color/pink"
-            android:gravity="center"
-            android:text="A"
-            android:textColor="@color/white"
-            android:textSize="60sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/kanaTextView" />
-
-        <ImageButton
-            android:id="@+id/nextItemButton"
-            android:layout_width="90dp"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:background="#4599ff"
-            android:foreground="?attr/selectableItemBackground"
-            android:src="@drawable/ic_right_arrow"
-            app:layout_constraintStart_toEndOf="@+id/englishTextView"
-            app:layout_constraintTop_toBottomOf="@+id/kanaTextView"
-            app:tint="@color/white" />
-
-    </LinearLayout>
-
-    <ScrollView
-        android:id="@+id/infoScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/lesson_box"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lessonLinearLayout"
-        app:layout_constraintBottom_toBottomOf="@id/itemConstraintLayout">
+        </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/infoLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/lesson_box"
+            app:layout_constraintBottom_toBottomOf="@id/itemConstraintLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lessonLinearLayout">
 
             <TextView
                 android:id="@+id/mnemonicTextView"
@@ -144,8 +143,8 @@
                 android:id="@+id/lessonDivider"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="#AAAAAA"
                 android:layout_margin="5dp"
+                android:background="#AAAAAA"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mnemonicTextView" />
@@ -155,11 +154,11 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/circle_shape"
                 android:foreground="@drawable/audio_ripple"
                 android:padding="10dp"
                 android:src="@drawable/ic_audio"
-                android:layout_marginBottom="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -171,12 +170,11 @@
                 android:layout_height="50dp"
                 android:foreground="?actionBarItemBackground"
                 android:src="@drawable/ic_plus"
-                app:tint="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/lessonDivider"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:tint="@color/white" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
