@@ -15,9 +15,11 @@
         android:theme="@style/Theme.KanaSRS">
         <activity
             android:name=".activity.FaqActivity"
+            android:screenOrientation="fullSensor"
             android:exported="false" />
         <activity
             android:name=".activity.KanaGridActivity"
+            android:screenOrientation="fullSensor"
             android:exported="false" />
 
         <receiver android:name=".notification.NotificationReceiver" />
@@ -25,7 +27,7 @@
         <activity
             android:name=".activity.MenuActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,19 +38,19 @@
         <activity
             android:name=".activity.LessonActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".activity.StatsActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".activity.SettingsActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
         <activity
             android:name=".activity.ReviewActivity"
             android:exported="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
     </application>
 
 </manifest>
