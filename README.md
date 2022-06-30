@@ -26,6 +26,11 @@ KanaSRS is an android application for helping new Japanese learners on memorizin
  
     **And of course, it's easy to get started! No account sign up necessary.**
     
+# Screenshots
+
+<img src="https://user-images.githubusercontent.com/74155090/176618158-87097576-4773-4bf6-86d9-5d060607b096.png" width="300">
+
+    
 Contribute
 ----------
 
