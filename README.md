@@ -25,3 +25,19 @@ KanaSRS is an android application for helping new Japanese learners on memorizin
 - Smooth UI/UX with fun animations and gifs
  
     **And of course, it's easy to get started! No account sign up necessary.**
+    
+Contribute
+----------
+
+Comments and new issues created are welcomed.
+
+Pull requests are currently not accepted.
+
+License
+-------
+
+KanaSRS is currently provided as Source Available Software, but not Open Source Software.
+
+Check [Choose a License - No License](https://choosealicense.com/no-permission/) and
+[Wikipedia - Source-available software](https://en.wikipedia.org/wiki/Source-available_software)
+for more information.
