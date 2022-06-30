@@ -42,6 +42,9 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var writingButton: Button
     private lateinit var extraInfoWriting: LottieAnimationView
 
+    private var sleepingCatCounter = 0
+    private var catToast: Toast? = null
+
     private val timePickerDialogListener: TimePickerDialog.OnTimeSetListener =
         TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
             val sharedPref = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE) ?: return@OnTimeSetListener
@@ -181,6 +184,27 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.sushiLinkTextView).setOnClickListener {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com/search?q=kaitenzushi"))
             startActivity(browserIntent)
+        }
+
+        findViewById<LottieAnimationView>(R.id.catSleepingAnimation).setOnClickListener {
+            sleepingCatCounter++
+
+            catToast?.cancel()
+
+            if (sleepingCatCounter == 7) {
+                catToast = Toast.makeText(this, "Hey!! I said the cat is sleeping!!", Toast.LENGTH_SHORT)
+                catToast?.show()
+                sleepingCatCounter = 0
+                return@setOnClickListener
+            }
+
+            if (sleepingCatCounter % 3 == 0 ) {
+                catToast = Toast.makeText(this, "Shhh, the cat is sleeping...", Toast.LENGTH_SHORT)
+                catToast?.show()
+            } else {
+                catToast = Toast.makeText(this, "zzz...", Toast.LENGTH_SHORT)
+                catToast?.show()
+            }
         }
 
         lessonNumberRadioGroup.setOnCheckedChangeListener { _, id ->
