@@ -4,4 +4,5 @@
     <string name="num_review"><u>Review #</u></string>
     <string name="clear_account"><font color='red'>DATA CLEARED\nAccount has been cleared.</font></string>
     <string name="pref_key">com.example.kanasrs.18290142</string>
+    <string name="writing_info">While reading is about <![CDATA[<b><font color=#FF0000>recognizing</font></b>]]>, writing the kana is about <![CDATA[<b><font color=#FF0000>recalling</font></b>]]> the image of it in your mind. This can create a <![CDATA[<b><font color=#FF0000>deeper</font></b>]]>  connection during the learning process, and is very beneficial! However, we understand if your goal is not aligned with the need to write. So, we have created the option to <![CDATA[<b><font color=#FF0000>turn off</font></b>]]>  all writing related stats and functions. You will be able to turn it back on at any time, and turning it off and on <![CDATA[<b><font color=#FF0000>will not</font></b>]]>  reset progress.</string>
 </resources>
