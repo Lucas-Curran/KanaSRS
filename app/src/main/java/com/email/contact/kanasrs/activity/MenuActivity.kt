@@ -349,9 +349,16 @@ class MenuActivity : AppCompatActivity() {
             startActivity(githubIntent)
         }
 
-        writingReviewButton = findViewById(R.id.writingReviewButton)
-        writingReviewButton.setOnClickListener {
+        val sharedPref = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE)
 
+        writingReviewButton = findViewById(R.id.writingReviewButton)
+
+        if (sharedPref.getBoolean("kanasrsWritingEnabled", true)) {
+            writingReviewButton.setOnClickListener {
+                //TODO: Writing review functionality
+            }
+        } else {
+            findViewById<RelativeLayout>(R.id.writingRelativeLayout).visibility = View.GONE
         }
 
         if (intent.getBooleanExtra("openKanaNotification", false) && numItemsToReview > 0) {
