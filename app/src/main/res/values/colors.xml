@@ -24,4 +24,9 @@
     <color name="night_gradient_3">#546bab</color>
     <color name="night_gradient_4">#87889c</color>
     <color name="night_gradient_5">#bea9de</color>
+    <color name="settings_gradient_1">#807C78</color>
+    <color name="settings_gradient_2">#75726F</color>
+    <color name="settings_gradient_3">#6B6967</color>
+    <color name="settings_gradient_4">#605F5E</color>
+    <color name="settings_gradient_5">#555555</color>
 </resources>
