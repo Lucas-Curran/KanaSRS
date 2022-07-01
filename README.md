@@ -36,6 +36,8 @@ Contribute
 
 Comments and new issues created are welcomed.
 
+Feel free to reach out to contact.kanasrs@gmail.com as well with feature requests or bug issues. 
+
 Pull requests are currently not accepted.
 
 License
