@@ -197,6 +197,7 @@ class KanaInfoView(val context: Context, val kana: Kana, val showReviewTime: Boo
 
                 val kanaLetter = view.findViewById<TextView>(R.id.kanaLetterTextView)
                 kanaLetter.text = kana.letter
+                // TODO: Causes error when clicking stat view on lesson wrong
                 kanaLetter.background.setTint(ContextCompat.getColor(context, getLevelColor(kana.level!!)))
                 val progressBar = view.findViewById<ProgressBar>(R.id.accuracyProgressBar)
                 val progressText = view.findViewById<TextView>(R.id.accuracyText)
@@ -289,7 +290,13 @@ class KanaInfoView(val context: Context, val kana: Kana, val showReviewTime: Boo
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT
             )
-            relativeLayout.background = ContextCompat.getDrawable(context, R.drawable.pink_outline)
+
+            val id = context.resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter!!)}_trace", "drawable", context.packageName)
+            relativeLayout.background = ContextCompat.getDrawable(context, id)
+
+            val strokeId = context.resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter)}_stroke", "drawable", context.packageName)
+            val kanaStrokeView = view.findViewById<ImageView>(R.id.kanaStrokeImageView)
+            kanaStrokeView.setImageResource(strokeId)
 
             val drawingView = DrawingView(context)
 
@@ -320,7 +327,7 @@ class KanaInfoView(val context: Context, val kana: Kana, val showReviewTime: Boo
             }
             clearButton.height = 75
             clearButton.setPadding(10)
-            clearButton.background = ContextCompat.getDrawable(context, R.drawable.pink_outline)
+            clearButton.background = ContextCompat.getDrawable(context, R.drawable.dialog_background)
             val outValue = TypedValue()
             context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -353,6 +360,11 @@ class KanaInfoView(val context: Context, val kana: Kana, val showReviewTime: Boo
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     val tabPosition = tab?.position!!
                     viewAnimator.displayedChild = tabPosition
+                    if (tabPosition == writeTab.position) {
+                        kanaStrokeView.visibility = View.VISIBLE
+                    } else {
+                        kanaStrokeView.visibility = View.GONE
+                    }
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {

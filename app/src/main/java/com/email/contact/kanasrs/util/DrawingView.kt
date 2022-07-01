@@ -20,11 +20,11 @@ class DrawingView(var c: Context) : View(c) {
         mPaint = Paint()
         mPaint!!.isAntiAlias = true
         mPaint!!.isDither = true
-        mPaint!!.color = Color.WHITE
+        mPaint!!.color = Color.BLACK
         mPaint!!.style = Paint.Style.STROKE
         mPaint!!.strokeJoin = Paint.Join.ROUND
         mPaint!!.strokeCap = Paint.Cap.ROUND
-        mPaint!!.strokeWidth = 12F
+        mPaint!!.strokeWidth = 20F
 
         circlePaint.isAntiAlias = true
         circlePaint.color = Color.BLUE

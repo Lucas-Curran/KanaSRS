@@ -252,9 +252,24 @@ class LessonActivity : AppCompatActivity() {
 
                 val relativeLayout = RelativeLayout(this)
                 relativeLayout.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
-                relativeLayout.background = ContextCompat.getDrawable(this, R.drawable.pink_outline)
+                val traceId = resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter!!)}_trace", "drawable", packageName)
+                relativeLayout.background = ContextCompat.getDrawable(this, traceId)
+
+                val strokeId = resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter)}_stroke", "drawable", packageName)
+                val kanaStrokeView = newView.findViewById<ImageView>(R.id.kanaStrokeImageView)
+                kanaStrokeView.setImageResource(strokeId)
 
                 val drawingView = DrawingView(this)
+
+                drawingView.setOnTouchListener { v, event ->
+                    v.parent.requestDisallowInterceptTouchEvent(true)
+                    when (event.action and MotionEvent.ACTION_MASK) {
+                        MotionEvent.ACTION_UP ->
+                            v.parent.requestDisallowInterceptTouchEvent(false)
+                    }
+                    false
+                }
+
                 val clearButton = Button(this)
                 clearButton.text = "Clear"
                 clearButton.textSize = 12f
@@ -270,7 +285,7 @@ class LessonActivity : AppCompatActivity() {
                 }
                 clearButton.height = 75
                 clearButton.setPadding(10)
-                clearButton.background = ContextCompat.getDrawable(this, R.drawable.review_box)
+                clearButton.background = ContextCompat.getDrawable(this, R.drawable.dialog_background)
                 val outValue = TypedValue()
                 theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -302,6 +317,11 @@ class LessonActivity : AppCompatActivity() {
                         if (lessonTabLayout.selectedTabPosition == newTab.position+1 || resetQuiz) {
                             setAnimNull(tempViewAnimator)
                             resetQuiz = false
+                        }
+                        if (tabPosition == writeTab.position) {
+                            kanaStrokeView.visibility = View.VISIBLE
+                        } else {
+                            kanaStrokeView.visibility = View.GONE
                         }
                         tempViewAnimator.displayedChild = tabPosition
                     }
@@ -347,7 +367,7 @@ class LessonActivity : AppCompatActivity() {
                         startConfetti(rootView)
 
                     } else if (tempViewAnimator.displayedChild == KANA_DRAW_SCREEN) {
-                        //If on gif screen, show next kana and switch current kana back to letter tab
+                        //If on drawing view, show next kana and switch current kana back to letter tab
                         disableButtons()
                         lessonTabLayout.getTabAt(newTab.position+1)?.select()
                         rootViewAnimator.postDelayed({
