@@ -5,10 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-
-// TODO: Give preset kana data a description column, gif link column, drawable int, mp3 int
-
-
 @Database(entities = [User::class, Kana::class], version = 5)
 abstract class KanaSRSDatabase : RoomDatabase() {
 
@@ -39,6 +35,7 @@ abstract class KanaSRSDatabase : RoomDatabase() {
 //                    database.execSQL("ALTER TABLE Kana ADD COLUMN totalCorrect INTEGER")
 //                }
 //            }
+
 
             return Room.databaseBuilder(context, KanaSRSDatabase::class.java, "kanasrs.db").createFromAsset("kanasrs.db")
                 .fallbackToDestructiveMigration()
