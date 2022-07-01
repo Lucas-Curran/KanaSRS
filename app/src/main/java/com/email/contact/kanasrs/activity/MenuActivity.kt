@@ -31,16 +31,8 @@ import com.email.contact.kanasrs.database.Kana
 import com.email.contact.kanasrs.database.User
 import com.email.contact.kanasrs.util.Utilities
 import com.email.contact.kanasrs.util.Utilities.Companion.colorizeText
-import com.email.contact.kanasrs.util.Utilities.Companion.createShowcase
-import com.email.contact.kanasrs.util.Utilities.Companion.createShowcaseRectangle
 import com.email.contact.kanasrs.util.Utilities.Companion.disable
-import com.email.contact.kanasrs.util.Utilities.Companion.disableScroll
-import com.email.contact.kanasrs.util.Utilities.Companion.enableScroll
 import com.email.contact.kanasrs.util.Utilities.Companion.formatTime
-import me.toptas.fancyshowcase.FancyShowCaseQueue
-import me.toptas.fancyshowcase.FancyShowCaseView
-import me.toptas.fancyshowcase.listener.OnCompleteListener
-
 
 class MenuActivity : AppCompatActivity() {
 
@@ -62,8 +54,6 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var writingReviewButton: Button
     private lateinit var reviewAnimation: LottieAnimationView
     private lateinit var lessonAnimation: LottieAnimationView
-
-    private lateinit var showcaseQueue: FancyShowCaseQueue
 
     private var showMore = true
     private var moving = false
@@ -87,20 +77,10 @@ class MenuActivity : AppCompatActivity() {
         return rect.contains((view.left + x).toInt(), (view.top + y).toInt())
     }
 
-    private val refreshString = "The refresh button is useful for staying up-to-date on all new reviews and lessons in your queue!"
-    private val summaryString = "Here is the summary!"
-    private val lessonString = "To begin learning new kana, click here"
-
-    private lateinit var refreshShowcase: FancyShowCaseView
-    private lateinit var summaryShowcase: FancyShowCaseView
-    private lateinit var lessonShowcase: FancyShowCaseView
-
     private lateinit var nextReviewTime: TextView
     private lateinit var numReviewTextView: TextView
 
     private var kanaReviewQueue = mutableListOf<Kana>()
-
-    private val showcaseArray = mutableListOf<FancyShowCaseView>()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -380,48 +360,12 @@ class MenuActivity : AppCompatActivity() {
         }
 
         menuScrollView = findViewById(R.id.menuScrollView)
-        showcaseQueue = FancyShowCaseQueue()
     }
 
     @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.home_menu, menu)
-        Handler(Looper.getMainLooper()).postDelayed(
-            {
-                showcaseArray.add(createShowcase(
-                    findViewById(R.id.refresh),
-                    refreshString,
-                    false,
-                    this
-                ))
-                showcaseArray.add(createShowcaseRectangle(
-                    summaryLayout,
-                    summaryString,
-                    false,
-                    this
-                ))
-                showcaseArray.add(createShowcaseRectangle(
-                    lessonButton,
-                    lessonString,
-                    true,
-                    this
-                ))
 
-                for (showcase in showcaseArray) {
-                    showcaseQueue.add(showcase)
-                }
-
-                //showcaseQueue.show()
-                if (showcaseQueue.current != null) {
-                    menuScrollView.disableScroll()
-                }
-                showcaseQueue.completeListener = object : OnCompleteListener {
-                    override fun onComplete() {
-                        menuScrollView.enableScroll()
-                    }
-                }
-
-            }, 50)
         if (menu is MenuBuilder) {
             menu.setOptionalIconsVisible(true)
         }
@@ -434,10 +378,7 @@ class MenuActivity : AppCompatActivity() {
             R.id.faq -> showFAQ()
             R.id.refresh -> refreshActivity()
             R.id.tutorial -> {
-                for (showcase in showcaseArray) {
-                    showcaseQueue.add(showcase)
-                }
-                showcaseQueue.show()
+
             }
         }
         return super.onOptionsItemSelected(item)

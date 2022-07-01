@@ -26,8 +26,6 @@ import androidx.core.animation.doOnEnd
 import androidx.core.view.marginBottom
 import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.notification.NotificationReceiver
-import me.toptas.fancyshowcase.FancyShowCaseView
-import me.toptas.fancyshowcase.FocusShape
 import java.time.Duration
 import java.util.*
 
@@ -114,36 +112,6 @@ class Utilities {
                 onEnd()
             }
             animationSet.start()
-        }
-
-        fun createShowcase(
-            view: View,
-            title: String,
-            enableTouch: Boolean,
-            activity: Activity
-        ): FancyShowCaseView {
-            return FancyShowCaseView.Builder(activity)
-                .focusOn(view)
-                .title(title)
-                .enableTouchOnFocusedView(enableTouch)
-                .enableAutoTextPosition()
-                .build()
-        }
-
-        fun createShowcaseRectangle(
-            view: View,
-            title: String,
-            enableTouch: Boolean,
-            activity: Activity
-        ): FancyShowCaseView {
-            return FancyShowCaseView.Builder(activity)
-                .focusOn(view)
-                .focusShape(FocusShape.ROUNDED_RECTANGLE)
-                .roundRectRadius(10)
-                .title(title)
-                .enableTouchOnFocusedView(enableTouch)
-                .enableAutoTextPosition()
-                .build()
         }
 
         fun setNextAnim(viewAnimator: ViewAnimator, animationIn: Animation, animationOut: Animation) {
