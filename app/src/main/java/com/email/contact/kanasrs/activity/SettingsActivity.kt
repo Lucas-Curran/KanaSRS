@@ -46,7 +46,7 @@ class SettingsActivity : AppCompatActivity() {
     private var catToast: Toast? = null
 
     private val timePickerDialogListener: TimePickerDialog.OnTimeSetListener =
-        TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+        TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
             val sharedPref = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE) ?: return@OnTimeSetListener
             with (sharedPref.edit()) {
                 putInt("kanasrsNotificationHour", hourOfDay)

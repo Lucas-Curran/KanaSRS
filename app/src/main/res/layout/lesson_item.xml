@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="300dp">
 
-        <me.grantland.widget.AutofitTextView
+        <TextView
             android:id="@+id/kanaTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
