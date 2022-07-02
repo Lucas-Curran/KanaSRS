@@ -51,6 +51,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     kapt  "androidx.room:room-compiler:$room_version"
     kapt "android.arch.persistence.room:compiler:1.1.1"
+    implementation 'com.github.AppIntro:AppIntro:6.2.0'
     implementation 'com.airbnb.android:lottie:5.2.0'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
     //noinspection GradleDependency

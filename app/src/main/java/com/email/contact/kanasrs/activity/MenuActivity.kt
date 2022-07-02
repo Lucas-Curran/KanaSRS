@@ -88,278 +88,290 @@ class MenuActivity : AppCompatActivity() {
 
         installSplashScreen()
 
-        db = KanaSRSDatabase.getInstance(this)
+        if (1 == 1) {
+            startActivity(Intent(this, KanaIntroActivity::class.java))
+        } else {
 
-        val user = db.userDao().getUser()
-        for (kana in db.kanaDao().getKana()) {
-            //Check if there is a review time, and if so, check if the current time has passed the stored review time
-            // Review time is calculated during review answers and initially added when learned in lessons
-            if (kana.reviewTime != null) {
-                if (kana.reviewTime!! < System.currentTimeMillis()) {
-                    numItemsToReview++
-                    kanaToReview.add(kana)
-                } else {
-                    kanaReviewQueue.add(kana)
+            db = KanaSRSDatabase.getInstance(this)
+
+            val user = db.userDao().getUser()
+            for (kana in db.kanaDao().getKana()) {
+                //Check if there is a review time, and if so, check if the current time has passed the stored review time
+                // Review time is calculated during review answers and initially added when learned in lessons
+                if (kana.reviewTime != null) {
+                    if (kana.reviewTime!! < System.currentTimeMillis()) {
+                        numItemsToReview++
+                        kanaToReview.add(kana)
+                    } else {
+                        kanaReviewQueue.add(kana)
 //                    val millisecondsUntilReview = kana.reviewTime!! - System.currentTimeMillis()
 //                    if (millisecondsUntilReview < mostRecentReview) {
 //                        mostRecentReview = millisecondsUntilReview
 //                        nextKanaToReview = kana.letter!!
 //                    }
+                    }
+                }
+                if (kana.level == Utilities.SENSEI && kana.isHiragana) {
+                    numHiraganaMastered++
+                } else if (kana.level == Utilities.SENSEI && !kana.isHiragana) {
+                    numKatakanaMastered++
                 }
             }
-            if (kana.level == Utilities.SENSEI && kana.isHiragana) {
-                numHiraganaMastered++
-            } else if (kana.level == Utilities.SENSEI && !kana.isHiragana) {
-                numKatakanaMastered++
-            }
-        }
 
-        kanaReviewQueue.sortBy { it.reviewTime }
+            kanaReviewQueue.sortBy { it.reviewTime }
 
-        setContentView(R.layout.activity_menu)
+            setContentView(R.layout.activity_menu)
 
-        Utilities.setAlarm(this)
+            Utilities.setAlarm(this)
 
-        numReviewTextView = findViewById(R.id.numItemsTextView)
-        numReviewTextView.text = numItemsToReview.toString()
+            numReviewTextView = findViewById(R.id.numItemsTextView)
+            numReviewTextView.text = numItemsToReview.toString()
 
-        nextReviewTime = findViewById(R.id.nextReviewText)
-        if (kanaReviewQueue.isNotEmpty()) {
-            startReviewTimer(kanaReviewQueue[0])
-        } else {
-            nextReviewTime.text = "Next review: none"
-        }
-
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        currentReviewsTextView = findViewById(R.id.currentReviewsTextView)
-        remainingLessonsTextView = findViewById(R.id.remainingLessonsTextView)
-
-        checkLessonTimer(user)
-        currentReviewsTextView.text = "Current Reviews: $numItemsToReview".colorizeText(
-            numItemsToReview.toString(),
-            ContextCompat.getColor(this, R.color.azure)
-        )
-
-        summaryButton = findViewById(R.id.summaryButton)
-        showMoreArrow = findViewById(R.id.arrowImageView)
-        summaryLayout = findViewById(R.id.summaryRelativeLayout)
-        levelsLayout = findViewById(R.id.levelsLayout)
-
-        val rookie = levelsLayout.findViewById<LinearLayout>(R.id.rookie)
-        val amateur = levelsLayout.findViewById<LinearLayout>(R.id.amateur)
-        val expert = levelsLayout.findViewById<LinearLayout>(R.id.expert)
-        val master = levelsLayout.findViewById<LinearLayout>(R.id.master)
-        val sensei = levelsLayout.findViewById<LinearLayout>(R.id.sensei)
-        levelsArray.add(rookie)
-        levelsArray.add(amateur)
-        levelsArray.add(expert)
-        levelsArray.add(master)
-        levelsArray.add(sensei)
-
-        for (kana in db.kanaDao().getKana()) {
-            if (kana.level != null) {
-                when (kana.level) {
-                    1, 2 -> levelsItemArray[ROOKIE] += 1
-                    3 -> levelsItemArray[AMATEUR] += 1
-                    4 -> levelsItemArray[EXPERT] += 1
-                    5 -> levelsItemArray[MASTER] += 1
-                    6 -> levelsItemArray[SENSEI] += 1
-                }
-            }
-        }
-
-        for ((index, level) in levelsArray.withIndex()) {
-            val name = level.context.resources.getResourceEntryName(level.id)
-            level.findViewById<TextView>(
-                resources.getIdentifier(
-                    "${name}NumKanaTextView",
-                    "id",
-                    packageName
-                )
-            ).text = levelsItemArray[index].toString()
-            level.setOnClickListener {
-                val intent = Intent(this, KanaGridActivity::class.java)
-                intent.putExtra("level", name)
-                startActivity(intent)
-            }
-        }
-
-        showMoreArrow.setOnClickListener {
-
-            showMoreArrow.isSelected = !showMoreArrow.isSelected
-
-            if (showMore && !moving) {
-                moving = true
-                showMoreArrow.isEnabled = false
-                Utilities.slideView(
-                    summaryLayout,
-                    summaryLayout.height,
-                    summaryLayout.height + levelsLayout.measuredHeight + levelsLayout.marginBottom
-
-                ) {}
-                Utilities.slideView(
-                    summaryButton,
-                    summaryButton.height,
-                    summaryButton.height + levelsLayout.measuredHeight + levelsLayout.marginBottom
-                ) {
-                    showMore = false
-                    moving = false
-                    showMoreArrow.isEnabled = true
-                }
-                showMoreArrow.setImageResource(R.drawable.ic_up_arrow_wide)
-            } else if (!showMore && !moving) {
-                moving = true
-                showMoreArrow.isEnabled = false
-                Utilities.slideView(
-                    summaryLayout,
-                    summaryLayout.height,
-                    summaryLayout.height - levelsLayout.measuredHeight - levelsLayout.marginBottom
-                ) {}
-                Utilities.slideView(
-                    summaryButton,
-                    summaryButton.height,
-                    summaryButton.height - levelsLayout.measuredHeight - levelsLayout.marginBottom
-                ) {
-                    moving = false
-                    showMore = true
-                    showMoreArrow.isEnabled = true
-                }
-                showMoreArrow.setImageResource(R.drawable.ic_down_arrow_wide)
-            }
-        }
-
-        lessonButton = findViewById(R.id.lessonButton)
-        lessonButton.setOnClickListener {
-            if (user.lessonsNumber!! > 0) {
-                startActivity(Intent(this, LessonActivity::class.java))
+            nextReviewTime = findViewById(R.id.nextReviewText)
+            if (kanaReviewQueue.isNotEmpty()) {
+                startReviewTimer(kanaReviewQueue[0])
             } else {
-                Toast.makeText(
-                    this,
-                    "You can do more lessons in ${formatTime(user.lessonRefreshTime!! - System.currentTimeMillis())}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                nextReviewTime.text = "Next review: none"
             }
-        }
-        val refreshTimeText = findViewById<TextView>(R.id.lessonRefreshTime)
-        if (user.lessonRefreshTime != null) {
-            refreshTimeText.visibility = View.VISIBLE
-            object : CountDownTimer(user.lessonRefreshTime!! - System.currentTimeMillis(), 1000) {
-                override fun onTick(millisLeft: Long) {
-                    refreshTimeText.text = "Lessons refresh in ${formatTime(millisLeft)}"
-                }
 
-                override fun onFinish() {
-                    val sharedPref = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE)
-                    val lessonNumber = sharedPref.getInt("kanasrsLessonNumber", 10)
-                    if (db.kanaDao().getUnlearnedKana().size in 1..9) {
-                        user.lessonsNumber = db.kanaDao().getUnlearnedKana().size
-                    } else {
-                        user.lessonsNumber = lessonNumber
-                    }
-                    user.lessonRefreshTime = null
-                    refreshTimeText.visibility = View.INVISIBLE
-                    remainingLessonsTextView.text = "Daily remaining lessons: $lessonNumber".colorizeText(user.lessonsNumber.toString(), ContextCompat.getColor(this@MenuActivity, R.color.pink))
-                    db.userDao().updateUser(user)
+            val toolbar = findViewById<Toolbar>(R.id.toolbar)
+            setSupportActionBar(toolbar)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
 
-                    if (!lessonButton.isEnabled) {
-                        lessonButton.isEnabled = true
-                        lessonButton.isClickable = true
-                        lessonAnimation.setAnimation(R.raw.bulb)
-                        lessonAnimation.playAnimation()
-                    }
+            currentReviewsTextView = findViewById(R.id.currentReviewsTextView)
+            remainingLessonsTextView = findViewById(R.id.remainingLessonsTextView)
 
-                }
-
-            }.start()
-        }
-
-        reviewButton = findViewById(R.id.reviewButton)
-        reviewAnimation = findViewById(R.id.reviewAnimation)
-        lessonAnimation = findViewById(R.id.lessonAnimation)
-
-        if (numItemsToReview == 0) {
-            reviewButton.disable()
-            reviewAnimation.setAnimation(R.raw.quiz_disabled)
-            numReviewTextView.background =
-                ContextCompat.getDrawable(this, R.drawable.no_review_items_background)
-        } else {
-            reviewAnimation.playAnimation()
-        }
-
-        if (user.lessonsNumber == 0) {
-            lessonAnimation.setAnimation(R.raw.bulb_disabled)
-            lessonButton.disable()
-        } else {
-            lessonAnimation.playAnimation()
-        }
-
-        reviewButton.setOnClickListener {
-            if (numItemsToReview > 0) {
-                val intent = Intent(this, ReviewActivity::class.java)
-                intent.putExtra("review", true)
-                intent.putExtra("kana", kanaToReview)
-                startActivity(intent)
-            }
-        }
-
-        statsButton = findViewById(R.id.statsButton)
-        statsButton.setOnClickListener {
-            startActivity(Intent(this, StatsActivity::class.java))
-        }
-
-        settingsButton = findViewById(R.id.settingsButton)
-        settingsButton.setOnClickListener {
-            startActivity(Intent(this, SettingsActivity::class.java))
-        }
-
-        contactImageView = findViewById(R.id.emailContactImageView)
-        contactImageView.setOnClickListener {
-            showReportDialog()
-        }
-
-        githubImageView = findViewById(R.id.githubContactImageView)
-        githubImageView.setOnClickListener {
-            val githubIntent = Intent(
-                "android.intent.action.VIEW",
-                Uri.parse("https://github.com/Lucas-Curran/KanaSRS")
+            checkLessonTimer(user)
+            currentReviewsTextView.text = "Current Reviews: $numItemsToReview".colorizeText(
+                numItemsToReview.toString(),
+                ContextCompat.getColor(this, R.color.azure)
             )
-            startActivity(githubIntent)
-        }
 
-        val sharedPref = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE)
+            summaryButton = findViewById(R.id.summaryButton)
+            showMoreArrow = findViewById(R.id.arrowImageView)
+            summaryLayout = findViewById(R.id.summaryRelativeLayout)
+            levelsLayout = findViewById(R.id.levelsLayout)
 
-        writingReviewButton = findViewById(R.id.writingReviewButton)
+            val rookie = levelsLayout.findViewById<LinearLayout>(R.id.rookie)
+            val amateur = levelsLayout.findViewById<LinearLayout>(R.id.amateur)
+            val expert = levelsLayout.findViewById<LinearLayout>(R.id.expert)
+            val master = levelsLayout.findViewById<LinearLayout>(R.id.master)
+            val sensei = levelsLayout.findViewById<LinearLayout>(R.id.sensei)
+            levelsArray.add(rookie)
+            levelsArray.add(amateur)
+            levelsArray.add(expert)
+            levelsArray.add(master)
+            levelsArray.add(sensei)
 
-        if (sharedPref.getBoolean("kanasrsWritingEnabled", true)) {
-            writingReviewButton.setOnClickListener {
-                //TODO: Writing review functionality
+            for (kana in db.kanaDao().getKana()) {
+                if (kana.level != null) {
+                    when (kana.level) {
+                        1, 2 -> levelsItemArray[ROOKIE] += 1
+                        3 -> levelsItemArray[AMATEUR] += 1
+                        4 -> levelsItemArray[EXPERT] += 1
+                        5 -> levelsItemArray[MASTER] += 1
+                        6 -> levelsItemArray[SENSEI] += 1
+                    }
+                }
             }
-        } else {
-            findViewById<RelativeLayout>(R.id.writingRelativeLayout).visibility = View.GONE
-        }
 
-        if (intent.getBooleanExtra("openKanaNotification", false) && numItemsToReview > 0) {
-            intent.removeExtra("openKanaNotification")
-            val view = layoutInflater.inflate(R.layout.notification_review_dialog, null)
-            val dialog = AlertDialog.Builder(this).setView(view).create()
-
-            view.findViewById<TextView>(R.id.beginReviewTextView).setOnClickListener {
-                val intent = Intent(this, ReviewActivity::class.java)
-                intent.putExtra("review", true)
-                intent.putExtra("kana", kanaToReview)
-                startActivity(intent)
-            }
-            view.findViewById<TextView>(R.id.cancelButton).setOnClickListener {
-                dialog.dismiss()
+            for ((index, level) in levelsArray.withIndex()) {
+                val name = level.context.resources.getResourceEntryName(level.id)
+                level.findViewById<TextView>(
+                    resources.getIdentifier(
+                        "${name}NumKanaTextView",
+                        "id",
+                        packageName
+                    )
+                ).text = levelsItemArray[index].toString()
+                level.setOnClickListener {
+                    val intent = Intent(this, KanaGridActivity::class.java)
+                    intent.putExtra("level", name)
+                    startActivity(intent)
+                }
             }
 
-            dialog.show()
-        }
+            showMoreArrow.setOnClickListener {
 
-        menuScrollView = findViewById(R.id.menuScrollView)
+                showMoreArrow.isSelected = !showMoreArrow.isSelected
+
+                if (showMore && !moving) {
+                    moving = true
+                    showMoreArrow.isEnabled = false
+                    Utilities.slideView(
+                        summaryLayout,
+                        summaryLayout.height,
+                        summaryLayout.height + levelsLayout.measuredHeight + levelsLayout.marginBottom
+
+                    ) {}
+                    Utilities.slideView(
+                        summaryButton,
+                        summaryButton.height,
+                        summaryButton.height + levelsLayout.measuredHeight + levelsLayout.marginBottom
+                    ) {
+                        showMore = false
+                        moving = false
+                        showMoreArrow.isEnabled = true
+                    }
+                    showMoreArrow.setImageResource(R.drawable.ic_up_arrow_wide)
+                } else if (!showMore && !moving) {
+                    moving = true
+                    showMoreArrow.isEnabled = false
+                    Utilities.slideView(
+                        summaryLayout,
+                        summaryLayout.height,
+                        summaryLayout.height - levelsLayout.measuredHeight - levelsLayout.marginBottom
+                    ) {}
+                    Utilities.slideView(
+                        summaryButton,
+                        summaryButton.height,
+                        summaryButton.height - levelsLayout.measuredHeight - levelsLayout.marginBottom
+                    ) {
+                        moving = false
+                        showMore = true
+                        showMoreArrow.isEnabled = true
+                    }
+                    showMoreArrow.setImageResource(R.drawable.ic_down_arrow_wide)
+                }
+            }
+
+            lessonButton = findViewById(R.id.lessonButton)
+            lessonButton.setOnClickListener {
+                if (user.lessonsNumber!! > 0) {
+                    startActivity(Intent(this, LessonActivity::class.java))
+                } else {
+                    Toast.makeText(
+                        this,
+                        "You can do more lessons in ${formatTime(user.lessonRefreshTime!! - System.currentTimeMillis())}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            val refreshTimeText = findViewById<TextView>(R.id.lessonRefreshTime)
+            if (user.lessonRefreshTime != null) {
+                refreshTimeText.visibility = View.VISIBLE
+                object :
+                    CountDownTimer(user.lessonRefreshTime!! - System.currentTimeMillis(), 1000) {
+                    override fun onTick(millisLeft: Long) {
+                        refreshTimeText.text = "Lessons refresh in ${formatTime(millisLeft)}"
+                    }
+
+                    override fun onFinish() {
+                        val sharedPref =
+                            getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE)
+                        val lessonNumber = sharedPref.getInt("kanasrsLessonNumber", 10)
+                        if (db.kanaDao().getUnlearnedKana().size in 1..9) {
+                            user.lessonsNumber = db.kanaDao().getUnlearnedKana().size
+                        } else {
+                            user.lessonsNumber = lessonNumber
+                        }
+                        user.lessonRefreshTime = null
+                        refreshTimeText.visibility = View.INVISIBLE
+                        remainingLessonsTextView.text =
+                            "Daily remaining lessons: $lessonNumber".colorizeText(
+                                user.lessonsNumber.toString(),
+                                ContextCompat.getColor(this@MenuActivity, R.color.pink)
+                            )
+                        db.userDao().updateUser(user)
+
+                        if (!lessonButton.isEnabled) {
+                            lessonButton.isEnabled = true
+                            lessonButton.isClickable = true
+                            lessonAnimation.setAnimation(R.raw.bulb)
+                            lessonAnimation.playAnimation()
+                        }
+
+                    }
+
+                }.start()
+            }
+
+            reviewButton = findViewById(R.id.reviewButton)
+            reviewAnimation = findViewById(R.id.reviewAnimation)
+            lessonAnimation = findViewById(R.id.lessonAnimation)
+
+            if (numItemsToReview == 0) {
+                reviewButton.disable()
+                reviewAnimation.setAnimation(R.raw.quiz_disabled)
+                numReviewTextView.background =
+                    ContextCompat.getDrawable(this, R.drawable.no_review_items_background)
+            } else {
+                reviewAnimation.playAnimation()
+            }
+
+            if (user.lessonsNumber == 0) {
+                lessonAnimation.setAnimation(R.raw.bulb_disabled)
+                lessonButton.disable()
+            } else {
+                lessonAnimation.playAnimation()
+            }
+
+            reviewButton.setOnClickListener {
+                if (numItemsToReview > 0) {
+                    val intent = Intent(this, ReviewActivity::class.java)
+                    intent.putExtra("review", true)
+                    intent.putExtra("kana", kanaToReview)
+                    startActivity(intent)
+                }
+            }
+
+            statsButton = findViewById(R.id.statsButton)
+            statsButton.setOnClickListener {
+                startActivity(Intent(this, StatsActivity::class.java))
+            }
+
+            settingsButton = findViewById(R.id.settingsButton)
+            settingsButton.setOnClickListener {
+                startActivity(Intent(this, SettingsActivity::class.java))
+            }
+
+            contactImageView = findViewById(R.id.emailContactImageView)
+            contactImageView.setOnClickListener {
+                showReportDialog()
+            }
+
+            githubImageView = findViewById(R.id.githubContactImageView)
+            githubImageView.setOnClickListener {
+                val githubIntent = Intent(
+                    "android.intent.action.VIEW",
+                    Uri.parse("https://github.com/Lucas-Curran/KanaSRS")
+                )
+                startActivity(githubIntent)
+            }
+
+            val sharedPref =
+                getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE)
+
+            writingReviewButton = findViewById(R.id.writingReviewButton)
+
+            if (sharedPref.getBoolean("kanasrsWritingEnabled", true)) {
+                writingReviewButton.setOnClickListener {
+                    //TODO: Writing review functionality
+                }
+            } else {
+                findViewById<RelativeLayout>(R.id.writingRelativeLayout).visibility = View.GONE
+            }
+
+            if (intent.getBooleanExtra("openKanaNotification", false) && numItemsToReview > 0) {
+                intent.removeExtra("openKanaNotification")
+                val view = layoutInflater.inflate(R.layout.notification_review_dialog, null)
+                val dialog = AlertDialog.Builder(this).setView(view).create()
+
+                view.findViewById<TextView>(R.id.beginReviewTextView).setOnClickListener {
+                    val intent = Intent(this, ReviewActivity::class.java)
+                    intent.putExtra("review", true)
+                    intent.putExtra("kana", kanaToReview)
+                    startActivity(intent)
+                }
+                view.findViewById<TextView>(R.id.cancelButton).setOnClickListener {
+                    dialog.dismiss()
+                }
+
+                dialog.show()
+            }
+
+            menuScrollView = findViewById(R.id.menuScrollView)
+        }
     }
 
     @SuppressLint("RestrictedApi")
