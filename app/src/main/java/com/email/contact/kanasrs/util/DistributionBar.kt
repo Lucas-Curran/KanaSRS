@@ -149,6 +149,9 @@ class DistributionBar(context: Context, attrs: AttributeSet?) : View(context, at
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (KanaSRSDatabase.getInstance(context).kanaDao().getLearnedHiragana().isEmpty()) {
+            return false
+        }
         val touchX = event.x
         val touchY = event.y
         when (event.action) {
