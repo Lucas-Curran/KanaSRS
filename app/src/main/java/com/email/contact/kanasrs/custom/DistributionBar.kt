@@ -1,4 +1,4 @@
-package com.email.contact.kanasrs.util
+package com.email.contact.kanasrs.custom
 
 import android.annotation.SuppressLint
 import android.content.Context

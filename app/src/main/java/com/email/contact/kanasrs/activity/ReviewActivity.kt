@@ -25,7 +25,7 @@ import com.email.contact.kanasrs.adapter.ReviewedKanaAdapter
 import com.email.contact.kanasrs.database.KanaSRSDatabase
 import com.email.contact.kanasrs.database.Kana
 import com.email.contact.kanasrs.util.KanaConverter
-import com.email.contact.kanasrs.util.KanaInfoView
+import com.email.contact.kanasrs.custom.KanaInfoView
 import com.email.contact.kanasrs.util.Utilities
 import com.email.contact.kanasrs.util.Utilities.Companion.colorizeText
 import com.email.contact.kanasrs.util.Utilities.Companion.showKeyboard

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
-import com.email.contact.kanasrs.util.KanaInfoView
+import com.email.contact.kanasrs.custom.KanaInfoView
 import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.database.Kana
 

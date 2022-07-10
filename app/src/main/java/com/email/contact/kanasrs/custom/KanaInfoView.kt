@@ -1,4 +1,4 @@
-package com.email.contact.kanasrs.util
+package com.email.contact.kanasrs.custom
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -24,6 +24,8 @@ import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.activity.setOnSingleClickListener
 import com.email.contact.kanasrs.database.KanaSRSDatabase
 import com.email.contact.kanasrs.database.Kana
+import com.email.contact.kanasrs.util.KanaConverter
+import com.email.contact.kanasrs.util.Utilities
 import com.email.contact.kanasrs.util.Utilities.Companion.getLevelColor
 import com.email.contact.kanasrs.util.Utilities.Companion.levelToTitle
 import com.email.contact.kanasrs.util.Utilities.Companion.mediaPlayer

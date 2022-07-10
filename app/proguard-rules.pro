@@ -8,7 +8,7 @@
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
--keepclassmembers class com.email.contact.kanasrs.activity.LessonActivity, com.email.contact.kanasrs.util.KanaInfoView {
+-keepclassmembers class com.email.contact.kanasrs.activity.LessonActivity, com.email.contact.kanasrs.custom.KanaInfoView {
    public *;
 }
 

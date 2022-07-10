@@ -22,7 +22,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
 import androidx.core.view.updateMargins
-import com.email.contact.kanasrs.util.DrawingView
+import com.email.contact.kanasrs.custom.DrawingView
 import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.database.KanaSRSDatabase
 import com.email.contact.kanasrs.database.Kana

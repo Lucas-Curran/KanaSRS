@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
@@ -18,15 +17,13 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import com.airbnb.lottie.LottieAnimationView
-import com.email.contact.kanasrs.util.KanaInfoView
+import com.email.contact.kanasrs.custom.KanaInfoView
 import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.database.KanaSRSDatabase
 import com.email.contact.kanasrs.database.Kana
-import com.email.contact.kanasrs.util.DistributionBar
 import com.email.contact.kanasrs.util.Utilities
 import com.email.contact.kanasrs.util.Utilities.Companion.ROOKIE1
 import com.email.contact.kanasrs.util.Utilities.Companion.ROOKIE2
-import com.email.contact.kanasrs.util.Utilities.Companion.formatTime
 import com.email.contact.kanasrs.util.Utilities.Companion.getLevelColor
 import com.google.android.material.tabs.TabLayout
 import com.skydoves.progressview.ProgressLabelConstraints
