@@ -257,7 +257,7 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <com.email.contact.kanasrs.util.DistributionBar
+        <com.email.contact.kanasrs.custom.DistributionBar
             android:layout_width="300dp"
             android:layout_height="30dp"
             android:layout_marginTop="30dp"
