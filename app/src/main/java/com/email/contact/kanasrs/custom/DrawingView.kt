@@ -10,13 +10,13 @@ import android.widget.Toast
 import kotlinx.coroutines.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
-import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.ByteArrayOutputStream
 
 
@@ -51,6 +51,7 @@ class DrawingView(var c: Context) : View(c) {
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://hf.space/embed/Detomo/Japanese-OCR/+/api/")
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         retrofitAPI = retrofit.create(KanaRetrofit::class.java)
@@ -103,9 +104,6 @@ class DrawingView(var c: Context) : View(c) {
         mCanvas?.drawPath(mPath, mPaint!!)
         // kill this so we don't double draw
         mPath.reset()
-        GlobalScope.launch {
-            println(isDrawingCorrect("あ"))
-        }
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -148,21 +146,23 @@ class DrawingView(var c: Context) : View(c) {
             val jsonObject = JSONObject()
             val jsonArray = JSONArray()
 
-            jsonArray.put("data:image/png;base64,sumthinfake")
+            jsonArray.put("data:image/png;base64,placeholdertext")
             jsonObject.put("data", jsonArray)
 
-            val jsonString = jsonObject.toString().replace("sumthinfake", encodedImage)
+            val jsonString = jsonObject.toString().replace("placeholdertext", encodedImage)
 
             val requestBody = RequestBody.create(MediaType.parse("application/json"), jsonString)
 
             val call = retrofitAPI.writingToKana(requestBody)
 
-            call.enqueue(object : Callback<ResponseBody> {
+            call.enqueue(object : Callback<WritingResponse> {
                 override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
+                    call: Call<WritingResponse>,
+                    response: Response<WritingResponse>
                 ) {
-                    if (response.body()?.string()?.contains(kanaLetter) == true) {
+                    val data = response.body()!!.data
+                    //data[0] is the first word, or letter, in a sequence of words
+                    if (data[0].contains(kanaLetter)) {
                         continuation.resume(true) {
                             Log.e("MLError", it.stackTraceToString())
                         }
@@ -173,7 +173,7 @@ class DrawingView(var c: Context) : View(c) {
                     }
                 }
 
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                override fun onFailure(call: Call<WritingResponse>, t: Throwable) {
                     Toast.makeText(context, "Kana could not be converted...", Toast.LENGTH_SHORT)
                         .show()
                     continuation.resume(false) {
@@ -183,6 +183,15 @@ class DrawingView(var c: Context) : View(c) {
 
             })
         }
+
+    fun setPaintColor(color: Int) {
+        mPaint?.color = color
+    }
+
+    fun checkIfEmpty(): Boolean {
+        val emptyBitmap = Bitmap.createBitmap(mBitmap!!.width, mBitmap!!.height, mBitmap!!.config)
+        return mBitmap!!.sameAs(emptyBitmap)
+    }
 
     companion object {
         private const val TOUCH_TOLERANCE = 4f
