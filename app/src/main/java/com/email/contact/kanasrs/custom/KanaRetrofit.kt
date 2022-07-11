@@ -7,5 +7,5 @@ import retrofit2.http.*
 
 interface KanaRetrofit {
     @POST("predict/")
-    fun writingToKana(@Body data: RequestBody): Call<ResponseBody>
+    fun writingToKana(@Body data: RequestBody): Call<WritingResponse>
 }
