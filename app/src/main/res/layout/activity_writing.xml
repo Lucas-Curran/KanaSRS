@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.WritingActivity"
+    android:background="@color/cardview_dark_background">
+
+    <LinearLayout
+        android:id="@+id/wrongAnswersLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/firstWrong"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            app:lottie_rawRes="@raw/wrong"
+            android:background="@drawable/placeholder_writing_x"/>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/secondWrong"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            app:lottie_rawRes="@raw/wrong"
+            android:background="@drawable/placeholder_writing_x" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/thirdWrong"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            app:lottie_rawRes="@raw/wrong"
+            android:background="@drawable/placeholder_writing_x"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/writingRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        app:layout_constraintTop_toBottomOf="@id/wrongAnswersLayout"
+        app:layout_constraintBottom_toTopOf="@id/submitWritingButton"
+        android:background="@drawable/rounded_dark_background">
+
+        <Button
+            android:id="@+id/clearButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:elevation="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/letterToDraw"
+            android:text="Please write:"
+            android:textColor="@color/white"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:id="@+id/letterToDraw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/review_box"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="10dp"
+            android:text="ke"
+            android:textColor="@color/white"
+            android:textSize="40sp" />
+
+    </RelativeLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/submitWritingButton"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/writing_submit_selector"
+        android:text="Done"
+        android:textSize="18sp"
+        app:backgroundTint="@null"
+        android:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
