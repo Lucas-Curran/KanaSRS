@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:gravity="center"
-        android:text="あ"
+        android:text="@string/placeholder_jp"
         android:textColor="@color/white"
         android:textSize="200sp"
         android:textStyle="bold"
@@ -28,7 +28,7 @@
         android:gravity="center"
         android:textSize="30sp"
         android:textColor="@color/white"
-        android:text="A"
+        android:text="@string/placeholder_en"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/kanaTextView" />

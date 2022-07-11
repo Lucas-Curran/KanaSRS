@@ -40,6 +40,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="start"
                     android:gravity="center"
+                    android:contentDescription="@string/app_title_logo"
                     android:src="@drawable/logo_text"/>
 
             </com.google.android.material.appbar.MaterialToolbar>
@@ -49,6 +50,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/kanasrs_logo"
+                android:contentDescription="@string/logo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/toolbar"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -107,7 +109,7 @@
                     android:layout_alignEnd="@id/summaryButton"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:text="Summary"
+                    android:text="@string/summary"
                     android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="bold" />
@@ -148,7 +150,7 @@
                         android:layout_marginEnd="2dp"
                         android:background="@drawable/top_round_rectangle"
                         app:backgroundTint="@null"
-                        android:text="Next review:\n\t\t00:00:00"
+                        android:text="@string/placeholder_next_review"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -164,7 +166,7 @@
                         android:paddingEnd="10dp"
                         android:background="#11d3d3d3"
                         android:gravity="start|center_vertical"
-                        android:text="Daily remaining lessons: 10"
+                        android:text="@string/placeholder_lessons_left"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -180,7 +182,7 @@
                         android:layout_marginEnd="2dp"
                         android:gravity="start|center_vertical"
                         android:background="@drawable/bottom_round_rect"
-                        android:text="Current reviews: 0"
+                        android:text="@string/placeholder_current_review"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -232,7 +234,7 @@
                     android:layout_alignStart="@id/lessonButton"
                     android:layout_alignEnd="@id/lessonButton"
                     android:visibility="invisible"
-                    android:text="Lessons refresh in 1:42:51"
+                    android:text="@string/placeholder_lesson_refresh"
                     android:textColor="@color/white"
                     android:gravity="center"
                     android:elevation="10dp"
@@ -267,7 +269,7 @@
                     android:shadowDx="1.5"
                     android:shadowDy="1.3"
                     android:shadowRadius="1.6"
-                    android:text="Learn"
+                    android:text="@string/learn"
                     android:textSize="20sp"
                     app:backgroundTint="@null" />
 
@@ -288,7 +290,7 @@
                     android:background="@drawable/items_review_background"
                     android:elevation="10dp"
                     android:gravity="center"
-                    android:text="0" />
+                    android:text="@string/reviews_now_notification" />
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/reviewAnimation"
@@ -315,7 +317,7 @@
                     android:shadowDx="1.5"
                     android:shadowDy="1.3"
                     android:shadowRadius="1.6"
-                    android:text="ひらがな・カタカナ\nReview"
+                    android:text="@string/review_button_text"
                     android:textSize="20sp"
                     app:backgroundTint="@null" />
 
@@ -345,7 +347,7 @@
                     android:layout_margin="15dp"
                     android:background="@drawable/extra_button_selector"
                     android:paddingTop="60dp"
-                    android:text="Writing"
+                    android:text="@string/writing"
                     android:shadowColor="@color/black"
                     android:shadowDx="1.5"
                     android:shadowDy="1.3"
@@ -384,7 +386,7 @@
                     android:shadowDx="1.5"
                     android:shadowDy="1.3"
                     android:shadowRadius="1.6"
-                    android:text="Statistics"
+                    android:text="@string/statistics"
                     android:textSize="20sp"
                     app:backgroundTint="@null" />
 
@@ -417,7 +419,7 @@
                     android:shadowDx="1.5"
                     android:shadowDy="1.3"
                     android:shadowRadius="1.6"
-                    android:text="Settings"
+                    android:text="@string/settings"
                     android:textSize="20sp"
                     app:backgroundTint="@null" />
 
@@ -461,12 +463,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
+                    android:contentDescription="@string/bottom_of_page_sun"
                     android:background="@drawable/half_circle" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="© 2022 | KanaSRS | All Rights Reserved"
+                    android:text="@string/copyright_statement"
                     android:textColor="@color/white"
                     android:layout_alignEnd="@id/bottomImageView"
                     android:layout_alignStart="@id/bottomImageView"

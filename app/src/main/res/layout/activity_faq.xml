@@ -35,6 +35,7 @@
                     android:visibility="invisible"
                     android:foreground="@drawable/home_ripple"
                     android:src="@drawable/ic_return"
+                    android:contentDescription="@string/return_to_menu"
                     app:layout_constraintEnd_toStartOf="@id/titleTextView"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/titleTextView"
@@ -51,6 +52,7 @@
                     android:textSize="30sp"
                     android:textStyle="bold"
                     android:src="@drawable/faq_title"
+                    android:contentDescription="@string/faq_title"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

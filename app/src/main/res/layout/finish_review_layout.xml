@@ -60,6 +60,7 @@
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="2dp"
+                    android:contentDescription="@string/number_correct"
                     app:tint="@color/lime"
                     android:src="@drawable/ic_checkmark" />
 
@@ -111,6 +112,7 @@
                 android:layout_height="35dp"
                 android:layout_marginTop="3dp"
                 android:layout_gravity="center"
+                android:contentDescription="@string/number_incorrect"
                 app:tint="@color/wrong_answer"
                 android:src="@drawable/ic_x"/>
 

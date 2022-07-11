@@ -80,6 +80,7 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginTop="20dp"
+        android:contentDescription="@string/convert_mnemonic_into"
         app:layout_constraintTop_toBottomOf="@id/currentMnemonicTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

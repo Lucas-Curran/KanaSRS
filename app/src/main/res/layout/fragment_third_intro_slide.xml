@@ -14,6 +14,7 @@
         android:layout_marginTop="40dp"
         android:scaleX="2"
         android:scaleY="2"
+        android:contentDescription="@string/hiragana_title"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/hiragana_title"/>
 
@@ -22,6 +23,7 @@
         android:layout_width="125dp"
         android:layout_height="100dp"
         android:layout_marginStart="25dp"
+        android:contentDescription="@string/hiragana_title"
         app:layout_constraintTop_toBottomOf="@id/hiraganaTitle"
         app:layout_constraintStart_toStartOf="parent"
         android:src="@drawable/hiragana_title_jp"/>
@@ -41,6 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/hiragana_footer"
+        android:contentDescription="@string/hiragana_examples"
         app:layout_constraintTop_toBottomOf="@id/slide3Description"
         android:layout_marginBottom="50dp"/>
 

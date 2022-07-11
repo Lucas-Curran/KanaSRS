@@ -68,6 +68,7 @@
                 android:layout_below="@id/itemTabLayout"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                android:contentDescription="@string/kana_stroke"
                 android:visibility="gone"
                 android:src="@drawable/a_stroke" />
 
@@ -91,6 +92,7 @@
                 android:background="#4599ff"
                 android:foreground="?attr/selectableItemBackground"
                 android:src="@drawable/ic_left_arrow"
+                android:contentDescription="@string/previous_item_button"
                 app:layout_constraintStart_toEndOf="@+id/englishTextView"
                 app:layout_constraintTop_toBottomOf="@+id/kanaTextView"
                 app:tint="@color/white" />
@@ -117,6 +119,7 @@
                 android:background="#4599ff"
                 android:foreground="?attr/selectableItemBackground"
                 android:src="@drawable/ic_right_arrow"
+                android:contentDescription="@string/next_item_button"
                 app:layout_constraintStart_toEndOf="@+id/englishTextView"
                 app:layout_constraintTop_toBottomOf="@+id/kanaTextView"
                 app:tint="@color/white" />
@@ -167,6 +170,7 @@
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/circle_shape"
                 android:foreground="@drawable/audio_ripple"
+                android:contentDescription="@string/kana_audio"
                 android:padding="10dp"
                 android:src="@drawable/ic_audio"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -180,6 +184,7 @@
                 android:layout_height="50dp"
                 android:foreground="?actionBarItemBackground"
                 android:src="@drawable/ic_plus"
+                android:contentDescription="@string/add_mnemonic"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/lessonDivider"
                 app:tint="@color/white" />
