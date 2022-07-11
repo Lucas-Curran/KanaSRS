@@ -14,9 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KanaSRS">
         <activity
-            android:name=".activity.KanaIntroActivity"
+            android:name=".activity.WritingActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.KanaIntroActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.FaqActivity"
             android:exported="false"
