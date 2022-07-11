@@ -24,5 +24,41 @@
         but rather make up the basic sounds. \n\nYou will learn the basic 46 letters, with
         some additional modifications that make up the rest of the sounds.\n\nHiragana is typically
         used for grammatical patterns, as well as some words.</string>
+    <string name="return_to_menu">Return to menu</string>
+    <string name="faq_title">faq title</string>
+    <string name="logo">logo</string>
+    <string name="app_title_logo">app title logo</string>
+    <string name="bottom_of_page_sun">bottom of page sun</string>
+    <string name="number_correct">number correct</string>
+    <string name="number_incorrect">number incorrect</string>
+    <string name="level_change_arrow">level change arrow</string>
+    <string name="back_to_menu">back to menu</string>
+    <string name="settings_title">settings title</string>
+    <string name="hiragana_title">hiragana title</string>
+    <string name="hiragana_examples">hiragana examples</string>
+    <string name="kana_stroke">kana stroke</string>
+    <string name="previous_item_button">previous item button</string>
+    <string name="next_item_button">next item button</string>
+    <string name="kana_audio">kana audio</string>
+    <string name="extra_stats">extra stats</string>
+    <string name="add_mnemonic">add mnemonic</string>
+    <string name="face_depicting_accuracy_happiness">face depicting accuracy happiness</string>
+    <string name="close_button">close button</string>
+    <string name="convert_mnemonic_into">convert mnemonic into</string>
+    <string name="rookie">ROOKIE</string>
+    <string name="placeholder_jp">あ</string>
+    <string name="placeholder_en">A</string>
+    <string name="summary">Summary</string>
+    <string name="placeholder_next_review">Next review:\n\t\t00:00:00</string>
+    <string name="placeholder_lessons_left">Daily remaining lessons: 10</string>
+    <string name="placeholder_current_review">Current reviews: 0</string>
+    <string name="placeholder_lesson_refresh">Lessons refresh in 1:42:51</string>
+    <string name="learn">Learn</string>
+    <string name="reviews_now_notification">0</string>
+    <string name="review_button_text">ひらがな・カタカナ\nReview</string>
+    <string name="writing">Writing</string>
+    <string name="statistics">Statistics</string>
+    <string name="settings">Settings</string>
+    <string name="copyright_statement">© 2022 | KanaSRS | All Rights Reserved</string>
 
 </resources>
