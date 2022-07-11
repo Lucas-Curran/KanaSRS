@@ -88,7 +88,7 @@ class MenuActivity : AppCompatActivity() {
 
         installSplashScreen()
 
-        if (1 == 1) {
+        if (1 == 2) {
             startActivity(Intent(this, KanaIntroActivity::class.java))
         } else {
 
@@ -346,7 +346,7 @@ class MenuActivity : AppCompatActivity() {
 
             if (sharedPref.getBoolean("kanasrsWritingEnabled", true)) {
                 writingReviewButton.setOnClickListener {
-                    //TODO: Writing review functionality
+                    startActivity(Intent(this, WritingActivity::class.java))
                 }
             } else {
                 findViewById<RelativeLayout>(R.id.writingRelativeLayout).visibility = View.GONE
