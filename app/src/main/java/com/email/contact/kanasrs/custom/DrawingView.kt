@@ -1,11 +1,13 @@
 package com.email.contact.kanasrs.custom
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.Base64
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import kotlinx.coroutines.*
 import okhttp3.MediaType
@@ -106,6 +108,7 @@ class DrawingView(var c: Context) : View(c) {
         mPath.reset()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val x = event.x
         val y = event.y
@@ -127,7 +130,7 @@ class DrawingView(var c: Context) : View(c) {
     }
 
     @OptIn(InternalCoroutinesApi::class, ExperimentalCoroutinesApi::class)
-    suspend fun isDrawingCorrect(kanaLetter: String): Boolean =
+    suspend fun isDrawingCorrect(kanaLetter: String, progressBar: ProgressBar): Boolean =
         suspendCancellableCoroutine { continuation ->
 
             val newBitmap = Bitmap.createBitmap(
@@ -162,6 +165,7 @@ class DrawingView(var c: Context) : View(c) {
                 ) {
                     val data = response.body()!!.data
                     //data[0] is the first word, or letter, in a sequence of words
+                    progressBar.visibility = INVISIBLE
                     if (data[0].contains(kanaLetter)) {
                         continuation.resume(true) {
                             Log.e("MLError", it.stackTraceToString())
@@ -174,6 +178,7 @@ class DrawingView(var c: Context) : View(c) {
                 }
 
                 override fun onFailure(call: Call<WritingResponse>, t: Throwable) {
+                    progressBar.visibility = INVISIBLE
                     Toast.makeText(context, "Kana could not be converted...", Toast.LENGTH_SHORT)
                         .show()
                     continuation.resume(false) {
