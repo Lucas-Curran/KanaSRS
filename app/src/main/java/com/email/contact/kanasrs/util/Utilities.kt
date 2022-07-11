@@ -164,6 +164,11 @@ class Utilities {
             isEnabled = false
         }
 
+        fun View.enable() {
+            isClickable = true
+            isEnabled = true
+        }
+
         @SuppressLint("ClickableViewAccessibility")
         fun ScrollView.disableScroll() {
             setOnTouchListener { _, _ -> true }
