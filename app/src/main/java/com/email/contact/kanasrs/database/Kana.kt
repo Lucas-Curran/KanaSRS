@@ -1,6 +1,7 @@
 package com.email.contact.kanasrs.database
 
 import android.os.Parcelable
+import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -21,4 +22,6 @@ data class Kana(
     @ColumnInfo(name = "writingLevel") var writingLevel: Int?,
     @ColumnInfo(name = "totalAnswered") var totalAnswered: Int?,
     @ColumnInfo(name = "totalCorrect") var totalCorrect: Int?,
+    @ColumnInfo(name = "writingNextReview") var writingReviewTime: Long?,
+    @ColumnInfo(name = "streak", defaultValue = "0") var streak: Int = 0
 ): Parcelable

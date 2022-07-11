@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [User::class, Kana::class], version = 5)
+@Database(entities = [User::class, Kana::class], version = 6)
 abstract class KanaSRSDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
@@ -37,7 +39,8 @@ abstract class KanaSRSDatabase : RoomDatabase() {
 //            }
 
 
-            return Room.databaseBuilder(context, KanaSRSDatabase::class.java, "kanasrs.db").createFromAsset("kanasrs.db")
+            return Room.databaseBuilder(context, KanaSRSDatabase::class.java, "kanasrs.db")
+                .createFromAsset("kanasrs.db")
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
                 .build()
