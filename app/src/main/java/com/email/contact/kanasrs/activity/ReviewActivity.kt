@@ -1,6 +1,7 @@
 package com.email.contact.kanasrs.activity
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.TransitionDrawable
 import android.os.Build
@@ -532,10 +533,12 @@ class ReviewActivity : AppCompatActivity() {
     private fun learnKana(kana: Kana) {
         kana.hasLearned = true
         kana.level = 1
+        kana.writingLevel = 1
         val oneMinute = 1000 * 60
         val now = System.currentTimeMillis()
         val nextPracticeDate = now + oneMinute * kana.level!!
         kana.reviewTime = nextPracticeDate
+        kana.writingReviewTime = nextPracticeDate
         KanaSRSDatabase.getInstance(this).kanaDao().updateKana(kana)
     }
 
