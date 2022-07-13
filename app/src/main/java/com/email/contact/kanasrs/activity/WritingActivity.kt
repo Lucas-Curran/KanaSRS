@@ -14,6 +14,7 @@ import com.airbnb.lottie.LottieAnimationView
 import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.custom.DrawingView
 import com.email.contact.kanasrs.database.Kana
+import com.email.contact.kanasrs.database.KanaSRSDatabase
 import com.email.contact.kanasrs.util.KanaConverter
 import com.email.contact.kanasrs.util.Utilities.Companion.disable
 import com.email.contact.kanasrs.util.Utilities.Companion.enable
@@ -25,8 +26,7 @@ import kotlinx.coroutines.launch
 
 class WritingActivity : AppCompatActivity() {
 
-    private val reviewQueue = mutableListOf<Kana>()
-    private val testList = mutableListOf("あ", "い", "う", "え", "お")
+    private lateinit var kanaList: MutableList<Kana>
     private lateinit var drawingView: DrawingView
     private lateinit var letterToDraw: TextView
     private lateinit var wrongImageOne: LottieAnimationView
@@ -44,6 +44,11 @@ class WritingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_writing)
+
+        val parcelableList = intent.getParcelableArrayListExtra<Kana>("kanaWriting")
+        println(parcelableList)
+        kanaList = (parcelableList?.toList() as List<Kana>).shuffled().toMutableList()
+        intent.removeExtra("kanaWriting")
 
         letterToDraw = findViewById(R.id.letterToDraw)
         kanaConverter = KanaConverter(false)
@@ -122,9 +127,10 @@ class WritingActivity : AppCompatActivity() {
                 loadResultBar.visibility = View.VISIBLE
                 submitWriting.disable()
                 GlobalScope.launch {
-                    if (drawingView.isDrawingCorrect(testList[0], loadResultBar)) {
+                    if (drawingView.isDrawingCorrect(kanaList[0].letter!!, loadResultBar)) {
                         runOnUiThread {
                             correctAnimation.playAnimation()
+                            calculateNextReviewTime(kanaList[0], correct = true)
                             nextKana()
                         }
                     } else {
@@ -143,6 +149,7 @@ class WritingActivity : AppCompatActivity() {
                                     imagesAnimatedList[1] = true
                                 }
                                 3 -> {
+                                    calculateNextReviewTime(kanaList[0], correct = false)
                                     wrongImageThree.playAnimation()
                                     imagesAnimatedList[2] = true
                                 }
@@ -155,8 +162,54 @@ class WritingActivity : AppCompatActivity() {
 
         relativeLayout.addView(drawingView)
 
-        letterToDraw.text = kanaConverter.hiraganaToRomaji(testList[0])
+        letterToDraw.text = kanaConverter.hiraganaToRomaji(kanaList[0].letter!!)
 
+    }
+
+    private fun calculateNextReviewTime(kana: Kana, correct: Boolean) {
+        if (correct) {
+            if (kana.writingLevel!! < 6) {
+                kana.writingLevel = kana.writingLevel?.plus(1)
+            }
+        } else {
+            if (kana.writingLevel!! > 1) {
+                kana.writingLevel = kana.writingLevel?.minus(1)
+            }
+        }
+        val now = System.currentTimeMillis()
+        val nextPracticeDate = now + levelToTime(kana.writingLevel!!)
+        if (kana.writingLevel == 6) {
+            kana.writingReviewTime = null
+        } else {
+            kana.writingReviewTime = nextPracticeDate
+        }
+        KanaSRSDatabase.getInstance(this).kanaDao().updateKana(kana)
+    }
+
+    private fun levelToTime(level: Int): Long {
+        //For debugging
+        val oneMinute = 1000 * 60L
+        val millisecondsInHours = 1000L * 60 * 60
+        val millisecondsInDays = millisecondsInHours * 24
+//        return when(level) {
+//            1 -> (millisecondsInHours * 8) // Level 1 is 8 hours after review
+//            2 -> (millisecondsInDays * 1) // Level 2 is 1 day after review
+//            3 -> (millisecondsInDays * 3) // Level 3 is 3 days after review
+//            4 -> (millisecondsInDays * 7) // Level 4 is 7 days (1 week) after review
+//            5 -> (millisecondsInDays * 14) // Level 5 is 14 day (2 weeks) after review
+//            6 -> (millisecondsInDays * 30) // Level 6 is 30 days (1 month) after review
+//            else -> 0
+//        }
+        //For debugging
+        return when (level) {
+            1 -> oneMinute * 1
+            2 -> oneMinute * 2
+            3 -> oneMinute * 3
+            4 -> oneMinute * 4
+            5 -> oneMinute * 5
+            6 -> oneMinute * 6
+            else -> 0
+        }
     }
 
     private fun isInternetAvailable(context: Context): Boolean {
@@ -191,14 +244,9 @@ class WritingActivity : AppCompatActivity() {
 
     private fun nextKana() {
         wrongCounter = 0
-        testList.removeAt(0)
+        kanaList.removeAt(0)
         drawingView.clearDrawing()
-        letterToDraw.animate().alpha(0f).withEndAction {
-            letterToDraw.text = kanaConverter.hiraganaToRomaji(testList[0])
-            letterToDraw.animate().alpha(1f).setStartDelay(750).withEndAction {
-                submitWriting.enable()
-            }.duration = 500
-        }.duration = 500
+
         //Reverse each animation, play it, making them all disappear, only if they've already been animated
         wrongImages.forEachIndexed { index, lottieAnimationView ->
             if (imagesAnimatedList[index]) {
@@ -207,5 +255,18 @@ class WritingActivity : AppCompatActivity() {
                 lottieAnimationView.playAnimation()
             }
         }
+
+        if (kanaList.isEmpty()) {
+            //TODO: End review session
+            return
+        }
+
+        letterToDraw.animate().alpha(0f).withEndAction {
+            letterToDraw.text = kanaConverter.hiraganaToRomaji(kanaList[0].letter!!)
+            letterToDraw.animate().alpha(1f).setStartDelay(750).withEndAction {
+                submitWriting.enable()
+            }.duration = 500
+        }.duration = 500
+
     }
 }
