@@ -47,6 +47,8 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var showMoreArrow: ImageView
     private lateinit var summaryButton: Button
     private lateinit var currentReviewsTextView: TextView
+    private lateinit var currentWritingReviews: TextView
+    private lateinit var nextWritingReviewText: TextView
     private lateinit var remainingLessonsTextView: TextView
     private lateinit var menuScrollView: ScrollView
     private lateinit var githubImageView: ImageView
@@ -58,9 +60,9 @@ class MenuActivity : AppCompatActivity() {
     private var showMore = true
     private var moving = false
     private var numItemsToReview: Int = 0
-    private var numHiraganaMastered: Float = 0f
-    private var numKatakanaMastered: Float = 0f
+    private var numItemsToWrite: Int = 0
     private var kanaToReview = ArrayList<Kana>()
+    private var kanaToWrite = ArrayList<Kana>()
     private var levelsArray = ArrayList<View>()
     private var levelsItemArray = IntArray(5)
 
@@ -79,8 +81,10 @@ class MenuActivity : AppCompatActivity() {
 
     private lateinit var nextReviewTime: TextView
     private lateinit var numReviewTextView: TextView
+    private lateinit var numWriteTextView: TextView
 
     private var kanaReviewQueue = mutableListOf<Kana>()
+    private var kanaWritingQueue = mutableListOf<Kana>()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,21 +108,20 @@ class MenuActivity : AppCompatActivity() {
                         kanaToReview.add(kana)
                     } else {
                         kanaReviewQueue.add(kana)
-//                    val millisecondsUntilReview = kana.reviewTime!! - System.currentTimeMillis()
-//                    if (millisecondsUntilReview < mostRecentReview) {
-//                        mostRecentReview = millisecondsUntilReview
-//                        nextKanaToReview = kana.letter!!
-//                    }
                     }
                 }
-                if (kana.level == Utilities.SENSEI && kana.isHiragana) {
-                    numHiraganaMastered++
-                } else if (kana.level == Utilities.SENSEI && !kana.isHiragana) {
-                    numKatakanaMastered++
+                if (kana.writingReviewTime != null) {
+                    if (kana.writingReviewTime!! < System.currentTimeMillis()) {
+                        numItemsToWrite++
+                        kanaToWrite.add(kana)
+                    } else {
+                        kanaWritingQueue.add(kana)
+                    }
                 }
             }
 
             kanaReviewQueue.sortBy { it.reviewTime }
+            kanaWritingQueue.sortBy { it.writingReviewTime }
 
             setContentView(R.layout.activity_menu)
 
@@ -126,13 +129,26 @@ class MenuActivity : AppCompatActivity() {
 
             numReviewTextView = findViewById(R.id.numItemsTextView)
             numReviewTextView.text = numItemsToReview.toString()
+            numWriteTextView = findViewById(R.id.numWritingTextView)
+            numWriteTextView.text = numItemsToWrite.toString()
 
             nextReviewTime = findViewById(R.id.nextReviewText)
+            nextWritingReviewText = findViewById(R.id.nextReviewWritingText)
+            writingReviewButton = findViewById(R.id.writingReviewButton)
+            currentWritingReviews = findViewById(R.id.currentWritingReviewsText)
+
             if (kanaReviewQueue.isNotEmpty()) {
                 startReviewTimer(kanaReviewQueue[0])
             } else {
-                nextReviewTime.text = "Next review: none"
+                nextReviewTime.text = "Next review: \nnone"
             }
+
+            if (kanaWritingQueue.isNotEmpty()) {
+                startWritingTimer(kanaWritingQueue[0])
+            } else {
+                nextWritingReviewText.text = "Next review: \nnone"
+            }
+
 
             val toolbar = findViewById<Toolbar>(R.id.toolbar)
             setSupportActionBar(toolbar)
@@ -142,9 +158,14 @@ class MenuActivity : AppCompatActivity() {
             remainingLessonsTextView = findViewById(R.id.remainingLessonsTextView)
 
             checkLessonTimer(user)
-            currentReviewsTextView.text = "Current Reviews: $numItemsToReview".colorizeText(
+            currentReviewsTextView.text = "Current: $numItemsToReview".colorizeText(
                 numItemsToReview.toString(),
                 ContextCompat.getColor(this, R.color.azure)
+            )
+
+            currentWritingReviews.text = "Current: $numItemsToWrite".colorizeText(
+                numItemsToWrite.toString(),
+                ContextCompat.getColor(this, R.color.writing_green)
             )
 
             summaryButton = findViewById(R.id.summaryButton)
@@ -306,6 +327,12 @@ class MenuActivity : AppCompatActivity() {
                 lessonAnimation.playAnimation()
             }
 
+            if (numItemsToWrite == 0) {
+                writingReviewButton.disable()
+                numWriteTextView.background =
+                    ContextCompat.getDrawable(this, R.drawable.no_review_items_background)
+            }
+
             reviewButton.setOnClickListener {
                 if (numItemsToReview > 0) {
                     val intent = Intent(this, ReviewActivity::class.java)
@@ -342,11 +369,13 @@ class MenuActivity : AppCompatActivity() {
             val sharedPref =
                 getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE)
 
-            writingReviewButton = findViewById(R.id.writingReviewButton)
-
             if (sharedPref.getBoolean("kanasrsWritingEnabled", true)) {
                 writingReviewButton.setOnClickListener {
-                    startActivity(Intent(this, WritingActivity::class.java))
+                    if (numItemsToReview > 0) {
+                        val intent = Intent(this, WritingActivity::class.java)
+                        intent.putExtra("kanaWriting", kanaToWrite)
+                        startActivity(intent)
+                    }
                 }
             } else {
                 findViewById<RelativeLayout>(R.id.writingRelativeLayout).visibility = View.GONE
@@ -413,16 +442,48 @@ class MenuActivity : AppCompatActivity() {
                     reviewAnimation.setAnimation(R.raw.quiz)
                     reviewAnimation.playAnimation()
                 }
-                currentReviewsTextView.text = "Current Reviews: $numItemsToReview".colorizeText(
+                currentReviewsTextView.text = "Current: $numItemsToReview".colorizeText(
                     numItemsToReview.toString(),
                     ContextCompat.getColor(this@MenuActivity, R.color.azure)
                 )
                 numReviewTextView.text = numItemsToReview.toString()
                 kanaToReview.add(kana)
                 if (kanaReviewQueue.isEmpty()) {
-                    nextReviewTime.text = "Next review: none"
+                    nextReviewTime.text = "Next review: \nnone"
                 } else {
                     startReviewTimer(kanaReviewQueue[0])
+                }
+            }
+        }.start()
+    }
+
+    private fun startWritingTimer(kana: Kana) {
+        object : CountDownTimer(kana.writingReviewTime!! - System.currentTimeMillis(), 1000) {
+            override fun onTick(millisLeft: Long) {
+                nextWritingReviewText.text =
+                    "Next review: \n\t\t${formatTime(millisLeft)}"
+            }
+
+            override fun onFinish() {
+                kanaWritingQueue.removeFirstOrNull()
+                numItemsToWrite++
+                if (numItemsToWrite == 1) {
+                    numWriteTextView.background = ContextCompat.getDrawable(this@MenuActivity, R.drawable.items_review_background)
+                    writingReviewButton.isEnabled = true
+                    writingReviewButton.isClickable = true
+                    //reviewAnimation.setAnimation(R.raw.quiz)
+                    //reviewAnimation.playAnimation()
+                }
+                currentWritingReviews.text = "Current: $numItemsToWrite".colorizeText(
+                    numItemsToWrite.toString(),
+                    ContextCompat.getColor(this@MenuActivity, R.color.writing_green)
+                )
+                numWriteTextView.text = numItemsToWrite.toString()
+                kanaToWrite.add(kana)
+                if (kanaWritingQueue.isEmpty()) {
+                    nextWritingReviewText.text = "Next review: \nnone"
+                } else {
+                    startWritingTimer(kanaWritingQueue[0])
                 }
             }
         }.start()
