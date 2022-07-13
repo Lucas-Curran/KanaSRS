@@ -138,22 +138,99 @@
                     android:layout_marginEnd="50dp"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/nextReviewText"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="start|center_vertical"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginEnd="2dp"
                         android:background="@drawable/top_round_rectangle"
-                        app:backgroundTint="@null"
-                        android:text="@string/placeholder_next_review"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_brain"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
+                            app:tint="@color/white"/>
+
+                        <TextView
+                            android:id="@+id/nextReviewText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginEnd="2dp"
+                            app:backgroundTint="@null"
+                            android:text="@string/placeholder_next_review"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/currentReviewsTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginEnd="2dp"
+                            android:gravity="center"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:text="@string/placeholder_current_review"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#11d3d3d3"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_pencil"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
+                            app:tint="@color/white"/>
+
+                        <TextView
+                            android:id="@+id/nextReviewWritingText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginEnd="2dp"
+                            app:backgroundTint="@null"
+                            android:text="@string/placeholder_next_review"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/currentWritingReviewsText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginEnd="2dp"
+                            android:gravity="center"
+                            android:text="@string/placeholder_current_review"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/remainingLessonsTextView"
@@ -164,25 +241,9 @@
                         android:layout_weight="1"
                         android:paddingStart="10dp"
                         android:paddingEnd="10dp"
-                        android:background="#11d3d3d3"
+                        android:background="@drawable/bottom_round_rect"
                         android:gravity="start|center_vertical"
                         android:text="@string/placeholder_lessons_left"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/currentReviewsTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginEnd="2dp"
-                        android:gravity="start|center_vertical"
-                        android:background="@drawable/bottom_round_rect"
-                        android:text="@string/placeholder_current_review"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -339,19 +400,36 @@
                     android:elevation="20dp"
                     android:layout_centerHorizontal="true" />
 
+                <TextView
+                    android:id="@+id/numWritingTextView"
+                    android:layout_width="26dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@id/writingReviewButton"
+                    android:layout_alignBottom="@id/writingReviewButton"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="@color/white"
+                    android:background="@drawable/items_review_background"
+                    android:elevation="10dp"
+                    android:gravity="center"
+                    android:text="@string/reviews_now_notification" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/writingReviewButton"
                     style="@style/Widget.MaterialComponents.Button.Icon"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_margin="15dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
                     android:background="@drawable/extra_button_selector"
                     android:paddingTop="60dp"
-                    android:text="@string/writing"
                     android:shadowColor="@color/black"
                     android:shadowDx="1.5"
                     android:shadowDy="1.3"
                     android:shadowRadius="1.6"
+                    android:text="@string/writing"
                     android:textSize="20sp"
                     app:backgroundTint="@null" />
 
