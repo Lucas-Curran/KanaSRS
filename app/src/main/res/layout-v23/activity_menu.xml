@@ -391,10 +391,10 @@
                 android:layout_height="wrap_content">
 
                 <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/writingAnimation"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     app:lottie_rawRes="@raw/writing"
-                    app:lottie_autoPlay="true"
                     app:lottie_loop="true"
                     app:lottie_renderMode="hardware"
                     android:elevation="20dp"
