@@ -293,10 +293,20 @@ class KanaInfoView(val context: Context, val kana: Kana, val showReviewTime: Boo
                 RelativeLayout.LayoutParams.MATCH_PARENT
             )
 
-            val id = context.resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter!!)}_trace", "drawable", context.packageName)
-            relativeLayout.background = ContextCompat.getDrawable(context, id)
+            val traceId = if (kana.isHiragana) {
+                context.resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter!!)}_trace", "drawable", context.packageName)
+            } else {
+                context.resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter!!)}_trace_k", "drawable", context.packageName)
+            }
 
-            val strokeId = context.resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter)}_stroke", "drawable", context.packageName)
+            relativeLayout.background = ContextCompat.getDrawable(context, traceId)
+
+            val strokeId = if (kana.isHiragana) {
+                context.resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter)}_stroke", "drawable", context.packageName)
+            } else {
+                context.resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter)}_stroke_k", "drawable", context.packageName)
+            }
+
             val kanaStrokeView = view.findViewById<ImageView>(R.id.kanaStrokeImageView)
             kanaStrokeView.setImageResource(strokeId)
 
