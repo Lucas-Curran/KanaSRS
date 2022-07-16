@@ -8,6 +8,8 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
@@ -15,18 +17,23 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.text.bold
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.adapter.ReviewedKanaAdapter
 import com.email.contact.kanasrs.custom.DrawingView
+import com.email.contact.kanasrs.custom.KanaInfoView
 import com.email.contact.kanasrs.database.Kana
 import com.email.contact.kanasrs.database.KanaSRSDatabase
 import com.email.contact.kanasrs.util.KanaConverter
 import com.email.contact.kanasrs.util.Utilities
+import com.email.contact.kanasrs.util.Utilities.Companion.colorizeText
 import com.email.contact.kanasrs.util.Utilities.Companion.disable
 import com.email.contact.kanasrs.util.Utilities.Companion.enable
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -90,7 +97,7 @@ class WritingActivity : AppCompatActivity() {
 
         writingProgress.max = kanaList.size * 100
 
-        writingLayout = findViewById<RelativeLayout>(R.id.writingRelativeLayout)
+        writingLayout = findViewById(R.id.writingRelativeLayout)
         drawingView = DrawingView(this)
         //drawingView.setPaintColor(Color.WHITE)
 
@@ -113,9 +120,6 @@ class WritingActivity : AppCompatActivity() {
                     // If animation is in reverse, i.e. disappearing, then switch it back
                     if (lottieAnimationView.speed < 0) {
                         lottieAnimationView.reverseAnimationSpeed()
-                    }
-                    if (imagesAnimatedList[2]) {
-                        nextKana()
                     }
                 }
 
@@ -164,6 +168,7 @@ class WritingActivity : AppCompatActivity() {
                 GlobalScope.launch {
                     val kana = kanaList[0]
                     if (drawingView.isDrawingCorrect(kana.letter!!, loadResultBar)) {
+
                         runOnUiThread {
                             correctAnimation.playAnimation()
                             correctReviewAnswers.add(kana)
@@ -269,6 +274,7 @@ class WritingActivity : AppCompatActivity() {
                                         kanaList.add(newKanaPosition, kana)
                                     }
                                     wrongImageThree.playAnimation()
+                                    showIncorrectDialog(kanaList[0])
                                     imagesAnimatedList[2] = true
                                 }
                             }
@@ -364,6 +370,7 @@ class WritingActivity : AppCompatActivity() {
 
         wrongCounter = 0
         drawingView.clearDrawing()
+        drawingView.disableDrawing()
 
         incorrectTextView.text = incorrectReviewAnswers.size.toString()
         correctTextView.text = correctReviewAnswers.size.toString()
@@ -387,6 +394,7 @@ class WritingActivity : AppCompatActivity() {
             newLevelLayout.animate().alpha(0F).setStartDelay(750).duration = 500
             letterToDraw.animate().alpha(1f).setStartDelay(750).withEndAction {
                 submitWriting.enable()
+                drawingView.enableDrawing()
             }.duration = 500
         }.duration = 500
 
@@ -398,6 +406,7 @@ class WritingActivity : AppCompatActivity() {
         Utilities.animateUp(findViewById(R.id.incorrectImageView), 100)
         Utilities.animateUp(correctTextView, 100)
         Utilities.animateUp(incorrectTextView, 100)
+        Utilities.animateUp(newLevelLayout, 100)
         Utilities.animateUp(findViewById(R.id.wrongAnswersLayout), 100)
         Utilities.animateToLeft(writingLayout, 100)
         Utilities.animateToRight(submitWriting, 100) {
@@ -423,8 +432,8 @@ class WritingActivity : AppCompatActivity() {
 
             correctRecyclerView.layoutManager = LinearLayoutManager(this)
             incorrectRecyclerView.layoutManager = LinearLayoutManager(this)
-            correctRecyclerView.adapter = ReviewedKanaAdapter(correctReviewAnswers, this, true)
-            incorrectRecyclerView.adapter = ReviewedKanaAdapter(incorrectReviewAnswers, this, false)
+            correctRecyclerView.adapter = ReviewedKanaAdapter(correctReviewAnswers, this, correct = true, isWriting = true)
+            incorrectRecyclerView.adapter = ReviewedKanaAdapter(incorrectReviewAnswers, this, correct = false, isWriting = true)
             correctRecyclerView.layoutAnimation.animation.startOffset = 1500L
             incorrectRecyclerView.layoutAnimation.animation.startOffset = 1500L
 
@@ -437,8 +446,31 @@ class WritingActivity : AppCompatActivity() {
         }
     }
 
-    private fun showIncorrectDialog() {
+    private fun showIncorrectDialog(kana: Kana) {
+        val view = LayoutInflater.from(this).inflate(R.layout.wrong_answer_dialog, null)
+        val dialog = BottomSheetDialog(this, R.style.BottomDialogTheme)
 
+        val correctString = SpannableStringBuilder()
+            .append("The correct answer is: a")
+
+        view.findViewById<TextView>(R.id.correctAnswerTextView).text = correctString
+
+        view.findViewById<TextView>(R.id.moreInfoTextView).setOnClickListener {
+            val kanaInfo = KanaInfoView(this, kana, true)
+            kanaInfo.setReviewToGone()
+            kanaInfo.show()
+        }
+
+        view.findViewById<TextView>(R.id.moveOnButton).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.setOnDismissListener {
+            nextKana()
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
     }
 
 }
