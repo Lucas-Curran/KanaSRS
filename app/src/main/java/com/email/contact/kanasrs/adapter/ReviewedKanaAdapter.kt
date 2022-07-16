@@ -12,7 +12,7 @@ import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.database.Kana
 
 
-class ReviewedKanaAdapter(private val kanaList: List<Kana>, private val mContext: Context, private val correct: Boolean) :
+class ReviewedKanaAdapter(private val kanaList: List<Kana>, private val mContext: Context, private val correct: Boolean, private val isWriting: Boolean) :
     RecyclerView.Adapter<ReviewedKanaAdapter.ViewHolder>() {
 
     /**
@@ -40,8 +40,14 @@ class ReviewedKanaAdapter(private val kanaList: List<Kana>, private val mContext
 
         var color = 0
 
+        val kanaLevel = if (isWriting) {
+            kanaList[position].writingLevel
+        } else {
+            kanaList[position].level
+        }
+
         if (correct) {
-            when (kanaList[position].level) {
+            when (kanaLevel) {
                 1, 2 -> {
                     color = R.color.rookie_pink
                 }
