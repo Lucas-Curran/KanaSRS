@@ -140,13 +140,13 @@ class MenuActivity : AppCompatActivity() {
             if (kanaReviewQueue.isNotEmpty()) {
                 startReviewTimer(kanaReviewQueue[0])
             } else {
-                nextReviewTime.text = "Next review: \nnone"
+                nextReviewTime.text = "Next review: \nnone".colorizeText("none", ContextCompat.getColor(this@MenuActivity, R.color.azure))
             }
 
             if (kanaWritingQueue.isNotEmpty()) {
                 startWritingTimer(kanaWritingQueue[0])
             } else {
-                nextWritingReviewText.text = "Next review: \nnone"
+                nextWritingReviewText.text = "Next review: \nnone".colorizeText("none", ContextCompat.getColor(this@MenuActivity, R.color.writing_green))
             }
 
 
@@ -331,6 +331,8 @@ class MenuActivity : AppCompatActivity() {
                 writingReviewButton.disable()
                 numWriteTextView.background =
                     ContextCompat.getDrawable(this, R.drawable.no_review_items_background)
+            } else {
+                findViewById<LottieAnimationView>(R.id.writingAnimation).playAnimation()
             }
 
             reviewButton.setOnClickListener {
@@ -428,8 +430,9 @@ class MenuActivity : AppCompatActivity() {
     private fun startReviewTimer(kana: Kana) {
         object : CountDownTimer(kana.reviewTime!! - System.currentTimeMillis(), 1000) {
             override fun onTick(millisLeft: Long) {
+                val time = formatTime(millisLeft)
                 nextReviewTime.text =
-                    "Next review: \n\t\t${formatTime(millisLeft)}"
+                    "Next review:\n\t\t$time".colorizeText(time, ContextCompat.getColor(this@MenuActivity, R.color.azure))
             }
 
             override fun onFinish() {
@@ -449,7 +452,7 @@ class MenuActivity : AppCompatActivity() {
                 numReviewTextView.text = numItemsToReview.toString()
                 kanaToReview.add(kana)
                 if (kanaReviewQueue.isEmpty()) {
-                    nextReviewTime.text = "Next review: \nnone"
+                    nextReviewTime.text = "Next review:\nnone".colorizeText("none", ContextCompat.getColor(this@MenuActivity, R.color.azure))
                 } else {
                     startReviewTimer(kanaReviewQueue[0])
                 }
@@ -460,8 +463,9 @@ class MenuActivity : AppCompatActivity() {
     private fun startWritingTimer(kana: Kana) {
         object : CountDownTimer(kana.writingReviewTime!! - System.currentTimeMillis(), 1000) {
             override fun onTick(millisLeft: Long) {
+                val time = formatTime(millisLeft)
                 nextWritingReviewText.text =
-                    "Next review: \n\t\t${formatTime(millisLeft)}"
+                    "Next review:\n\t\t$time".colorizeText(time, ContextCompat.getColor(this@MenuActivity, R.color.writing_green))
             }
 
             override fun onFinish() {
@@ -471,8 +475,7 @@ class MenuActivity : AppCompatActivity() {
                     numWriteTextView.background = ContextCompat.getDrawable(this@MenuActivity, R.drawable.items_review_background)
                     writingReviewButton.isEnabled = true
                     writingReviewButton.isClickable = true
-                    //reviewAnimation.setAnimation(R.raw.quiz)
-                    //reviewAnimation.playAnimation()
+                    findViewById<LottieAnimationView>(R.id.writingAnimation).playAnimation()
                 }
                 currentWritingReviews.text = "Current: $numItemsToWrite".colorizeText(
                     numItemsToWrite.toString(),
@@ -481,7 +484,7 @@ class MenuActivity : AppCompatActivity() {
                 numWriteTextView.text = numItemsToWrite.toString()
                 kanaToWrite.add(kana)
                 if (kanaWritingQueue.isEmpty()) {
-                    nextWritingReviewText.text = "Next review: \nnone"
+                    nextWritingReviewText.text = "Next review:\nnone".colorizeText("none", ContextCompat.getColor(this@MenuActivity, R.color.writing_green))
                 } else {
                     startWritingTimer(kanaWritingQueue[0])
                 }
