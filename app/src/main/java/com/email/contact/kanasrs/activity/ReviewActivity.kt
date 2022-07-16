@@ -296,9 +296,6 @@ class ReviewActivity : AppCompatActivity() {
                 val newKanaPosition = Random.nextInt(1, kanaList.size)
                 kanaList.remove(kana)
                 kanaList.add(newKanaPosition, kana)
-            } else if (kanaList.size == 2) {
-                kanaList.remove(kana)
-                kanaList.add(1, kana)
             }
         }
 
@@ -309,9 +306,6 @@ class ReviewActivity : AppCompatActivity() {
                 val newKanaPosition = Random.nextInt(1, kanaList.size)
                 kanaList.remove(kana)
                 kanaList.add(newKanaPosition, kana)
-            } else if (kanaList.size == 2) {
-                kanaList.remove(kana)
-                kanaList.add(1, kana)
             }
         }
 
