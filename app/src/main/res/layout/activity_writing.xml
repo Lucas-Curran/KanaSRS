@@ -5,14 +5,82 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.WritingActivity"
+    android:id="@+id/rootLayout"
     android:background="@color/cardview_dark_background">
+
+    <include
+        android:id="@+id/finishSessionLayout"
+        layout="@layout/finish_review_layout"
+        android:visibility="invisible" />
+
+    <ProgressBar
+        android:id="@+id/reviewProgressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        app:layout_goneMarginStart="10dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:progressTint="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/numberCorrectTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/incorrectImageView"/>
+
+    <TextView
+        android:id="@+id/numberCorrectTextView"
+        android:layout_width="19dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/correctImageView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/correctImageView"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        app:tint="@color/lime"
+        android:contentDescription="@string/number_correct"
+        android:src="@drawable/ic_checkmark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/numberWrongTextView"
+        android:layout_width="19dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/correctImageView"
+        app:layout_constraintTop_toBottomOf="@id/numberCorrectTextView"/>
+
+    <ImageView
+        android:id="@+id/incorrectImageView"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        app:tint="@color/wrong_answer"
+        android:src="@drawable/ic_x"
+        android:contentDescription="@string/number_incorrect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/correctImageView" />
 
     <LinearLayout
         android:id="@+id/wrongAnswersLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reviewProgressBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:orientation="horizontal">
@@ -40,6 +108,44 @@
             android:layout_margin="10dp"
             app:lottie_rawRes="@raw/wrong"
             android:background="@drawable/placeholder_writing_x"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/newLevelLayout"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/review_level_background"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/correctAnimation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/writingRelativeLayout">
+
+        <ImageView
+            android:id="@+id/arrowIndicator"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:contentDescription="@string/level_change_arrow"
+            android:background="@drawable/pill_shape"
+            android:padding="7dp"
+            android:src="@drawable/ic_up_arrow"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/newLevelTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:text="Rookie"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
