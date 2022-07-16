@@ -1,7 +1,6 @@
 package com.email.contact.kanasrs.activity
 
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.TransitionDrawable
 import android.os.Build
@@ -17,16 +16,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.bold
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.email.contact.kanasrs.*
 import com.email.contact.kanasrs.adapter.ReviewedKanaAdapter
-import com.email.contact.kanasrs.database.KanaSRSDatabase
-import com.email.contact.kanasrs.database.Kana
-import com.email.contact.kanasrs.util.KanaConverter
 import com.email.contact.kanasrs.custom.KanaInfoView
+import com.email.contact.kanasrs.database.Kana
+import com.email.contact.kanasrs.database.KanaSRSDatabase
+import com.email.contact.kanasrs.util.KanaConverter
 import com.email.contact.kanasrs.util.Utilities
 import com.email.contact.kanasrs.util.Utilities.Companion.colorizeText
 import com.email.contact.kanasrs.util.Utilities.Companion.showKeyboard
@@ -113,6 +113,9 @@ class ReviewActivity : AppCompatActivity() {
         correctImageView = findViewById(R.id.correctImageView)
         incorrectImageView = findViewById(R.id.incorrectImageView)
         endReviewLayout = findViewById(R.id.finishGameLayout)
+
+        val typeface = ResourcesCompat.getFont(this, R.font.font1)
+        letterTextView.typeface = typeface
 
         correctTransition = TransitionDrawable(arrayOf(
             ContextCompat.getDrawable(this, R.drawable.review_box),
@@ -478,8 +481,8 @@ class ReviewActivity : AppCompatActivity() {
 
             correctRecyclerView.layoutManager = LinearLayoutManager(this)
             incorrectRecyclerView.layoutManager = LinearLayoutManager(this)
-            correctRecyclerView.adapter = ReviewedKanaAdapter(correctReviewAnswers, this, true)
-            incorrectRecyclerView.adapter = ReviewedKanaAdapter(incorrectReviewAnswers, this, false)
+            correctRecyclerView.adapter = ReviewedKanaAdapter(correctReviewAnswers, this, correct = true, isWriting = false)
+            incorrectRecyclerView.adapter = ReviewedKanaAdapter(incorrectReviewAnswers, this, correct = false,isWriting = false)
             correctRecyclerView.layoutAnimation.animation.startOffset = 1500L
             incorrectRecyclerView.layoutAnimation.animation.startOffset = 1500L
 
