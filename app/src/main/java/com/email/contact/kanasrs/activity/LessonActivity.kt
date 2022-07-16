@@ -252,10 +252,21 @@ class LessonActivity : AppCompatActivity() {
 
                 val relativeLayout = RelativeLayout(this)
                 relativeLayout.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
-                val traceId = resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter!!)}_trace", "drawable", packageName)
+
+                val traceId = if (kana.isHiragana) {
+                    resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter!!)}_trace", "drawable", packageName)
+                } else {
+                    resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter!!)}_trace_k", "drawable", packageName)
+                }
+
                 relativeLayout.background = ContextCompat.getDrawable(this, traceId)
 
-                val strokeId = resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter)}_stroke", "drawable", packageName)
+                val strokeId = if (kana.isHiragana) {
+                    resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter)}_stroke", "drawable", packageName)
+                } else {
+                    resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter)}_stroke_k", "drawable", packageName)
+                }
+
                 val kanaStrokeView = newView.findViewById<ImageView>(R.id.kanaStrokeImageView)
                 kanaStrokeView.setImageResource(strokeId)
 
