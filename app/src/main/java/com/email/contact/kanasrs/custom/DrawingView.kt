@@ -32,6 +32,8 @@ class DrawingView(var c: Context) : View(c) {
     private val circlePaint: Paint = Paint()
     private val circlePath: Path = Path()
 
+    private var canDraw = true
+
     private val retrofitAPI: KanaRetrofit
 
     init {
@@ -85,6 +87,7 @@ class DrawingView(var c: Context) : View(c) {
         mPath.moveTo(x, y)
         mX = x
         mY = y
+
     }
 
     private fun touchMove(x: Float, y: Float) {
@@ -97,6 +100,7 @@ class DrawingView(var c: Context) : View(c) {
             circlePath.reset()
             circlePath.addCircle(mX, mY, 30F, Path.Direction.CW)
         }
+
     }
 
     private fun touchUp() {
@@ -110,23 +114,26 @@ class DrawingView(var c: Context) : View(c) {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val x = event.x
-        val y = event.y
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                touchStart(x, y)
-                invalidate()
+        if (canDraw) {
+            val x = event.x
+            val y = event.y
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    touchStart(x, y)
+                    invalidate()
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    touchMove(x, y)
+                    invalidate()
+                }
+                MotionEvent.ACTION_UP -> {
+                    touchUp()
+                    invalidate()
+                }
             }
-            MotionEvent.ACTION_MOVE -> {
-                touchMove(x, y)
-                invalidate()
-            }
-            MotionEvent.ACTION_UP -> {
-                touchUp()
-                invalidate()
-            }
+            return true
         }
-        return true
+        return false
     }
 
     @OptIn(InternalCoroutinesApi::class, ExperimentalCoroutinesApi::class)
@@ -166,7 +173,9 @@ class DrawingView(var c: Context) : View(c) {
                     val data = response.body()!!.data
                     //data[0] is the first word, or letter, in a sequence of words
                     progressBar.visibility = INVISIBLE
-                    if (data[0].contains(kanaLetter)) {
+                    println(data[0])
+                    //Make sure response isn't too long so they can't get a false positive
+                    if (data[0].contains(kanaLetter) && data[0].length < 5) {
                         continuation.resume(true) {
                             Log.e("MLError", it.stackTraceToString())
                         }
@@ -188,6 +197,14 @@ class DrawingView(var c: Context) : View(c) {
 
             })
         }
+
+    fun disableDrawing() {
+        canDraw = false
+    }
+
+    fun enableDrawing() {
+        canDraw = true
+    }
 
     fun setPaintColor(color: Int) {
         mPaint?.color = color
