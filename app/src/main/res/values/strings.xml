@@ -19,6 +19,11 @@
         and turning it off and on <![CDATA[<b><font color=#FF0000>will not</font></b>]]>
         reset progress.</string>
 
+    <string name="random_font_info">This setting can be used to randomly assign a new font on every
+        review item. Reading computer font compared to handwriting can be vastly different,
+        as in most languages. There are many styles, so we provide the option to review with variety.
+    </string>
+
     <string name="slide3_description">Hiragana is one of the three character sets, and is one of two
         phonetic lettering systems. \n\nPhonetic means the characters have no special meaning,
         but rather make up the basic sounds. \n\nYou will learn the basic 46 letters, with
