@@ -1,5 +1,5 @@
-一* How does the review system work?* Very carefully
-二* Second item* Second answer
+一* How does the review system work?* Spaced Repetition System (SRS) is how review times are calculated.
+二* Does KanaSRS require internet to learn and review kana?* For the most part, no! Internet is only required for the writing review sessions. Requests are made over the web to check your handwriting, which can not be done offline. Everything else is all good.
 三* Third item* Third answer
 四* Fourth item* Fourth answer
 五* Fifth item* Fifth answer
