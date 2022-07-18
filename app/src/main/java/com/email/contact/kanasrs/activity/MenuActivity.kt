@@ -33,6 +33,7 @@ import com.email.contact.kanasrs.util.Utilities
 import com.email.contact.kanasrs.util.Utilities.Companion.colorizeText
 import com.email.contact.kanasrs.util.Utilities.Companion.disable
 import com.email.contact.kanasrs.util.Utilities.Companion.formatTime
+import com.email.contact.kanasrs.util.Utilities.Companion.reviewApp
 
 class MenuActivity : AppCompatActivity() {
 
@@ -418,11 +419,10 @@ class MenuActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.report -> showReportDialog()
-            R.id.faq -> showFAQ()
+            R.id.faq -> startActivity(Intent(this, FaqActivity::class.java))
             R.id.refresh -> refreshActivity()
-            R.id.tutorial -> {
-
-            }
+            R.id.tutorial -> startActivity(Intent(this, KanaIntroActivity::class.java))
+            R.id.review -> redirectToPlayStore()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -492,15 +492,27 @@ class MenuActivity : AppCompatActivity() {
         }.start()
     }
 
+    private fun redirectToPlayStore() {
+        val uri: Uri = Uri.parse("market://details?id=$packageName")
+        val goToMarket = Intent(Intent.ACTION_VIEW, uri)
+        // To count with Play market backstack, After pressing back button,
+        // to taken back to our application, we need to add following flags to intent.
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or
+                Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+        try {
+            startActivity(goToMarket)
+        } catch (e: ActivityNotFoundException) {
+            startActivity(Intent(Intent.ACTION_VIEW,
+                Uri.parse("http://play.google.com/store/apps/details?id=$packageName")))
+        }
+    }
+
     private fun refreshActivity() {
         finish()
         overridePendingTransition(0, 0)
         startActivity(intent)
         overridePendingTransition(0, 0)
-    }
-
-    private fun showFAQ() {
-        startActivity(Intent(this, FaqActivity::class.java))
     }
 
     private fun showReportDialog() {
