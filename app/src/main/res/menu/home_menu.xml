@@ -25,4 +25,10 @@
         android:icon="@drawable/ic_tutorial"
         app:iconTint="@color/white"
         app:showAsAction="collapseActionView|withText"/>
+    <item
+        android:id="@+id/review"
+        android:title="@string/review"
+        android:icon="@drawable/ic_review_app"
+        app:iconTint="@color/white"
+        app:showAsAction="collapseActionView|withText"/>
 </menu>
