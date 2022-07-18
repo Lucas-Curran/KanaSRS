@@ -116,9 +116,10 @@
 
     <TextView
         android:id="@+id/letterToGuess"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="130dp"
         android:text="あ"
+        android:gravity="center"
         android:shadowColor="@color/black"
         android:shadowDx="1.5"
         android:shadowDy="1.3"
