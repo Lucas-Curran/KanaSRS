@@ -18,6 +18,7 @@ import android.view.animation.Animation
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ScrollView
+import android.widget.Toast
 import android.widget.ViewAnimator
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,9 @@ import androidx.core.animation.doOnEnd
 import androidx.core.view.marginBottom
 import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.notification.NotificationReceiver
+import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.android.play.core.review.model.ReviewErrorCode
+import com.google.android.play.core.review.testing.FakeReviewManager
 import java.time.Duration
 import java.util.*
 
@@ -226,6 +230,19 @@ class Utilities {
                     "Sensei"
                 }
                 else -> ""
+            }
+        }
+
+        fun reviewApp(context: Context, fromActivity: Activity) {
+            val manager = FakeReviewManager(context)
+            val request = manager.requestReviewFlow()
+            request.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val reviewInfo = task.result
+                    manager.launchReviewFlow(fromActivity, reviewInfo!!)
+                } else {
+                    Toast.makeText(context, "There was an issue handling the request, check your internet connection.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
