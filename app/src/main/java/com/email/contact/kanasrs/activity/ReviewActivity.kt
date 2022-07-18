@@ -30,6 +30,7 @@ import com.email.contact.kanasrs.database.KanaSRSDatabase
 import com.email.contact.kanasrs.util.KanaConverter
 import com.email.contact.kanasrs.util.Utilities
 import com.email.contact.kanasrs.util.Utilities.Companion.colorizeText
+import com.email.contact.kanasrs.util.Utilities.Companion.reviewApp
 import com.email.contact.kanasrs.util.Utilities.Companion.showKeyboard
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
@@ -202,6 +203,8 @@ class ReviewActivity : AppCompatActivity() {
 
             val moreLessonsButton = view.findViewById<MaterialButton>(R.id.moreLessonsButton)
             val endLessonButton = view.findViewById<MaterialButton>(R.id.endLessonButton)
+
+            reviewApp(this, this)
 
             if (KanaSRSDatabase.getInstance(this).userDao().getUser().lessonsNumber!! > 0) {
                 moreLessonsButton.setOnClickListener {
