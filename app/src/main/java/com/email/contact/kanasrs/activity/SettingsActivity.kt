@@ -102,7 +102,7 @@ class SettingsActivity : AppCompatActivity() {
                 this.deleteDatabase("kanasrs.db")
                 KanaSRSDatabase.destroyInstance()
                 this.getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE).edit().clear().apply()
-                val toast = Toast(this)
+                val toast = Toast.makeText(this, "", Toast.LENGTH_SHORT)
                 toast.setGravity(Gravity.CENTER, 0, 0)
                 toast.setText(resources.getText(R.string.clear_account))
                 toast.show()
