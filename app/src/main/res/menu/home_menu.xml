@@ -4,31 +4,25 @@
 
     <item
         android:id="@+id/refresh"
-        android:title="Refresh"
+        android:title="@string/refresh"
         android:icon="@drawable/ic_refresh"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/faq"
-        android:title="FAQ"
+        android:title="@string/faq"
         android:icon="@drawable/ic_faq"
         app:iconTint="@color/white"
         app:showAsAction="collapseActionView|withText"/>
     <item
         android:id="@+id/report"
-        android:title="Contact"
+        android:title="@string/contact"
         android:icon="@drawable/ic_contact"
         app:iconTint="@color/white"
         app:showAsAction="collapseActionView|withText"/>
     <item
         android:id="@+id/tutorial"
-        android:title="Tutorial"
+        android:title="@string/intro"
         android:icon="@drawable/ic_tutorial"
-        app:iconTint="@color/white"
-        app:showAsAction="collapseActionView|withText"/>
-    <item
-        android:id="@+id/attributions"
-        android:title="Attributions"
-        android:icon="@drawable/ic_attributions"
         app:iconTint="@color/white"
         app:showAsAction="collapseActionView|withText"/>
 </menu>
