@@ -249,8 +249,7 @@ class KanaInfoView(val context: Context, val kana: Kana, val showReviewTime: Boo
                     accuracyImage.setImageResource(android.R.color.transparent)
                 }
 
-                //TODO: Streak data
-                view.findViewById<TextView>(R.id.streakTextView).text = "0"
+                view.findViewById<TextView>(R.id.streakTextView).text = kana.streak.toString()
 
                 val levelTextView = view.findViewById<TextView>(R.id.levelTextView)
                 levelTextView.setTextColor(ContextCompat.getColor(context, getLevelColor(kana.level!!)))

@@ -268,6 +268,7 @@ class ReviewActivity : AppCompatActivity() {
             if (!incorrectReviewAnswers.contains(kana)) {
 
                 incorrect++
+                kana.streak = 0
                 if (kana.totalAnswered == null) {
                     kana.totalAnswered = 1
                 } else {
@@ -345,6 +346,8 @@ class ReviewActivity : AppCompatActivity() {
             if (!incorrectReviewAnswers.contains(kana)) {
 
                 calculateNextReviewTime(kana = kana, correct = true)
+
+                kana.streak += 1
 
                 if (kana.totalCorrect == null) {
                     kana.totalCorrect = 1
