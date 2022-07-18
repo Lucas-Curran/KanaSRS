@@ -1,6 +1,7 @@
 package com.email.contact.kanasrs.activity
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.TransitionDrawable
 import android.os.Build
@@ -114,9 +115,6 @@ class ReviewActivity : AppCompatActivity() {
         incorrectImageView = findViewById(R.id.incorrectImageView)
         endReviewLayout = findViewById(R.id.finishGameLayout)
 
-        val typeface = ResourcesCompat.getFont(this, R.font.font1)
-        letterTextView.typeface = typeface
-
         correctTransition = TransitionDrawable(arrayOf(
             ContextCompat.getDrawable(this, R.drawable.review_box),
             ContextCompat.getDrawable(this, R.drawable.input_background_correct))
@@ -161,6 +159,8 @@ class ReviewActivity : AppCompatActivity() {
         }
 
         reviewProgressBar.max = kanaList.size * 100
+
+        switchFont()
 
         letterTextView.text = kanaList[0].letter
 
@@ -229,6 +229,7 @@ class ReviewActivity : AppCompatActivity() {
         // and then overshoot by a little, and recorrect
         letterTextView.animate().translationXBy((rootLayout.width).toFloat()).withEndAction {
             letterTextView.x = (-rootLayout.width).toFloat() / 2
+            switchFont()
             letterTextView.text = kanaList[0].letter
 
             letterTextView.animate().translationXBy(rootLayout.width.toFloat() + letterTextView.width / 2).withEndAction {
@@ -489,6 +490,23 @@ class ReviewActivity : AppCompatActivity() {
             Utilities.animateFromTop(linearLayout, rootLayout, 200)
             Utilities.animateFromTop(endReviewLayout.findViewById(R.id.layoutDivider), rootLayout, 300)
             Utilities.animateFromBottom(finishButton, rootLayout, 400)
+        }
+    }
+
+    private fun switchFont() {
+        if (getSharedPreferences(
+                getString(R.string.pref_key),
+                Context.MODE_PRIVATE
+            ).getBoolean("randomizedFonts", false)
+        ) {
+            if (review) {
+                val randomizer = Random.nextInt(1, 18)
+                val font = ResourcesCompat.getFont(
+                    this,
+                    resources.getIdentifier("font$randomizer", "font", packageName)
+                )
+                letterTextView.typeface = font
+            }
         }
     }
 
