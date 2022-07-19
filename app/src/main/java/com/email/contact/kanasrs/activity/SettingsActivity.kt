@@ -23,16 +23,6 @@ import com.email.contact.kanasrs.database.KanaSRSDatabase
 import com.email.contact.kanasrs.util.Utilities
 import java.text.SimpleDateFormat
 
-
-/*
-Could possibly include:
-    - Light mode/dark mode
-    - Blocking certain letters
-    - Having timer visible/not in timed mode
-    - Switching between katakana/hiragana
-    - Creating custom study sets
- */
-
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var resetAccount: TextView
