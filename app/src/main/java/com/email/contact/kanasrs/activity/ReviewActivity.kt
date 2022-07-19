@@ -530,6 +530,32 @@ class ReviewActivity : AppCompatActivity() {
 
         view.findViewById<TextView>(R.id.correctAnswerTextView).text = correctString
 
+        val mnemonicText = view.findViewById<TextView>(R.id.mnemonicTextView)
+
+        if (kana.customMnemonic != null) {
+            mnemonicText.text = kana.customMnemonic
+        } else {
+            mnemonicText.text = kana.mnemonic
+            if (mnemonicText.text.contains("(${kanaConverter.hiraganaToRomaji(kana.letter!!)})")) {
+                mnemonicText.text = mnemonicText.text.colorizeText(
+                    "(${kanaConverter.hiraganaToRomaji(kana.letter)})",
+                    ContextCompat.getColor(this, R.color.pink)
+                )
+            }
+            if (mnemonicText.text.contains("'${kanaConverter.hiraganaToRomaji(kana.letter)}'")) {
+                mnemonicText.text = mnemonicText.text.colorizeText(
+                    "'${kanaConverter.hiraganaToRomaji(kana.letter)}'",
+                    ContextCompat.getColor(this, R.color.pink)
+                )
+            }
+            if (mnemonicText.text.contains("'${kanaConverter.hiraganaToRomaji(kana.letter)?.uppercase()}'")) {
+                mnemonicText.text = mnemonicText.text.colorizeText(
+                    "'${kanaConverter.hiraganaToRomaji(kana.letter)?.uppercase()}'",
+                    ContextCompat.getColor(this, R.color.pink)
+                )
+            }
+        }
+
         view.findViewById<TextView>(R.id.moreInfoTextView).setOnClickListener {
             val kanaInfo = KanaInfoView(this, kana, true)
             kanaInfo.setReviewToGone()
