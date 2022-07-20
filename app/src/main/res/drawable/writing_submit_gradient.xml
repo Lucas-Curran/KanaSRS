@@ -3,7 +3,7 @@
 
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/review_shadow" />
+            <solid android:color="#043927" />
         </shape>
     </item>
 
@@ -18,8 +18,8 @@
             <!--            Button TOP Color -->
             <gradient
                 android:angle="45"
-                android:endColor="#0dd2ff"
-                android:startColor="@color/azure"
+                android:endColor="#2e8b57"
+                android:startColor="#01796f"
                 android:type="linear" />
 
             <corners android:radius="15dp" />

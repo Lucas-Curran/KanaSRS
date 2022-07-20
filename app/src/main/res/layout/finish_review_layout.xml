@@ -143,9 +143,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:backgroundTint="@null"
-        android:background="@drawable/end_review_button_background"
+        android:background="@drawable/review_button_selector"
         android:drawableBottom="@drawable/end_review_check"
-        android:foreground="?android:attr/selectableItemBackgroundBorderless"
         android:paddingTop="40dp"
         android:paddingBottom="40dp"/>
 
