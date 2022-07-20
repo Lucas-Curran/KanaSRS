@@ -1,5 +1,6 @@
 package com.email.contact.kanasrs.activity
 
+import android.content.Context
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -43,7 +44,11 @@ class KanaIntroActivity : AppIntro2() {
 
     override fun onDonePressed(currentFragment: Fragment?) {
         super.onDonePressed(currentFragment)
-        // Decide what to do when the user clicks on "Done"
+        val sharedPref = getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE)
+        with (sharedPref.edit()) {
+            putBoolean("needsToCompleteIntro", false)
+            apply()
+        }
         finish()
     }
 }
