@@ -170,9 +170,8 @@ class WritingActivity : AppCompatActivity() {
                     if (drawingView.isDrawingCorrect(kana.letter!!, loadResultBar)) {
 
                         runOnUiThread {
+
                             correctAnimation.playAnimation()
-                            correctReviewAnswers.add(kana)
-                            calculateNextReviewTime(kana, correct = true)
 
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 val animation = ObjectAnimator.ofInt(writingProgress, "progress", writingProgress.progress, writingProgress.progress+100)
@@ -182,9 +181,13 @@ class WritingActivity : AppCompatActivity() {
                             } else {
                                 writingProgress.progress = correctReviewAnswers.size
                             }
-                            kanaList.removeAt(0)
+
+                            kanaList.remove(kana)
 
                             if (!incorrectReviewAnswers.contains(kana)) {
+
+                                calculateNextReviewTime(kana, correct = true)
+                                correctReviewAnswers.add(kana)
 
                                 var levelText = ""
                                 var color = 0
