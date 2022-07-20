@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -99,7 +100,7 @@ class WritingActivity : AppCompatActivity() {
 
         writingLayout = findViewById(R.id.writingRelativeLayout)
         drawingView = DrawingView(this)
-        //drawingView.setPaintColor(Color.WHITE)
+        drawingView.setPaintColor(Color.WHITE)
 
         val clearButton = findViewById<Button>(R.id.clearButton)
 
@@ -417,6 +418,7 @@ class WritingActivity : AppCompatActivity() {
             finishLayout.visibility = View.VISIBLE
 
             val finishButton = finishLayout.findViewById<MaterialButton>(R.id.finishButton)
+            finishButton.background = ContextCompat.getDrawable(this, R.drawable.extra_button_selector)
             finishButton.setOnClickListener {
                 startActivity(Intent(this, MenuActivity::class.java))
                 finish()
