@@ -174,6 +174,15 @@ class DrawingView(var c: Context) : View(c) {
                     //data[0] is the first word, or letter, in a sequence of words
                     progressBar.visibility = INVISIBLE
                     println(data[0])
+
+                    //For now, hiragana ki and katakana ki get mixed up
+                    if (data[0].contains("キ") && kanaLetter == "き" || data[0].contains("き") && kanaLetter == "キ") {
+                        continuation.resume(true) {
+                            Log.e("MLError", it.stackTraceToString())
+                        }
+                        return
+                    }
+
                     //Make sure response isn't too long so they can't get a false positive
                     if (data[0].contains(kanaLetter) && data[0].length < 5) {
                         continuation.resume(true) {
