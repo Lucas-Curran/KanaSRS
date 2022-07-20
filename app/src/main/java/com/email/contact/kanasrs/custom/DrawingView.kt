@@ -146,7 +146,11 @@ class DrawingView(var c: Context) : View(c) {
             )
 
             val canvas = Canvas(newBitmap)
-            canvas.drawColor(Color.WHITE)
+            if (mPaint?.color == Color.BLACK) {
+                canvas.drawColor(Color.WHITE)
+            } else if (mPaint?.color == Color.WHITE) {
+                canvas.drawColor(Color.BLACK)
+            }
             canvas.drawBitmap(mBitmap!!, 0f, 0f, null)
 
             val baos = ByteArrayOutputStream()
@@ -197,7 +201,7 @@ class DrawingView(var c: Context) : View(c) {
 
                 override fun onFailure(call: Call<WritingResponse>, t: Throwable) {
                     progressBar.visibility = INVISIBLE
-                    Toast.makeText(context, "Kana could not be converted...", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, "Connection failed, check your internet", Toast.LENGTH_SHORT)
                         .show()
                     continuation.resume(false) {
                         Log.e("MLError", t.stackTraceToString())
@@ -206,6 +210,10 @@ class DrawingView(var c: Context) : View(c) {
 
             })
         }
+
+    fun setStrokeWidth(width: Float) {
+        mPaint?.strokeWidth = width
+    }
 
     fun disableDrawing() {
         canDraw = false
