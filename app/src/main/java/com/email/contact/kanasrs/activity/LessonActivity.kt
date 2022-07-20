@@ -2,6 +2,7 @@ package com.email.contact.kanasrs.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.*
 import android.media.MediaPlayer
 import android.os.*
@@ -33,6 +34,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class LessonActivity : AppCompatActivity() {
@@ -251,64 +254,8 @@ class LessonActivity : AppCompatActivity() {
                 buttonList.add(previousButton)
 
                 val relativeLayout = RelativeLayout(this)
-                relativeLayout.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
 
-                val traceId = if (kana.isHiragana) {
-                    resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter!!)}_trace", "drawable", packageName)
-                } else {
-                    resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter!!)}_trace_k", "drawable", packageName)
-                }
-
-                relativeLayout.background = ContextCompat.getDrawable(this, traceId)
-
-                val strokeId = if (kana.isHiragana) {
-                    resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter)}_stroke", "drawable", packageName)
-                } else {
-                    resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter)}_stroke_k", "drawable", packageName)
-                }
-
-                val kanaStrokeView = newView.findViewById<ImageView>(R.id.kanaStrokeImageView)
-                kanaStrokeView.setImageResource(strokeId)
-
-                val drawingView = DrawingView(this)
-
-                drawingView.setOnTouchListener { v, event ->
-                    v.parent.requestDisallowInterceptTouchEvent(true)
-                    when (event.action and MotionEvent.ACTION_MASK) {
-                        MotionEvent.ACTION_UP ->
-                            v.parent.requestDisallowInterceptTouchEvent(false)
-                    }
-                    false
-                }
-
-                val clearButton = Button(this)
-                clearButton.text = "Clear"
-                clearButton.textSize = 12f
-                clearButton.minimumHeight = 0
-                clearButton.layoutParams =
-                    RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT).apply {
-                        addRule(RelativeLayout.ALIGN_PARENT_END)
-                        addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-                        updateMargins(0, 100, 10, 10)
-                    }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    clearButton.setTextColor(resources.getColor(R.color.white, theme))
-                }
-                clearButton.height = 75
-                clearButton.setPadding(10)
-                clearButton.background = ContextCompat.getDrawable(this, R.drawable.dialog_background)
-                val outValue = TypedValue()
-                theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    clearButton.foreground = ContextCompat.getDrawable(this, outValue.resourceId)
-                }
-
-                clearButton.setOnClickListener {
-                    drawingView.clearDrawing()
-                }
-
-                relativeLayout.addView(clearButton)
-                relativeLayout.addView(drawingView)
+                setupDrawing(kana, kanaConverter, relativeLayout)
 
                 tempViewAnimator.addView(relativeLayout)
 
@@ -328,11 +275,6 @@ class LessonActivity : AppCompatActivity() {
                         if (lessonTabLayout.selectedTabPosition == newTab.position+1 || resetQuiz) {
                             setAnimNull(tempViewAnimator)
                             resetQuiz = false
-                        }
-                        if (tabPosition == writeTab.position) {
-                            kanaStrokeView.visibility = View.VISIBLE
-                        } else {
-                            kanaStrokeView.visibility = View.GONE
                         }
                         tempViewAnimator.displayedChild = tabPosition
                     }
@@ -430,6 +372,169 @@ class LessonActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupDrawing(kana: Kana, kanaConverter: KanaConverter, relativeLayout: RelativeLayout) {
+        relativeLayout.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
+
+        val traceId = if (kana.isHiragana) {
+            resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter!!)}_trace", "drawable", packageName)
+        } else {
+            resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter!!)}_trace_k", "drawable", packageName)
+        }
+
+        val strokeId = if (kana.isHiragana) {
+            resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter)}_stroke", "drawable", packageName)
+        } else {
+            resources.getIdentifier("${kanaConverter.hiraganaToRomaji(kana.letter)}_stroke_k", "drawable", packageName)
+        }
+
+        val drawingView = DrawingView(this)
+        drawingView.setStrokeWidth(14f)
+        drawingView.id = View.generateViewId()
+        drawingView.layoutParams = RelativeLayout.LayoutParams(300, 300).apply {
+            addRule(RelativeLayout.ALIGN_PARENT_TOP)
+            addRule(RelativeLayout.ALIGN_PARENT_START)
+        }
+        drawingView.background = ContextCompat.getDrawable(this, traceId)
+
+        drawingView.setOnTouchListener { v, event ->
+            v.parent.requestDisallowInterceptTouchEvent(true)
+            when (event.action and MotionEvent.ACTION_MASK) {
+                MotionEvent.ACTION_UP ->
+                    v.parent.requestDisallowInterceptTouchEvent(false)
+            }
+            false
+        }
+
+        val strokeImageView =  ImageView(this)
+        strokeImageView.setImageResource(strokeId)
+
+        val responseImageView = ImageView(this)
+        responseImageView.setImageResource(R.drawable.ic_checkmark)
+        responseImageView.elevation = 10f
+        responseImageView.visibility = View.INVISIBLE
+
+        val clearButton = Button(this)
+        clearButton.id = View.generateViewId()
+        clearButton.text = "Clear"
+        clearButton.textSize = 12f
+        clearButton.setPadding(10)
+        clearButton.background = ContextCompat.getDrawable(this, R.drawable.dialog_background)
+
+        val checkButton = Button(this)
+        checkButton.id = View.generateViewId()
+        checkButton.text = "Check writing"
+        checkButton.textSize = 12f
+        checkButton.setPadding(10)
+        checkButton.background = ContextCompat.getDrawable(this, R.drawable.dialog_background)
+
+        val progressBar = ProgressBar(this, null, android.R.attr.progressBarStyleSmall)
+        progressBar.isIndeterminate = true
+        progressBar.visibility = View.INVISIBLE
+        progressBar.elevation = 10f
+
+        val outValue = TypedValue()
+        theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            clearButton.setTextColor(resources.getColor(R.color.white, theme))
+            checkButton.setTextColor(resources.getColor(R.color.white, theme))
+            clearButton.foreground = ContextCompat.getDrawable(this, outValue.resourceId)
+            checkButton.foreground = ContextCompat.getDrawable(this, outValue.resourceId)
+        }
+
+        strokeImageView.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT).apply {
+            addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
+            addRule(RelativeLayout.ALIGN_PARENT_END)
+            addRule(RelativeLayout.ALIGN_PARENT_START)
+            addRule(RelativeLayout.BELOW, drawingView.id)
+        }
+
+        clearButton.layoutParams =
+            RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT).apply {
+                addRule(RelativeLayout.ALIGN_PARENT_TOP)
+                addRule(RelativeLayout.ALIGN_PARENT_END)
+                addRule(RelativeLayout.RIGHT_OF, drawingView.id)
+            }
+
+        checkButton.layoutParams =
+            RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT).apply {
+                addRule(RelativeLayout.ALIGN_PARENT_END)
+                addRule(RelativeLayout.RIGHT_OF, drawingView.id)
+                addRule(RelativeLayout.ALIGN_BOTTOM, drawingView.id)
+                addRule(RelativeLayout.BELOW, clearButton.id)
+            }
+
+        progressBar.layoutParams = RelativeLayout.LayoutParams(50, 50).apply {
+            addRule(RelativeLayout.ALIGN_BOTTOM, checkButton.id)
+            addRule(RelativeLayout.ALIGN_START, checkButton.id)
+            setMargins(10, 0, 0, 10)
+        }
+
+        responseImageView.layoutParams = RelativeLayout.LayoutParams(50, 50).apply {
+            addRule(RelativeLayout.ALIGN_BOTTOM, checkButton.id)
+            addRule(RelativeLayout.ALIGN_START, checkButton.id)
+            setMargins(10, 0, 0, 10)
+        }
+
+        clearButton.setOnClickListener {
+            drawingView.clearDrawing()
+        }
+
+        checkButton.setOnClickListener {
+            if (!drawingView.checkIfEmpty()) {
+                progressBar.visibility = View.VISIBLE
+                drawingView.disableDrawing()
+                GlobalScope.launch {
+                    if (drawingView.isDrawingCorrect(kana.letter, progressBar)) {
+                        runOnUiThread {
+                            responseImageView.alpha = 1f
+                            responseImageView.setImageResource(R.drawable.ic_checkmark)
+                            responseImageView.imageTintList = ColorStateList.valueOf(
+                                ContextCompat.getColor(
+                                    this@LessonActivity,
+                                    R.color.lime
+                                )
+                            )
+                            responseImageView.visibility = View.VISIBLE
+                            drawingView.clearDrawing()
+                            responseImageView.animate().alpha(0f).setStartDelay(1000L)
+                                .withEndAction {
+                                    drawingView.enableDrawing()
+                                }.duration = 300
+                        }
+                    } else {
+                        runOnUiThread {
+                            responseImageView.alpha = 1f
+                            responseImageView.setImageResource(R.drawable.ic_x)
+                            responseImageView.imageTintList = ColorStateList.valueOf(
+                                ContextCompat.getColor(
+                                    this@LessonActivity,
+                                    R.color.wrong_answer
+                                )
+                            )
+                            responseImageView.visibility = View.VISIBLE
+                            drawingView.clearDrawing()
+                            responseImageView.animate().alpha(0f).setStartDelay(1000L)
+                                .withEndAction {
+                                    drawingView.enableDrawing()
+                                }.duration = 300
+                        }
+                    }
+                }
+            } else {
+                Toast.makeText(this, "Please write something", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        relativeLayout.addView(progressBar)
+        relativeLayout.addView(responseImageView)
+        relativeLayout.addView(strokeImageView)
+        relativeLayout.addView(checkButton)
+        relativeLayout.addView(clearButton)
+        relativeLayout.addView(drawingView)
     }
 
     private fun playAudio(letter: String) {
