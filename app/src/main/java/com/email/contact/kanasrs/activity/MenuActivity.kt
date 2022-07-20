@@ -93,7 +93,10 @@ class MenuActivity : AppCompatActivity() {
 
         installSplashScreen()
 
-        if (1 == 2) {
+        val sharedPref =
+            getSharedPreferences(getString(R.string.pref_key), Context.MODE_PRIVATE)
+
+        if (sharedPref.getBoolean("needsToCompleteIntro", true)) {
             startActivity(Intent(this, KanaIntroActivity::class.java))
         } else {
 
