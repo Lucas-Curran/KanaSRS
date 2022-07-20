@@ -1,6 +1,6 @@
 # KanaSRS
 
-![app_banner](https://user-images.githubusercontent.com/74155090/179695638-b08e1bd6-ed88-4a16-a9ae-0799c2ad079c.png)
+![app_banner](https://user-images.githubusercontent.com/74155090/179920037-ae562a12-f5f7-4f61-ae3d-3851ad1d32ee.png)
 
 ![kanasrs_logo](https://user-images.githubusercontent.com/74155090/174512418-c583bf20-3f9f-48b3-b3d8-f6ec38889ac9.png)
 
