@@ -1,5 +1,6 @@
 package com.email.contact.kanasrs.activity
 
+import android.R.attr
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
@@ -10,8 +11,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +23,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.RoundedBitmapDrawable
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.core.text.bold
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -482,6 +483,7 @@ class WritingActivity : AppCompatActivity() {
 
         val view = LayoutInflater.from(this).inflate(R.layout.wrong_writing_dialog, null)
         val dialog = BottomSheetDialog(this, R.style.BottomDialogTheme)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(view)
         dialog.show()
 
@@ -500,6 +502,24 @@ class WritingActivity : AppCompatActivity() {
             .append(":")
 
         view.findViewById<TextView>(R.id.correctAnswerTextView).text = correctString
+
+        val wrongImages = drawingView.getWrongImages().toMutableList()
+        val roundedImages = mutableListOf<RoundedBitmapDrawable>()
+
+        for (bitmap in wrongImages) {
+            val roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(
+                resources, bitmap
+            )
+            val roundPx = bitmap.width.toFloat() * 0.1f
+            roundedBitmapDrawable.cornerRadius = roundPx
+            roundedImages.add(roundedBitmapDrawable)
+        }
+
+        view.findViewById<ImageView>(R.id.wrongImageOne).setImageDrawable(roundedImages[0])
+        view.findViewById<ImageView>(R.id.wrongImageTwo).setImageDrawable(roundedImages[1])
+        view.findViewById<ImageView>(R.id.wrongImageThree).setImageDrawable(roundedImages[2])
+
+        drawingView.clearWrongImages()
 
         val correctWebStroke = view.findViewById<WebView>(R.id.correctWritingWebView)
         correctWebStroke.settings.javaScriptEnabled = true

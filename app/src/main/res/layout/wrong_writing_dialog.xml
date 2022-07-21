@@ -1,102 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/dialog_background">
-
-    <TextView
-        android:id="@+id/correctAnswerTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="15dp"
-        android:text="Here is how to write a:"
-        android:textSize="30sp"
-        android:gravity="center"
-        android:textColor="@color/white"/>
-
-    <WebView
-        android:id="@+id/correctWritingWebView"
-        android:layout_width="200dp"
-        android:layout_height="150dp"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toBottomOf="@id/correctAnswerTextView"/>
-
-    <TextView
-        android:id="@+id/practiceButton"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/correctWritingWebView"
-        app:layout_constraintTop_toTopOf="@id/correctWritingWebView"
-        app:layout_constraintBottom_toBottomOf="@id/correctWritingWebView"
-        android:background="@drawable/kana_stats_circle"
-        android:foreground="@drawable/audio_ripple"
-        android:text="Practice"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/black"
-        android:textSize="18sp"
-        android:gravity="center"/>
-
-    <ImageView
-        android:id="@+id/correctStrokeImage"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="10dp"
-        android:src="@drawable/a_stroke"
-        app:layout_constraintTop_toBottomOf="@id/correctWritingWebView"/>
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/buttonsLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/correctStrokeImage">
+        android:background="@color/cardview_dark_background"
+        app:layout_constraintBottom_toTopOf="@id/mainInfoLayout">
+
+        <ImageView
+            android:id="@+id/wrongImageOne"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_x"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:id="@+id/wrongImageTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_x"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:id="@+id/wrongImageThree"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_x"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainInfoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/dialog_background"
+        tools:ignore="WebViewLayout">
 
         <TextView
-            android:id="@+id/overrideButton"
+            android:id="@+id/correctAnswerTextView"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:background="@drawable/override_button_background"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:gravity="center"
-            android:text="Override"
-            android:textColor="@color/sensei_gold"
+            android:text="Here is how to write a:"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <WebView
+            android:id="@+id/correctWritingWebView"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/correctAnswerTextView" />
+
+        <TextView
+            android:id="@+id/practiceButton"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/kana_stats_circle"
+            android:backgroundTint="@color/black"
+            android:foreground="@drawable/audio_ripple"
+            android:gravity="center"
+            android:text="Practice"
+            android:textColor="@color/white"
             android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/correctWritingWebView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/correctWritingWebView"
             app:layout_constraintTop_toTopOf="@id/correctWritingWebView" />
 
-        <TextView
-            android:id="@+id/moveOnButton"
+        <ImageView
+            android:id="@+id/correctStrokeImage"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="100dp"
             android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/custom_button"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:text="Next"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:backgroundTint="@color/wrong_answer"
+            android:src="@drawable/a_stroke"
+            app:layout_constraintTop_toBottomOf="@id/correctWritingWebView" />
+
+        <LinearLayout
+            android:id="@+id/buttonsLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/responseEditText" />
+            app:layout_constraintTop_toBottomOf="@id/correctStrokeImage">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/overrideButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/override_button_background"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="Override"
+                android:textColor="@color/sensei_gold"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/correctWritingWebView"
+                app:layout_constraintTop_toTopOf="@id/correctWritingWebView" />
+
+            <TextView
+                android:id="@+id/moveOnButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/custom_button"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="Next"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:backgroundTint="@color/wrong_answer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/responseEditText" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

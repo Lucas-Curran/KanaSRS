@@ -9,6 +9,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import com.email.contact.kanasrs.R
 import kotlinx.coroutines.*
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -31,6 +33,8 @@ class DrawingView(var c: Context) : View(c) {
     private val mBitmapPaint: Paint = Paint(Paint.DITHER_FLAG)
     private val circlePaint: Paint = Paint()
     private val circlePath: Path = Path()
+
+    private var wrongImages = mutableListOf<Bitmap>()
 
     private var canDraw = true
 
@@ -181,6 +185,7 @@ class DrawingView(var c: Context) : View(c) {
 
                     //For now, hiragana ki and katakana ki get mixed up
                     if (data[0].contains("キ") && kanaLetter == "き" || data[0].contains("き") && kanaLetter == "キ") {
+                        clearWrongImages()
                         continuation.resume(true) {
                             Log.e("MLError", it.stackTraceToString())
                         }
@@ -189,10 +194,12 @@ class DrawingView(var c: Context) : View(c) {
 
                     //Make sure response isn't too long so they can't get a false positive
                     if (data[0].contains(kanaLetter) && data[0].length < 5) {
+                        clearWrongImages()
                         continuation.resume(true) {
                             Log.e("MLError", it.stackTraceToString())
                         }
                     } else {
+                        wrongImages.add(newBitmap)
                         continuation.resume(false) {
                             Log.e("MLError", it.stackTraceToString())
                         }
@@ -210,6 +217,14 @@ class DrawingView(var c: Context) : View(c) {
 
             })
         }
+
+    fun getWrongImages(): List<Bitmap> {
+        return wrongImages
+    }
+
+    fun clearWrongImages() {
+        wrongImages.clear()
+    }
 
     fun setStrokeWidth(width: Float) {
         mPaint?.strokeWidth = width
