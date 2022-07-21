@@ -237,7 +237,7 @@
         android:layout_height="150dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/writing_submit_selector"
-        android:text="Done"
+        android:text="Check"
         android:textSize="18sp"
         app:backgroundTint="@null"
         android:elevation="10dp"

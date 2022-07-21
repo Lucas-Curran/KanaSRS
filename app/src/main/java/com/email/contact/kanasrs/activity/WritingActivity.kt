@@ -2,6 +2,7 @@ package com.email.contact.kanasrs.activity
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -9,11 +10,15 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -157,7 +162,11 @@ class WritingActivity : AppCompatActivity() {
         submitWriting.setOnClickListener {
 
             if (!isInternetAvailable(this)) {
-                Toast.makeText(this, "Error: please check your internet connection", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Error: please check your internet connection",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
 
@@ -169,71 +178,8 @@ class WritingActivity : AppCompatActivity() {
                 GlobalScope.launch {
                     val kana = kanaList[0]
                     if (drawingView.isDrawingCorrect(kana.letter!!, loadResultBar)) {
-
                         runOnUiThread {
-
-                            correctAnimation.playAnimation()
-
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                val animation = ObjectAnimator.ofInt(writingProgress, "progress", writingProgress.progress, writingProgress.progress+100)
-                                animation.duration = 1000
-                                animation.interpolator = DecelerateInterpolator()
-                                animation.start()
-                            } else {
-                                writingProgress.progress = correctReviewAnswers.size
-                            }
-
-                            kanaList.remove(kana)
-
-                            if (!incorrectReviewAnswers.contains(kana)) {
-
-                                calculateNextReviewTime(kana, correct = true)
-                                correctReviewAnswers.add(kana)
-
-                                var levelText = ""
-                                var color = 0
-
-                                when (kana.level) {
-                                    1, 2 -> {
-                                        levelText = "Rookie"
-                                        color = R.color.rookie_pink
-                                    }
-                                    3 -> {
-                                        levelText = "Amateur"
-                                        color = R.color.amateur_purple
-                                    }
-                                    4 -> {
-                                        levelText = "Expert"
-                                        color = R.color.expert_blue
-                                    }
-                                    5 -> {
-                                        levelText = "Master"
-                                        color = R.color.master_blue
-                                    }
-                                    6 -> {
-                                        levelText = "Sensei"
-                                        color = R.color.sensei_gold
-                                    }
-                                }
-
-                                arrowIndicator.setImageResource(R.drawable.ic_up_arrow)
-                                newLevelTextView.text = levelText
-
-                                newLevelLayout.backgroundTintList =
-                                    AppCompatResources.getColorStateList(
-                                        this@WritingActivity,
-                                        color
-                                    )
-                                newLevelLayout.visibility = View.VISIBLE
-                                newLevelLayout.alpha = 1F
-                            } else {
-                                arrowIndicator.setImageResource(R.drawable.ic_checkmark)
-                                newLevelTextView.text = "Corrected!"
-                                newLevelLayout.backgroundTintList = AppCompatResources.getColorStateList(this@WritingActivity, android.R.color.darker_gray)
-                                newLevelLayout.visibility = View.VISIBLE
-                                newLevelLayout.alpha = 1F
-                            }
-
+                            correctAnswer(kana)
                             nextKana()
                         }
                     } else {
@@ -253,32 +199,8 @@ class WritingActivity : AppCompatActivity() {
                                     drawingView.clearDrawing()
                                 }
                                 3 -> {
-                                    if (!incorrectReviewAnswers.contains(kana)) {
-                                        incorrectReviewAnswers.add(kana)
-                                        calculateNextReviewTime(kana, correct = false)
-                                        val levelText: String = when (kana.level) {
-                                            1, 2 -> "Rookie"
-                                            3 -> "Amateur"
-                                            4 -> "Expert"
-                                            5 -> "Master"
-                                            6 -> "Sensei"
-                                            else -> "Error"
-                                        }
-
-                                        arrowIndicator.setImageResource(R.drawable.ic_down_arrow)
-                                        newLevelTextView.text = levelText
-
-                                        newLevelLayout.backgroundTintList = AppCompatResources.getColorStateList(this@WritingActivity, R.color.wrong_answer)
-                                        newLevelLayout.visibility = View.VISIBLE
-                                        newLevelLayout.alpha = 1F
-                                    }
-                                    if (kanaList.size > 1) {
-                                        val newKanaPosition = Random.nextInt(1, kanaList.size)
-                                        kanaList.remove(kana)
-                                        kanaList.add(newKanaPosition, kana)
-                                    }
+                                    showIncorrectDialog(kana)
                                     wrongImageThree.playAnimation()
-                                    showIncorrectDialog(kanaList[0])
                                     imagesAnimatedList[2] = true
                                 }
                             }
@@ -418,7 +340,8 @@ class WritingActivity : AppCompatActivity() {
             finishLayout.visibility = View.VISIBLE
 
             val finishButton = finishLayout.findViewById<MaterialButton>(R.id.finishButton)
-            finishButton.background = ContextCompat.getDrawable(this, R.drawable.extra_button_selector)
+            finishButton.background =
+                ContextCompat.getDrawable(this, R.drawable.extra_button_selector)
             finishButton.setOnClickListener {
                 startActivity(Intent(this, MenuActivity::class.java))
                 finish()
@@ -437,8 +360,10 @@ class WritingActivity : AppCompatActivity() {
 
             correctRecyclerView.layoutManager = LinearLayoutManager(this)
             incorrectRecyclerView.layoutManager = LinearLayoutManager(this)
-            correctRecyclerView.adapter = ReviewedKanaAdapter(correctReviewAnswers, this, correct = true, isWriting = true)
-            incorrectRecyclerView.adapter = ReviewedKanaAdapter(incorrectReviewAnswers, this, correct = false, isWriting = true)
+            correctRecyclerView.adapter =
+                ReviewedKanaAdapter(correctReviewAnswers, this, correct = true, isWriting = true)
+            incorrectRecyclerView.adapter =
+                ReviewedKanaAdapter(incorrectReviewAnswers, this, correct = false, isWriting = true)
             correctRecyclerView.layoutAnimation.animation.startOffset = 1500L
             incorrectRecyclerView.layoutAnimation.animation.startOffset = 1500L
 
@@ -451,31 +376,173 @@ class WritingActivity : AppCompatActivity() {
         }
     }
 
+    private fun incorrectAnswer(kana: Kana) {
+        if (!incorrectReviewAnswers.contains(kana)) {
+            incorrectReviewAnswers.add(kana)
+            calculateNextReviewTime(kana, correct = false)
+            val levelText: String = when (kana.level) {
+                1, 2 -> "Rookie"
+                3 -> "Amateur"
+                4 -> "Expert"
+                5 -> "Master"
+                6 -> "Sensei"
+                else -> "Error"
+            }
+
+            arrowIndicator.setImageResource(R.drawable.ic_down_arrow)
+            newLevelTextView.text = levelText
+
+            newLevelLayout.backgroundTintList =
+                AppCompatResources.getColorStateList(this@WritingActivity, R.color.wrong_answer)
+            newLevelLayout.visibility = View.VISIBLE
+            newLevelLayout.alpha = 1F
+        }
+
+        if (kanaList.size > 1) {
+            val newKanaPosition = Random.nextInt(1, kanaList.size)
+            kanaList.remove(kana)
+            kanaList.add(newKanaPosition, kana)
+        }
+    }
+
+    private fun correctAnswer(kana: Kana) {
+        correctAnimation.playAnimation()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val animation = ObjectAnimator.ofInt(
+                writingProgress,
+                "progress",
+                writingProgress.progress,
+                writingProgress.progress + 100
+            )
+            animation.duration = 1000
+            animation.interpolator = DecelerateInterpolator()
+            animation.start()
+        } else {
+            writingProgress.progress = correctReviewAnswers.size
+        }
+
+        kanaList.remove(kana)
+
+        if (!incorrectReviewAnswers.contains(kana)) {
+
+            calculateNextReviewTime(kana, correct = true)
+            correctReviewAnswers.add(kana)
+
+            var levelText = ""
+            var color = 0
+
+            when (kana.level) {
+                1, 2 -> {
+                    levelText = "Rookie"
+                    color = R.color.rookie_pink
+                }
+                3 -> {
+                    levelText = "Amateur"
+                    color = R.color.amateur_purple
+                }
+                4 -> {
+                    levelText = "Expert"
+                    color = R.color.expert_blue
+                }
+                5 -> {
+                    levelText = "Master"
+                    color = R.color.master_blue
+                }
+                6 -> {
+                    levelText = "Sensei"
+                    color = R.color.sensei_gold
+                }
+            }
+
+            arrowIndicator.setImageResource(R.drawable.ic_up_arrow)
+            newLevelTextView.text = levelText
+
+            newLevelLayout.backgroundTintList =
+                AppCompatResources.getColorStateList(
+                    this@WritingActivity,
+                    color
+                )
+            newLevelLayout.visibility = View.VISIBLE
+            newLevelLayout.alpha = 1F
+        } else {
+            arrowIndicator.setImageResource(R.drawable.ic_checkmark)
+            newLevelTextView.text = "Corrected!"
+            newLevelLayout.backgroundTintList = AppCompatResources.getColorStateList(
+                this@WritingActivity,
+                android.R.color.darker_gray
+            )
+            newLevelLayout.visibility = View.VISIBLE
+            newLevelLayout.alpha = 1F
+        }
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
     private fun showIncorrectDialog(kana: Kana) {
-        val view = LayoutInflater.from(this).inflate(R.layout.wrong_answer_dialog, null)
+
+        val view = LayoutInflater.from(this).inflate(R.layout.wrong_writing_dialog, null)
         val dialog = BottomSheetDialog(this, R.style.BottomDialogTheme)
+        dialog.setContentView(view)
+        dialog.show()
+
+        val romaji = kanaConverter.hiraganaToRomaji(letterToDraw.text.toString())
+        val colorizedText =
+            romaji?.let {
+                romaji.colorizeText(
+                    it,
+                    ContextCompat.getColor(applicationContext, R.color.lime)
+                )
+            }
 
         val correctString = SpannableStringBuilder()
-            .append("The correct answer is: a")
+            .append("Here is how to write ")
+            .bold { append(colorizedText) }
+            .append(":")
 
         view.findViewById<TextView>(R.id.correctAnswerTextView).text = correctString
 
-        view.findViewById<TextView>(R.id.moreInfoTextView).setOnClickListener {
+        val correctWebStroke = view.findViewById<WebView>(R.id.correctWritingWebView)
+        correctWebStroke.settings.javaScriptEnabled = true
+        correctWebStroke.webViewClient = WebViewClient()
+        correctWebStroke.loadUrl(kana.gif)
+        correctWebStroke.settings.loadWithOverviewMode = true
+        correctWebStroke.settings.useWideViewPort = true
+
+        val strokeId = if (kana.isHiragana) {
+            resources.getIdentifier(
+                "${kanaConverter.hiraganaToRomaji(kana.letter!!)}_stroke",
+                "drawable",
+                packageName
+            )
+        } else {
+            resources.getIdentifier(
+                "${kanaConverter.hiraganaToRomaji(kana.letter!!)}_stroke_k",
+                "drawable",
+                packageName
+            )
+        }
+
+        view.findViewById<ImageView>(R.id.correctStrokeImage).setImageResource(strokeId)
+
+        view.findViewById<TextView>(R.id.overrideButton).setOnClickListener {
+            correctAnswer(kana)
+            dialog.dismiss()
+        }
+
+        view.findViewById<TextView>(R.id.practiceButton).setOnClickListener {
             val kanaInfo = KanaInfoView(this, kana, true)
             kanaInfo.setReviewToGone()
             kanaInfo.show()
         }
 
         view.findViewById<TextView>(R.id.moveOnButton).setOnClickListener {
+            incorrectAnswer(kana)
             dialog.dismiss()
         }
 
         dialog.setOnDismissListener {
             nextKana()
         }
-
-        dialog.setContentView(view)
-        dialog.show()
     }
 
 }
