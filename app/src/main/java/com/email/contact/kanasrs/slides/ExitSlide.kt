@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.email.contact.kanasrs.R
 
-class FinalIntroSlide : Fragment() {
+class ExitSlide : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -17,8 +17,8 @@ class FinalIntroSlide : Fragment() {
     }
 
     companion object {
-        fun newInstance() : FinalIntroSlide {
-            return FinalIntroSlide()
+        fun newInstance() : ExitSlide {
+            return ExitSlide()
         }
     }
 }

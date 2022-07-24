@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.email.contact.kanasrs.R
 
-class ThirdIntroSlide : Fragment() {
+class HirganaSlide : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -17,8 +17,8 @@ class ThirdIntroSlide : Fragment() {
     }
 
     companion object {
-        fun newInstance() : ThirdIntroSlide {
-            return ThirdIntroSlide()
+        fun newInstance() : HirganaSlide {
+            return HirganaSlide()
         }
     }
 }

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.email.contact.kanasrs.R
 
-class SecondIntroSlide : Fragment() {
+class ExplainSlide : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -16,8 +16,8 @@ class SecondIntroSlide : Fragment() {
     ): View? = inflater.inflate(R.layout.fragment_second_intro_slide, container, false)
 
     companion object {
-        fun newInstance() : SecondIntroSlide {
-            return SecondIntroSlide()
+        fun newInstance() : ExplainSlide {
+            return ExplainSlide()
         }
     }
 }

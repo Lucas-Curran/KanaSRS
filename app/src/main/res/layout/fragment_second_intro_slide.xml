@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/back_slide2"
-    tools:context=".slides.SecondIntroSlide">
+    tools:context=".slides.ExplainSlide">
 
     <View
         android:layout_width="match_parent"

@@ -9,7 +9,7 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.email.contact.kanasrs.R
 
-class FirstIntroSlide : Fragment() {
+class IntroSlide : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,8 +23,8 @@ class FirstIntroSlide : Fragment() {
     }
 
     companion object {
-        fun newInstance() : FirstIntroSlide {
-            return FirstIntroSlide()
+        fun newInstance() : IntroSlide {
+            return IntroSlide()
         }
     }
 }
