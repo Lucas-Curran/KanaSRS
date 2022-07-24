@@ -5,10 +5,7 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.email.contact.kanasrs.R
-import com.email.contact.kanasrs.slides.ExitSlide
-import com.email.contact.kanasrs.slides.IntroSlide
-import com.email.contact.kanasrs.slides.ExplainSlide
-import com.email.contact.kanasrs.slides.HirganaSlide
+import com.email.contact.kanasrs.slides.*
 import com.github.appintro.AppIntro2
 import com.github.appintro.AppIntroPageTransformerType
 
@@ -18,7 +15,9 @@ class KanaIntroActivity : AppIntro2() {
 
         addSlide(IntroSlide.newInstance())
         addSlide(ExplainSlide.newInstance())
-        addSlide(HirganaSlide.newInstance())
+        addSlide(HiraganaSlide.newInstance())
+        addSlide(KatakanaSlide.newInstance())
+        addSlide(KanjiSlide.newInstance())
         addSlide(ExitSlide.newInstance())
 
         setIndicatorColor(

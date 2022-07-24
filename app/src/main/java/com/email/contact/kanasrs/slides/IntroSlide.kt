@@ -15,7 +15,7 @@ class IntroSlide : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_first_intro_slide, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_intro_slide, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

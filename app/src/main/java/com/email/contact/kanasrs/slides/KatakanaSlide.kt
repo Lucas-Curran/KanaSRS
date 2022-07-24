@@ -7,18 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import com.email.contact.kanasrs.R
 
-class ExitSlide : Fragment() {
+class KatakanaSlide : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_final_slide, container, false)
+        return inflater.inflate(R.layout.fragment_katakana_slide, container, false)
     }
 
     companion object {
-        fun newInstance() : ExitSlide {
-            return ExitSlide()
+        fun newInstance() : KatakanaSlide {
+            return KatakanaSlide()
         }
     }
 }
