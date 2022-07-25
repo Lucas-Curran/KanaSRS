@@ -14,10 +14,8 @@ class KanaIntroActivity : AppIntro2() {
         super.onCreate(savedInstanceState)
 
         addSlide(IntroSlide.newInstance())
+        addSlide(TransitionSlide.newInstance())
         addSlide(ExplainSlide.newInstance())
-        addSlide(HiraganaSlide.newInstance())
-        addSlide(KatakanaSlide.newInstance())
-        addSlide(KanjiSlide.newInstance())
         addSlide(ExitSlide.newInstance())
 
         setIndicatorColor(
