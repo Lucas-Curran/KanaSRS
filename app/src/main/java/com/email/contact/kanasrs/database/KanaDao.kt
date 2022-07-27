@@ -44,6 +44,21 @@ interface KanaDao {
     @Query("SELECT * FROM kana WHERE level = 6")
     fun getSenseiKana(): List<Kana>
 
+    @Query("SELECT * FROM kana WHERE writingLevel = 1 or writingLevel = 2")
+    fun rookieWritingKana(): List<Kana>
+
+    @Query("SELECT * FROM kana WHERE writingLevel = 3")
+    fun amateurWritingKana(): List<Kana>
+
+    @Query("SELECT * FROM kana WHERE writingLevel = 4")
+    fun expertWritingKana(): List<Kana>
+
+    @Query("SELECT * FROM kana WHERE writingLevel = 5")
+    fun masterWritingKana(): List<Kana>
+
+    @Query("SELECT * FROM kana WHERE writingLevel = 6")
+    fun senseiWritingKana(): List<Kana>
+
     @Insert
     fun insertAll(vararg kana: Kana)
 
