@@ -10,10 +10,7 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
-import android.view.Menu
-import android.view.MenuItem
-import android.view.MotionEvent
-import android.view.View
+import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +31,7 @@ import com.email.contact.kanasrs.util.Utilities.Companion.colorizeText
 import com.email.contact.kanasrs.util.Utilities.Companion.disable
 import com.email.contact.kanasrs.util.Utilities.Companion.formatTime
 import com.email.contact.kanasrs.util.Utilities.Companion.reviewApp
+import com.google.android.material.tabs.TabLayout
 
 class MenuActivity : AppCompatActivity() {
 
@@ -66,6 +64,8 @@ class MenuActivity : AppCompatActivity() {
     private var kanaToWrite = ArrayList<Kana>()
     private var levelsArray = ArrayList<View>()
     private var levelsItemArray = IntArray(5)
+
+    private var writingLevelsArray = IntArray(5)
 
     private val ROOKIE = 0
     private val AMATEUR = 1
@@ -189,7 +189,7 @@ class MenuActivity : AppCompatActivity() {
             levelsArray.add(sensei)
 
             for (kana in db.kanaDao().getKana()) {
-                if (kana.level != null) {
+                if (kana.level != null && kana.writingLevel != null) {
                     when (kana.level) {
                         1, 2 -> levelsItemArray[ROOKIE] += 1
                         3 -> levelsItemArray[AMATEUR] += 1
@@ -197,24 +197,44 @@ class MenuActivity : AppCompatActivity() {
                         5 -> levelsItemArray[MASTER] += 1
                         6 -> levelsItemArray[SENSEI] += 1
                     }
+                    when (kana.writingLevel) {
+                        1, 2 -> writingLevelsArray[ROOKIE] += 1
+                        3 -> writingLevelsArray[AMATEUR] += 1
+                        4 -> writingLevelsArray[EXPERT] += 1
+                        5 -> writingLevelsArray[MASTER] += 1
+                        6 -> writingLevelsArray[SENSEI] += 1
+                    }
                 }
             }
 
-            for ((index, level) in levelsArray.withIndex()) {
-                val name = level.context.resources.getResourceEntryName(level.id)
-                level.findViewById<TextView>(
-                    resources.getIdentifier(
-                        "${name}NumKanaTextView",
-                        "id",
-                        packageName
-                    )
-                ).text = levelsItemArray[index].toString()
-                level.setOnClickListener {
-                    val intent = Intent(this, KanaGridActivity::class.java)
-                    intent.putExtra("level", name)
-                    startActivity(intent)
-                }
+
+
+            setLevelsFunction(false)
+
+            val tabLayout = levelsLayout.findViewById<TabLayout>(R.id.levelsTabs)
+
+            for (i in 0 until tabLayout.tabCount) {
+                val tab = (tabLayout.getChildAt(0) as ViewGroup).getChildAt(i)
+                val p = tab.layoutParams as ViewGroup.MarginLayoutParams
+                p.setMargins(15, 0, 15, 0)
+                tab.requestLayout()
             }
+
+            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    when (tab?.position) {
+                        0 -> setLevelsFunction(isWriting = false)
+                        1 -> setLevelsFunction(isWriting = true)
+                    }
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                }
+
+            })
 
             showMoreArrow.setOnClickListener {
 
@@ -428,6 +448,39 @@ class MenuActivity : AppCompatActivity() {
             R.id.review -> redirectToPlayStore()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setLevelsFunction(isWriting: Boolean) {
+        for ((index, level) in levelsArray.withIndex()) {
+            val name = level.context.resources.getResourceEntryName(level.id)
+            if (isWriting) {
+                level.findViewById<TextView>(
+                    resources.getIdentifier(
+                        "${name}NumKanaTextView",
+                        "id",
+                        packageName
+                    )
+                ).text = writingLevelsArray[index].toString()
+                level.setOnClickListener {
+                    val intent = Intent(this, KanaGridActivity::class.java)
+                    intent.putExtra("writingLevel", name)
+                    startActivity(intent)
+                }
+            } else {
+                level.findViewById<TextView>(
+                    resources.getIdentifier(
+                        "${name}NumKanaTextView",
+                        "id",
+                        packageName
+                    )
+                ).text = levelsItemArray[index].toString()
+                level.setOnClickListener {
+                    val intent = Intent(this, KanaGridActivity::class.java)
+                    intent.putExtra("level", name)
+                    startActivity(intent)
+                }
+            }
+        }
     }
 
     private fun startReviewTimer(kana: Kana) {

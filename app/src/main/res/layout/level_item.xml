@@ -6,6 +6,31 @@
     android:id="@+id/levelItemLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/levelsTabs"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@android:color/transparent"
+        app:tabRippleColor="@null"
+        app:tabMinWidth="80dp"
+        app:tabIndicator="@null"
+        app:tabGravity="center"
+        android:layout_margin="10dp"
+        app:tabIconTint="@color/white"
+        app:tabBackground="@drawable/intro_tab_selector">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_brain"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_pencil"/>
+
+    </com.google.android.material.tabs.TabLayout>
+
     <LinearLayout
         android:id="@+id/rookie"
         android:layout_width="match_parent"
@@ -195,7 +220,5 @@
             android:textSize="30sp" />
 
     </LinearLayout>
-
-
 
 </LinearLayout>
