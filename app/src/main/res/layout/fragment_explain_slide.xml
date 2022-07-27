@@ -4,42 +4,124 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/back_slide2"
-    tools:context=".slides.TransitionSlide">
+    android:background="@drawable/back_slide3"
+    tools:context=".slides.ExplainSlide">
 
-    <View
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/explainTabsLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/slide2_bg"/>
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        app:tabRippleColor="@null"
+        android:background="@android:color/transparent"
+        app:tabTextAppearance="@style/IntroTabText"
+        app:tabMinWidth="100dp"
+        app:tabGravity="center"
+        app:tabBackground="@drawable/intro_tab_selector"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabIndicatorHeight="0dp"
+        app:tabTextColor="@color/white"
+        >
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/hiraganaTab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="あ" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/katakanaTab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ア" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/kanjiTab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="字" />
+
+    </com.google.android.material.tabs.TabLayout>
 
     <TextView
+        android:id="@+id/englishTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Let's start with a quick explanation of how the Japanese alphabet works!"
-        android:textColor="@color/white"
-        android:textSize="30sp"
+        android:layout_marginTop="40dp"
+        android:text="Hiragana"
         android:gravity="center"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:textSize="80sp"
+        android:shadowColor="@color/purple_500"
+        android:shadowDx="8"
+        android:shadowDy="8"
+        android:shadowRadius="1.6"
+        android:textColor="@color/white"
+        android:contentDescription="@string/hiragana_title"
+        app:layout_constraintTop_toBottomOf="@id/explainTabsLayout" />
+
+    <TextView
+        android:id="@+id/japaneseTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ひらがな"
+        android:gravity="center"
+        android:textSize="40sp"
+        android:shadowColor="@color/purple_500"
+        android:shadowDx="8"
+        android:shadowDy="8"
+        android:shadowRadius="1.6"
+        android:textColor="@color/white"
+        android:contentDescription="@string/hiragana_title"
+        app:layout_constraintTop_toBottomOf="@id/englishTitle" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerText"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:text="Hiragana"
+        android:textSize="18sp"
+        android:textColor="@color/white"
         android:background="#50000000"
+        android:nestedScrollingEnabled="true"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
         android:shadowColor="@color/black"
         android:shadowDx="1.5"
         android:shadowDy="1.3"
         android:shadowRadius="1.6"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/japaneseTitle"/>
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:lottie_rawRes="@raw/intro_cat"
-            app:lottie_loop="true"
-            app:lottie_autoPlay="true"
-            app:lottie_speed=".5"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:scaleX="1.8"
-            android:scaleY="1.8"/>
+    <com.tbuonomo.viewpagerdotsindicator.SpringDotsIndicator
+        android:id="@+id/dotsIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewPagerText"
+        app:dampingRatio="0.5"
+        app:dotsColor="@color/pink"
+        app:dotsStrokeColor="@color/black"
+        app:dotsCornerRadius="2dp"
+        app:dotsSize="16dp"
+        app:dotsSpacing="6dp"
+        app:dotsStrokeWidth="2dp"
+        app:stiffness="300" />
+
+    <TextView
+        android:id="@+id/footerJapaneseText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="あ　い　う　え　お"
+        android:gravity="center"
+        android:textSize="40sp"
+        android:shadowColor="@color/purple_500"
+        android:shadowDx="8"
+        android:shadowDy="8"
+        android:shadowRadius="1.6"
+        android:textColor="@color/white"
+        android:contentDescription="@string/hiragana_examples"
+        app:layout_constraintTop_toBottomOf="@id/dotsIndicator"
+        android:layout_marginTop="20dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

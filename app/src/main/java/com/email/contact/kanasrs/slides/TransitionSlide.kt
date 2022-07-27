@@ -13,7 +13,7 @@ class TransitionSlide : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_explain_slide, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_transition_slide, container, false)
 
     companion object {
         fun newInstance() : TransitionSlide {
