@@ -381,7 +381,7 @@ class WritingActivity : AppCompatActivity() {
         if (!incorrectReviewAnswers.contains(kana)) {
             incorrectReviewAnswers.add(kana)
             calculateNextReviewTime(kana, correct = false)
-            val levelText: String = when (kana.level) {
+            val levelText: String = when (kana.writingLevel) {
                 1, 2 -> "Rookie"
                 3 -> "Amateur"
                 4 -> "Expert"
@@ -433,7 +433,7 @@ class WritingActivity : AppCompatActivity() {
             var levelText = ""
             var color = 0
 
-            when (kana.level) {
+            when (kana.writingLevel) {
                 1, 2 -> {
                     levelText = "Rookie"
                     color = R.color.rookie_pink
