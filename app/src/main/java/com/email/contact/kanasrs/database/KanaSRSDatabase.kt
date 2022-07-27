@@ -43,54 +43,6 @@ abstract class KanaSRSDatabase : RoomDatabase() {
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
                 .build()
-
-            // Code below is for manual data entry
-
-//            return Room.databaseBuilder(context, KanaSRSDatabase::class.java, "kanasrs.db")
-//                .addCallback(object : RoomDatabase.Callback() {
-//                    override fun onCreate(db: SupportSQLiteDatabase) {
-//                        super.onCreate(db)
-//                        //pre-populate data
-//                        Executors.newSingleThreadExecutor().execute {
-//                            instance?.let {
-//                                //Create new user, and add fresh kana data to database
-//
-//                                val newUser = User(0)
-//                                it.userDao().insertAll(newUser)
-//                                var id = 0
-//                                for (letter in ReviewActivity.hiraganaList) {
-//                                    val newKana = Kana(
-//                                        id = id,
-//                                        letter = letter,
-//                                        reviewTime = null,
-//                                        level = null,
-//                                        isHiragana = true,
-//                                        hasLearned = false,
-//                                        description = "yes",
-//                                        gif = "yes")
-//                                    it.kanaDao().insertAll(newKana)
-//                                    id++
-//                                }
-//                                for (letter in ReviewActivity.katakanaList) {
-//                                    val newKana = Kana(
-//                                        id = id,
-//                                        letter = letter,
-//                                        reviewTime = null,
-//                                        level = null,
-//                                        isHiragana = false,
-//                                        hasLearned = false,
-//                                        description = "yes",
-//                                        gif = "yes")
-//                                    it.kanaDao().insertAll(newKana)
-//                                    id++
-//                                }
-//                            }
-//                        }
-//                    }
-//                })
-//                .allowMainThreadQueries()
-//                .fallbackToDestructiveMigration()
-//                .build()
         }
 
         fun destroyInstance() {
