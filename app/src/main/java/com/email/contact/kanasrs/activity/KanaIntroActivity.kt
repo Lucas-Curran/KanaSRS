@@ -23,6 +23,7 @@ class KanaIntroActivity : AppIntro2() {
             unselectedIndicatorColor = ContextCompat.getColor(this, android.R.color.darker_gray)
         )
 
+        setSwipeLock(true)
         setTransformer(AppIntroPageTransformerType.Depth)
 
         isWizardMode = true
