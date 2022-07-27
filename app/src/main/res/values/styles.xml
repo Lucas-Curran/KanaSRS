@@ -28,4 +28,9 @@
         <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
         <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
+    <style name="IntroTabText">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">#ffff</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
