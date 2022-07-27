@@ -24,11 +24,34 @@
         as in most languages. There are many styles, so we provide the option to review with variety.
     </string>
 
-    <string name="slide3_description">Hiragana is one of the three character sets, and is one of two
-        phonetic lettering systems. \n\nPhonetic means the characters have no special meaning,
-        but rather make up the basic sounds. \n\nYou will learn the basic 46 letters, with
-        some additional modifications that make up the rest of the sounds.\n\nHiragana is typically
+    <string name="hiragana_intro_1">Hiragana is one of the three character sets, and is one of two
+        phonetic lettering systems.</string>
+    <string name="hiragana_intro_2">Phonetic means the characters have no special meaning,
+        but rather make up the basic sounds.</string>
+    <string name="hiragana_intro_3">You will learn the basic 46 letters, with
+        some additional modifications that make up the rest of the sounds.</string>
+    <string name="hiragana_intro_4">Hiragana is typically
         used for grammatical patterns, as well as some words.</string>
+
+    <string name="katakana_intro_1">Katakana is the second character set, and like hiragana, is also phonetic.</string>
+    <string name="katakana_intro_2">The syllables included in hiragana and katakana are the same,
+        however katakana has different usages.</string>
+    <string name="katakana_intro_3">The most common is that katakana is used for foreign loan words.
+    You will notice Japanese people use a lot of english sounding words, because they do! This includes
+        a lot of scientific words as well.</string>
+    <string name="katakana_intro_4">Katakana also looks really cool, sharp, and modern! Many companies
+    may use katakana for their name, logo, or signs!</string>
+
+    <string name="kanji_intro_1">Kanji is the final character set, and also the biggest! Unlike hiragana
+        and katakana, these characters are not phonetic!</string>
+    <string name="kanji_intro_2">Each character has its own meaning, and corresponds to a word and idea.
+        They can be used on their own, or put together to create different words.</string>
+    <string name="kanji_intro_3">Kanji originates from China, but has long since been imported into Japanese.
+        Hiragana and katakana are much quicker to learn since kanji has
+        thousands of characters to learn, but don\'t be overwhelmed!</string>
+    <string name="kanji_intro_4">This app does not teach kanji, but will work through the kana systems.
+    Bit by bit, the Japanese alphabet will be covered! Remember, it\'s not a marathon! Take your time.</string>
+
     <string name="return_to_menu">Return to menu</string>
     <string name="faq_title">faq title</string>
     <string name="logo">logo</string>
