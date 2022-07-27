@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [User::class, Kana::class], version = 6)
+@Database(entities = [User::class, Kana::class], version = 7)
 abstract class KanaSRSDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
@@ -37,7 +37,6 @@ abstract class KanaSRSDatabase : RoomDatabase() {
 //                    database.execSQL("ALTER TABLE Kana ADD COLUMN totalCorrect INTEGER")
 //                }
 //            }
-
 
             return Room.databaseBuilder(context, KanaSRSDatabase::class.java, "kanasrs.db")
                 .createFromAsset("kanasrs.db")
