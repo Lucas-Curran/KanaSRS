@@ -23,10 +23,16 @@ class KanaGridActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.kanaRecyclerView)
         recyclerView.layoutManager = GridLayoutManager(applicationContext, 2)
-        kanaGridAdapter = KanaGridAdapter(applicationContext)
+        kanaGridAdapter = if (intent.getStringExtra("level") != null) {
+            KanaGridAdapter(applicationContext, false)
+        } else {
+            KanaGridAdapter(applicationContext, true)
+        }
         recyclerView.adapter = kanaGridAdapter
 
         val titleTextView = findViewById<TextView>(R.id.levelTitleTextView)
+
+        val db = KanaSRSDatabase.getInstance(this)
 
         when (intent.getStringExtra("level")) {
             "rookie" -> {
@@ -55,6 +61,38 @@ class KanaGridActivity : AppCompatActivity() {
                 titleTextView.setTextColor(ContextCompat.getColor(this, R.color.sensei_gold))
             }
         }
+
+        when (intent.getStringExtra("writingLevel")) {
+            "rookie" -> {
+                dataList = db.kanaDao().rookieWritingKana().toMutableList()
+                titleTextView.text = "WRITING ROOKIE"
+                titleTextView.setTextColor(ContextCompat.getColor(this, R.color.rookie_pink))
+            }
+            "amateur" -> {
+                dataList = db.kanaDao().amateurWritingKana().toMutableList()
+                titleTextView.text = "WRITING AMATEUR"
+                titleTextView.setTextColor(ContextCompat.getColor(this, R.color.amateur_purple))
+            }
+            "expert" -> {
+                dataList = db.kanaDao().expertWritingKana().toMutableList()
+                titleTextView.text = "WRITING EXPERT"
+                titleTextView.setTextColor(ContextCompat.getColor(this, R.color.expert_blue))
+            }
+            "master" -> {
+                dataList = db.kanaDao().expertWritingKana().toMutableList()
+                titleTextView.text = "WRITING MASTER"
+                titleTextView.setTextColor(ContextCompat.getColor(this, R.color.master_blue))
+            }
+            "sensei" -> {
+                dataList = db.kanaDao().senseiWritingKana().toMutableList()
+                titleTextView.text = "WRITING SENSEI"
+                titleTextView.setTextColor(ContextCompat.getColor(this, R.color.sensei_gold))
+            }
+        }
+
+        intent.removeExtra("level")
+        intent.removeExtra("writingLevel")
+
 
         val closeActivityImage = findViewById<ImageView>(R.id.closeActivityImage)
 
