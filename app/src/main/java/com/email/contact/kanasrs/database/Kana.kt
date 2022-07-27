@@ -22,6 +22,9 @@ data class Kana(
     @ColumnInfo(name = "writingLevel") var writingLevel: Int?,
     @ColumnInfo(name = "totalAnswered") var totalAnswered: Int?,
     @ColumnInfo(name = "totalCorrect") var totalCorrect: Int?,
+    @ColumnInfo(name = "writingTotalAnswered") var writingTotalAnswered: Int?,
+    @ColumnInfo(name = "writingTotalCorrect") var writingTotalCorrect: Int?,
     @ColumnInfo(name = "writingNextReview") var writingReviewTime: Long?,
-    @ColumnInfo(name = "streak", defaultValue = "0") var streak: Int = 0
+    @ColumnInfo(name = "streak", defaultValue = "0") var streak: Int = 0,
+    @ColumnInfo(name = "writingStreak", defaultValue = "0") var writingStreak: Int = 0
 ): Parcelable
