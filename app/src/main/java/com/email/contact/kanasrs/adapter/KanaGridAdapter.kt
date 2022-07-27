@@ -15,7 +15,7 @@ import com.email.contact.kanasrs.R
 import com.email.contact.kanasrs.database.Kana
 
 
-class KanaGridAdapter(var context: Context): RecyclerView.Adapter<KanaGridAdapter.ViewHolder>()  {
+class KanaGridAdapter(var context: Context, val writing: Boolean): RecyclerView.Adapter<KanaGridAdapter.ViewHolder>()  {
 
     var dataList = emptyList<Kana>()
     private lateinit var parent: ViewGroup
@@ -46,7 +46,14 @@ class KanaGridAdapter(var context: Context): RecyclerView.Adapter<KanaGridAdapte
 
         val drawable = (holder.linearLayout.background as GradientDrawable)
         drawable.setStroke(2, AppCompatResources.getColorStateList(context, R.color.white))
-        when (data.level) {
+
+        val level = if (writing) {
+            data.writingLevel!!
+        } else {
+            data.level!!
+        }
+
+        when (level) {
             1, 2 -> drawable.color = AppCompatResources.getColorStateList(context,
                 R.color.rookie_pink
             )
