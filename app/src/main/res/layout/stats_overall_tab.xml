@@ -257,7 +257,35 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/modeTabs"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@android:color/transparent"
+            app:tabRippleColor="@null"
+            app:tabMinWidth="80dp"
+            app:tabIndicator="@null"
+            app:tabGravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:tabIconTint="@color/white"
+            app:tabBackground="@drawable/intro_tab_selector">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_brain"/>
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_pencil"/>
+
+        </com.google.android.material.tabs.TabLayout>
+
         <com.email.contact.kanasrs.custom.DistributionBar
+            android:id="@+id/distributionBar"
             android:layout_width="300dp"
             android:layout_height="30dp"
             android:layout_marginTop="30dp"
@@ -299,7 +327,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_toStartOf="@id/middleText"
-                    android:text="104"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:textSize="50sp"
                     app:layout_constraintBottom_toBottomOf="@id/middleText"
@@ -325,7 +353,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:layout_toStartOf="@id/middleText"
-                    android:text="197"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:textSize="50sp"
                     app:layout_constraintBottom_toBottomOf="@id/middleText"
