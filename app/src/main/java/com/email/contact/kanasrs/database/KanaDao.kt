@@ -17,6 +17,12 @@ interface KanaDao {
     @Query("SELECT SUM(totalAnswered) FROM kana")
     fun sumAnswered(): Int
 
+    @Query("SELECT SUM(writingTotalCorrect) FROM kana")
+    fun sumWritingCorrect(): Int
+
+    @Query("SELECT SUM(writingTotalAnswered) FROM kana")
+    fun sumWritingAnswered(): Int
+
     @Query("SELECT * FROM kana WHERE hasLearned = 1 and isHiragana = 1")
     fun getLearnedHiragana(): List<Kana>
 
