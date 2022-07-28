@@ -233,6 +233,14 @@ class Utilities {
             }
         }
 
+        fun Context.dpToPx(dp: Int): Int {
+            return (dp * resources.displayMetrics.density).toInt()
+        }
+
+        fun Context.pxToDp(px: Int): Int {
+            return (px / resources.displayMetrics.density).toInt()
+        }
+
         fun reviewApp(context: Context, fromActivity: Activity) {
             val manager = FakeReviewManager(context)
             val request = manager.requestReviewFlow()
