@@ -23,39 +23,15 @@ class DistributionBar(context: Context, attrs: AttributeSet?) : View(context, at
     private var savedColor = 0
     private var savedIndex = -1
 
+    private var isWritingMode = false
+
     init {
         paint.style = Paint.Style.FILL
         paint.textSize = 30f
         paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         db = KanaSRSDatabase.getInstance(context)
         total = db.kanaDao().getLearnedHiragana().size.toFloat() + db.kanaDao().getLearnedKatakana().size.toFloat()
-        val rookieKana = db.kanaDao().getRookieKana()
-        val amateurKana = db.kanaDao().getAmateurKana()
-        val expertKana = db.kanaDao().getExpertKana()
-        val masterKana = db.kanaDao().getMasterKana()
-        val senseiKana = db.kanaDao().getSenseiKana()
-
-        if (rookieKana.isNotEmpty()) {
-            levelProportion.add(rookieKana.size / total)
-            levelColors.add(ContextCompat.getColor(context, R.color.rookie_pink))
-        }
-        if (amateurKana.isNotEmpty()) {
-            levelProportion.add(amateurKana.size / total)
-            levelColors.add(ContextCompat.getColor(context, R.color.amateur_purple))
-        }
-        if (expertKana.isNotEmpty()) {
-            levelProportion.add(expertKana.size / total)
-            levelColors.add(ContextCompat.getColor(context, R.color.expert_blue))
-        }
-        if (masterKana.isNotEmpty()) {
-            levelProportion.add(masterKana.size / total)
-            levelColors.add(ContextCompat.getColor(context, R.color.master_blue))
-        }
-        if (senseiKana.isNotEmpty()) {
-            levelProportion.add(senseiKana.size / total)
-            levelColors.add(ContextCompat.getColor(context, R.color.sensei_gold))
-        }
-
+        setToRecall()
     }
 
     @SuppressLint("DrawAllocation")
@@ -147,6 +123,82 @@ class DistributionBar(context: Context, attrs: AttributeSet?) : View(context, at
         }
     }
 
+    fun setToRecall() {
+
+        isWritingMode = false
+
+        val rookieKana = db.kanaDao().getRookieKana()
+        val amateurKana = db.kanaDao().getAmateurKana()
+        val expertKana = db.kanaDao().getExpertKana()
+        val masterKana = db.kanaDao().getMasterKana()
+        val senseiKana = db.kanaDao().getSenseiKana()
+
+        levelProportion.clear()
+        levelColors.clear()
+
+        if (rookieKana.isNotEmpty()) {
+            levelProportion.add(rookieKana.size / total)
+            levelColors.add(ContextCompat.getColor(context, R.color.rookie_pink))
+        }
+        if (amateurKana.isNotEmpty()) {
+            levelProportion.add(amateurKana.size / total)
+            levelColors.add(ContextCompat.getColor(context, R.color.amateur_purple))
+        }
+        if (expertKana.isNotEmpty()) {
+            levelProportion.add(expertKana.size / total)
+            levelColors.add(ContextCompat.getColor(context, R.color.expert_blue))
+        }
+        if (masterKana.isNotEmpty()) {
+            levelProportion.add(masterKana.size / total)
+            levelColors.add(ContextCompat.getColor(context, R.color.master_blue))
+        }
+        if (senseiKana.isNotEmpty()) {
+            levelProportion.add(senseiKana.size / total)
+            levelColors.add(ContextCompat.getColor(context, R.color.sensei_gold))
+        }
+
+        invalidate()
+
+    }
+
+    fun setToWriting() {
+
+        isWritingMode = true
+
+        val rookieKana = db.kanaDao().rookieWritingKana()
+        val amateurKana = db.kanaDao().amateurWritingKana()
+        val expertKana = db.kanaDao().expertWritingKana()
+        val masterKana = db.kanaDao().masterWritingKana()
+        val senseiKana = db.kanaDao().senseiWritingKana()
+
+        levelProportion.clear()
+        levelColors.clear()
+
+        if (rookieKana.isNotEmpty()) {
+            levelProportion.add(rookieKana.size / total)
+            levelColors.add(ContextCompat.getColor(context, R.color.rookie_pink))
+        }
+        if (amateurKana.isNotEmpty()) {
+            levelProportion.add(amateurKana.size / total)
+            levelColors.add(ContextCompat.getColor(context, R.color.amateur_purple))
+        }
+        if (expertKana.isNotEmpty()) {
+            levelProportion.add(expertKana.size / total)
+            levelColors.add(ContextCompat.getColor(context, R.color.expert_blue))
+        }
+        if (masterKana.isNotEmpty()) {
+            levelProportion.add(masterKana.size / total)
+            levelColors.add(ContextCompat.getColor(context, R.color.master_blue))
+        }
+        if (senseiKana.isNotEmpty()) {
+            levelProportion.add(senseiKana.size / total)
+            levelColors.add(ContextCompat.getColor(context, R.color.sensei_gold))
+        }
+
+        invalidate()
+
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (KanaSRSDatabase.getInstance(context).kanaDao().getLearnedHiragana().isEmpty()) {
@@ -183,30 +235,36 @@ class DistributionBar(context: Context, attrs: AttributeSet?) : View(context, at
                         invalidate()
                         for ((index2, color) in levelColors.withIndex()) {
                             if (index == index2) {
+
+                                val levelIntent = if (isWritingMode) {
+                                    "writingLevel"
+                                } else {
+                                    "level"
+                                }
                                 when (color) {
                                     ContextCompat.getColor(context, R.color.rookie_pink) -> {
                                         val intent = Intent(context, KanaGridActivity::class.java)
-                                        intent.putExtra("level", "rookie")
+                                        intent.putExtra(levelIntent, "rookie")
                                         context.startActivity(intent)
                                     }
                                     ContextCompat.getColor(context, R.color.amateur_purple) -> {
                                         val intent = Intent(context, KanaGridActivity::class.java)
-                                        intent.putExtra("level", "amateur")
+                                        intent.putExtra(levelIntent, "amateur")
                                         context.startActivity(intent)
                                     }
                                     ContextCompat.getColor(context, R.color.expert_blue) -> {
                                         val intent = Intent(context, KanaGridActivity::class.java)
-                                        intent.putExtra("level", "expert")
+                                        intent.putExtra(levelIntent, "expert")
                                         context.startActivity(intent)
                                     }
                                     ContextCompat.getColor(context, R.color.master_blue) -> {
                                         val intent = Intent(context, KanaGridActivity::class.java)
-                                        intent.putExtra("level", "master")
+                                        intent.putExtra(levelIntent, "master")
                                         context.startActivity(intent)
                                     }
                                     ContextCompat.getColor(context, R.color.sensei_gold) -> {
                                         val intent = Intent(context, KanaGridActivity::class.java)
-                                        intent.putExtra("level", "sensei")
+                                        intent.putExtra(levelIntent, "sensei")
                                         context.startActivity(intent)
                                     }
                                 }
