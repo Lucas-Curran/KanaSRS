@@ -557,7 +557,7 @@ class ReviewActivity : AppCompatActivity() {
         }
 
         view.findViewById<TextView>(R.id.moreInfoTextView).setOnClickListener {
-            val kanaInfo = KanaInfoView(this, kana, true)
+            val kanaInfo = KanaInfoView(this, kana, true, writingInfo = false)
             kanaInfo.setReviewToGone()
             kanaInfo.show()
         }

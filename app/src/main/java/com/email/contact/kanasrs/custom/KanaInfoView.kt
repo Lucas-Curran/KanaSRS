@@ -42,7 +42,7 @@ import java.text.NumberFormat
 
 
 @SuppressLint("ClickableViewAccessibility")
-class KanaInfoView(val context: Context, val kana: Kana, val showReviewTime: Boolean) {
+class KanaInfoView(val context: Context, val kana: Kana, private val showReviewTime: Boolean, private val writingInfo: Boolean) {
 
     private lateinit var animationIn: Animation
     private lateinit var animationOut: Animation
@@ -89,7 +89,11 @@ class KanaInfoView(val context: Context, val kana: Kana, val showReviewTime: Boo
                     }
                 }
             } else {
-                setTextToLevel()
+                if (writingInfo) {
+                    setTextToWritingLevel()
+                } else {
+                    setTextToLevel()
+                }
             }
 
             val kanaConverter = KanaConverter(false)
@@ -558,6 +562,19 @@ class KanaInfoView(val context: Context, val kana: Kana, val showReviewTime: Boo
         }
         topTextView.text = levelText
         topTextView.setTextColor(ContextCompat.getColor(context, getLevelColor(kana.level!!)))
+    }
+
+    fun setTextToWritingLevel() {
+        val levelText = when (kana.writingLevel) {
+            1, 2 -> "Rookie"
+            3 -> "Amateur"
+            4 -> "Expert"
+            5 -> "Master"
+            6 -> "Sensei"
+            else -> ""
+        }
+        topTextView.text = levelText
+        topTextView.setTextColor(ContextCompat.getColor(context, getLevelColor(kana.writingLevel!!)))
     }
 
     fun setReviewToGone() {
