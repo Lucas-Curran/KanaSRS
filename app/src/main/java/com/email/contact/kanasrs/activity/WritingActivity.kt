@@ -379,8 +379,19 @@ class WritingActivity : AppCompatActivity() {
 
     private fun incorrectAnswer(kana: Kana) {
         if (!incorrectReviewAnswers.contains(kana)) {
+
             incorrectReviewAnswers.add(kana)
             calculateNextReviewTime(kana, correct = false)
+
+            kana.writingStreak = 0
+            if (kana.writingTotalAnswered == null) {
+                kana.writingTotalAnswered = 1
+            } else {
+                kana.writingTotalAnswered = kana.writingTotalAnswered?.plus(1)
+            }
+            KanaSRSDatabase.getInstance(this).kanaDao().updateKana(kana)
+
+
             val levelText: String = when (kana.writingLevel) {
                 1, 2 -> "Rookie"
                 3 -> "Amateur"
@@ -429,6 +440,22 @@ class WritingActivity : AppCompatActivity() {
 
             calculateNextReviewTime(kana, correct = true)
             correctReviewAnswers.add(kana)
+
+            kana.writingStreak += 1
+
+            if (kana.writingTotalCorrect == null) {
+                kana.writingTotalCorrect = 1
+                if (kana.writingTotalAnswered == null) {
+                    kana.writingTotalAnswered = 1
+                } else {
+                    kana.writingTotalAnswered = kana.writingTotalAnswered?.plus(1)
+                }
+            } else {
+                kana.writingTotalCorrect = kana.writingTotalCorrect?.plus(1)
+                kana.writingTotalAnswered = kana.writingTotalAnswered?.plus(1)
+            }
+
+            KanaSRSDatabase.getInstance(this).kanaDao().updateKana(kana)
 
             var levelText = ""
             var color = 0
@@ -550,7 +577,7 @@ class WritingActivity : AppCompatActivity() {
         }
 
         view.findViewById<TextView>(R.id.practiceButton).setOnClickListener {
-            val kanaInfo = KanaInfoView(this, kana, true)
+            val kanaInfo = KanaInfoView(this, kana, showReviewTime = true, writingInfo = true)
             kanaInfo.setReviewToGone()
             kanaInfo.show()
         }
