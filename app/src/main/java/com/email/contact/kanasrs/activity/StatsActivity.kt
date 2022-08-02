@@ -265,7 +265,7 @@ class StatsActivity : AppCompatActivity() {
         for (i in 0 until modeTabs.tabCount) {
             val tab = (modeTabs.getChildAt(0) as ViewGroup).getChildAt(i)
             val p = tab.layoutParams as ViewGroup.MarginLayoutParams
-            p.setMargins(15, 0, 15, 0)
+            p.setMargins(15, 0, 0, 0)
             tab.requestLayout()
         }
 
