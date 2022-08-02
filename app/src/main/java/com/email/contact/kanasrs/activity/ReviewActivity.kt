@@ -559,6 +559,9 @@ class ReviewActivity : AppCompatActivity() {
         view.findViewById<TextView>(R.id.moreInfoTextView).setOnClickListener {
             val kanaInfo = KanaInfoView(this, kana, true, writingInfo = false)
             kanaInfo.setReviewToGone()
+            if (quiz) {
+                kanaInfo.hideExtraStats()
+            }
             kanaInfo.show()
         }
         view.findViewById<TextView>(R.id.moveOnButton).setOnClickListener {
@@ -581,9 +584,11 @@ class ReviewActivity : AppCompatActivity() {
         kana.hasLearned = true
         kana.level = 1
         kana.writingLevel = 1
-        val oneMinute = 1000 * 60
+        //val oneMinute = 1000 * 60
+        val millisecondsInHours = 1000L * 60 * 60
         val now = System.currentTimeMillis()
-        val nextPracticeDate = now + oneMinute * kana.level!!
+        val nextPracticeDate = now + millisecondsInHours * 8
+        //val nextPracticeDate = now + oneMinute
         kana.reviewTime = nextPracticeDate
         kana.writingReviewTime = nextPracticeDate
         KanaSRSDatabase.getInstance(this).kanaDao().updateKana(kana)
@@ -614,25 +619,25 @@ class ReviewActivity : AppCompatActivity() {
         val oneMinute = 1000 * 60L
         val millisecondsInHours = 1000L * 60 * 60
         val millisecondsInDays = millisecondsInHours * 24
-//        return when(level) {
-//            1 -> (millisecondsInHours * 8) // Level 1 is 8 hours after review
-//            2 -> (millisecondsInDays * 1) // Level 2 is 1 day after review
-//            3 -> (millisecondsInDays * 3) // Level 3 is 3 days after review
-//            4 -> (millisecondsInDays * 7) // Level 4 is 7 days (1 week) after review
-//            5 -> (millisecondsInDays * 14) // Level 5 is 14 day (2 weeks) after review
-//            6 -> (millisecondsInDays * 30) // Level 6 is 30 days (1 month) after review
-//            else -> 0
-//        }
-        //For debugging
-        return when (level) {
-            1 -> oneMinute * 1
-            2 -> oneMinute * 2
-            3 -> oneMinute * 3
-            4 -> oneMinute * 4
-            5 -> oneMinute * 5
-            6 -> oneMinute * 6
+        return when(level) {
+            1 -> (millisecondsInHours * 8) // Level 1 is 8 hours after review
+            2 -> (millisecondsInDays * 1) // Level 2 is 1 day after review
+            3 -> (millisecondsInDays * 3) // Level 3 is 3 days after review
+            4 -> (millisecondsInDays * 7) // Level 4 is 7 days (1 week) after review
+            5 -> (millisecondsInDays * 14) // Level 5 is 14 day (2 weeks) after review
+            6 -> (millisecondsInDays * 30) // Level 6 is 30 days (1 month) after review
             else -> 0
         }
+        //For debugging
+//        return when (level) {
+//            1 -> oneMinute * 1
+//            2 -> oneMinute * 2
+//            3 -> oneMinute * 3
+//            4 -> oneMinute * 4
+//            5 -> oneMinute * 5
+//            6 -> oneMinute * 6
+//            else -> 0
+//        }
     }
 
     private fun learnQuizKana() {
