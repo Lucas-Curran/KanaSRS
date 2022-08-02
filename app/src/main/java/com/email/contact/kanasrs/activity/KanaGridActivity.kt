@@ -66,26 +66,31 @@ class KanaGridActivity : AppCompatActivity() {
             "rookie" -> {
                 dataList = db.kanaDao().rookieWritingKana().toMutableList()
                 titleTextView.text = "WRITING ROOKIE"
+                titleTextView.textSize = 40f
                 titleTextView.setTextColor(ContextCompat.getColor(this, R.color.rookie_pink))
             }
             "amateur" -> {
                 dataList = db.kanaDao().amateurWritingKana().toMutableList()
                 titleTextView.text = "WRITING AMATEUR"
+                titleTextView.textSize = 40f
                 titleTextView.setTextColor(ContextCompat.getColor(this, R.color.amateur_purple))
             }
             "expert" -> {
                 dataList = db.kanaDao().expertWritingKana().toMutableList()
                 titleTextView.text = "WRITING EXPERT"
+                titleTextView.textSize = 40f
                 titleTextView.setTextColor(ContextCompat.getColor(this, R.color.expert_blue))
             }
             "master" -> {
                 dataList = db.kanaDao().expertWritingKana().toMutableList()
                 titleTextView.text = "WRITING MASTER"
+                titleTextView.textSize = 40f
                 titleTextView.setTextColor(ContextCompat.getColor(this, R.color.master_blue))
             }
             "sensei" -> {
                 dataList = db.kanaDao().senseiWritingKana().toMutableList()
                 titleTextView.text = "WRITING SENSEI"
+                titleTextView.textSize = 40f
                 titleTextView.setTextColor(ContextCompat.getColor(this, R.color.sensei_gold))
             }
         }
