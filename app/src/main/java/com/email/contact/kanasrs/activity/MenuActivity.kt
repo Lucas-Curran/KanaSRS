@@ -419,11 +419,13 @@ class MenuActivity : AppCompatActivity() {
 
                         hiraganaButton.setOnClickListener {
                             intent.putExtra("kanaWriting", hiraganaKana)
+                            intent.putExtra("hiraganaWriting", true)
                             startActivity(intent)
                         }
 
                         katakanaButton.setOnClickListener {
                             intent.putExtra("kanaWriting", katakanaKana)
+                            intent.putExtra("hiraganaWriting", false)
                             startActivity(intent)
                         }
 

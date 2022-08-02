@@ -9,7 +9,7 @@
         android:id="@+id/choiceDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Both katakana and hiragana are ready to be reviewed, choose which to write first"
+        android:text="Hiragana and katakana must be in separate review sessions, choose which to write."
         android:textSize="20sp"
         android:layout_margin="10dp"
         android:textColor="@color/white"

@@ -12,6 +12,7 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.text.SpannableStringBuilder
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -19,6 +20,7 @@ import android.view.animation.DecelerateInterpolator
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -39,7 +41,9 @@ import com.email.contact.kanasrs.util.KanaConverter
 import com.email.contact.kanasrs.util.Utilities
 import com.email.contact.kanasrs.util.Utilities.Companion.colorizeText
 import com.email.contact.kanasrs.util.Utilities.Companion.disable
+import com.email.contact.kanasrs.util.Utilities.Companion.dpToPx
 import com.email.contact.kanasrs.util.Utilities.Companion.enable
+import com.email.contact.kanasrs.util.Utilities.Companion.pxToDp
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -78,6 +82,9 @@ class WritingActivity : AppCompatActivity() {
     private lateinit var kanaConverter: KanaConverter
     private var wrongCounter = 0
 
+    private var reviewOver = false
+    private var transitioning = false
+
     private lateinit var writingLayout: RelativeLayout
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -101,6 +108,15 @@ class WritingActivity : AppCompatActivity() {
         arrowIndicator = findViewById(R.id.arrowIndicator)
         newLevelTextView = findViewById(R.id.newLevelTextView)
         newLevelLayout = findViewById(R.id.newLevelLayout)
+
+        findViewById<TextView>(R.id.kanaTypeTextView).text =
+            if (intent.getBooleanExtra("hiraganaWriting", true)) {
+                "Hiragana"
+            } else {
+                "Katakana"
+            }
+
+        intent.removeExtra("isHiragana")
 
         writingProgress.max = kanaList.size * 100
 
@@ -295,6 +311,7 @@ class WritingActivity : AppCompatActivity() {
 
     private fun nextKana() {
 
+        transitioning = true
         wrongCounter = 0
         drawingView.clearDrawing()
         drawingView.disableDrawing()
@@ -322,12 +339,14 @@ class WritingActivity : AppCompatActivity() {
             letterToDraw.animate().alpha(1f).setStartDelay(750).withEndAction {
                 submitWriting.enable()
                 drawingView.enableDrawing()
+                transitioning = false
             }.duration = 500
         }.duration = 500
 
     }
 
     private fun endSession() {
+        transitioning = true
         Utilities.animateUp(writingProgress, 100)
         Utilities.animateUp(findViewById(R.id.correctImageView), 100)
         Utilities.animateUp(findViewById(R.id.incorrectImageView), 100)
@@ -343,6 +362,7 @@ class WritingActivity : AppCompatActivity() {
             val finishButton = finishLayout.findViewById<MaterialButton>(R.id.finishButton)
             finishButton.background =
                 ContextCompat.getDrawable(this, R.drawable.extra_button_selector)
+            finishButton.setPadding(0, dpToPx(40), 0, dpToPx(40))
             finishButton.setOnClickListener {
                 startActivity(Intent(this, MenuActivity::class.java))
                 finish()
@@ -373,6 +393,9 @@ class WritingActivity : AppCompatActivity() {
             Utilities.animateFromTop(linearLayout, rootLayout, 200)
             Utilities.animateFromTop(finishLayout.findViewById(R.id.layoutDivider), rootLayout, 300)
             Utilities.animateFromBottom(finishButton, rootLayout, 400)
+
+            reviewOver = true
+            transitioning = false
 
         }
     }
@@ -592,4 +615,32 @@ class WritingActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        if (!transitioning) {
+
+            if (reviewOver) {
+                startActivity(Intent(this, MenuActivity::class.java))
+                return
+            }
+
+            val view = layoutInflater.inflate(R.layout.leave_review_dialog, null)
+            val dialog = AlertDialog.Builder(this, R.style.DialogTheme).create()
+
+            view.findViewById<TextView>(R.id.cancelButton).setOnClickListener {
+                dialog.dismiss()
+            }
+
+            view.findViewById<TextView>(R.id.endReviewTextView).setOnClickListener {
+                if (correctReviewAnswers.isEmpty() && incorrectReviewAnswers.isEmpty()) {
+                    startActivity(Intent(this, MenuActivity::class.java))
+                } else {
+                    endSession()
+                }
+                dialog.dismiss()
+            }
+
+            dialog.setView(view)
+            dialog.show()
+        }
+    }
 }
