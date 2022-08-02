@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/choiceDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Both katakana and hiragana are ready to be reviewed, choose which to write first"
+        android:textSize="20sp"
+        android:layout_margin="10dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:background="@drawable/lesson_box"
+        android:padding="10dp"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_round_rect"
+        app:layout_constraintStart_toStartOf="@id/choiceDescription"
+        app:layout_constraintEnd_toEndOf="@id/choiceDescription"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/choiceDescription"
+        >
+
+    <RelativeLayout
+        android:id="@+id/hiraganaLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/hiraganaButton"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/extra_button_selector"
+            android:text="Hiragana"
+            app:backgroundTint="@null" />
+
+        <TextView
+            android:id="@+id/hiraganaNumberText"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/faq_circle"
+            android:elevation="10dp"
+            android:gravity="center"
+            android:text="13"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/katakanaLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/katakanaButton"
+            android:layout_width="125dp"
+            android:layout_height="125dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/extra_button_selector"
+            android:text="Katakana"
+            app:backgroundTint="@null" />
+
+        <TextView
+            android:id="@+id/katakanaNumberText"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/faq_circle"
+            android:elevation="10dp"
+            android:gravity="center"
+            android:text="5"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/katakanaButton"
+            app:layout_constraintStart_toStartOf="@id/katakanaButton" />
+
+    </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
