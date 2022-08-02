@@ -5,6 +5,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/dialog_background">
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/modeTabs"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabRippleColor="@null"
+        app:tabMinWidth="50dp"
+        app:tabIndicator="@null"
+        app:tabGravity="center"
+        android:layout_marginTop="20dp"
+        app:tabIconTint="@color/white"
+        app:tabBackground="@drawable/intro_tab_selector">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_brain"/>
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_pencil"/>
+
+    </com.google.android.material.tabs.TabLayout>
+
     <TextView
         android:id="@+id/kanaLetterTextView"
         android:layout_width="100dp"
@@ -202,7 +230,6 @@
             android:layout_height="130dp"
             android:orientation="vertical"
             android:background="@drawable/review_box"
-            android:layout_marginEnd="10dp"
             android:layout_weight="1">
 
             <TextView
@@ -228,44 +255,6 @@
                 android:layout_height="wrap_content"
                 android:text="Master"
                 android:textColor="@color/master_blue"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="34sp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="130dp"
-            android:orientation="vertical"
-            android:background="@drawable/review_box"
-            android:layout_weight="1">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Writing"
-                android:textSize="30sp"
-                android:layout_gravity="center"
-                android:textColor="@color/white"
-                android:layout_marginTop="5dp"
-                android:textStyle="bold"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#AAAAAA"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp" />
-
-            <TextView
-                android:id="@+id/writingLevelTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Rookie"
-                android:textColor="@color/rookie_pink"
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
                 android:gravity="center"
