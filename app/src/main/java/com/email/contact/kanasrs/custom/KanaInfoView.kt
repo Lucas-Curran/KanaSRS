@@ -49,6 +49,7 @@ class KanaInfoView(val context: Context, val kana: Kana, private val showReviewT
     private lateinit var animationOut: Animation
     private lateinit var prevAnimIn: Animation
     private lateinit var prevAnimOut: Animation
+    private var extraStatsImage: ImageView
     private var dialog: BottomSheetDialog
     private var topTextView: TextView
 
@@ -56,13 +57,14 @@ class KanaInfoView(val context: Context, val kana: Kana, private val showReviewT
 
         val view = LayoutInflater.from(context).inflate(R.layout.kana_info_dialog, null)
 
+        extraStatsImage = view.findViewById(R.id.extraStatsImageView)
+
         dialog = BottomSheetDialog(context, R.style.BottomDialogTheme)
         dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
         dialog.dismissWithAnimation = true
 
         topTextView = view.findViewById(R.id.topTextView)
-
 
         Handler(Looper.getMainLooper()).post {
 
@@ -193,7 +195,7 @@ class KanaInfoView(val context: Context, val kana: Kana, private val showReviewT
                 dialog.show()
             }
 
-            view.findViewById<ImageView>(R.id.extraStatsImageView).setOnClickListener {
+            extraStatsImage.setOnClickListener {
                 showExtraStats()
             }
 
@@ -364,7 +366,6 @@ class KanaInfoView(val context: Context, val kana: Kana, private val showReviewT
 
         val kanaLetter = view.findViewById<TextView>(R.id.kanaLetterTextView)
         kanaLetter.text = kana.letter
-        // TODO: Causes error when clicking stat view on lesson wrong
         kanaLetter.background.setTint(ContextCompat.getColor(context, getLevelColor(kanaLevel!!)))
         val progressBar = view.findViewById<ProgressBar>(R.id.accuracyProgressBar)
         val progressText = view.findViewById<TextView>(R.id.accuracyText)
@@ -597,6 +598,10 @@ class KanaInfoView(val context: Context, val kana: Kana, private val showReviewT
         relativeLayout.addView(checkButton)
         relativeLayout.addView(clearButton)
         relativeLayout.addView(drawingView)
+    }
+
+    fun hideExtraStats() {
+        extraStatsImage.visibility = View.GONE
     }
 
     fun show() {
