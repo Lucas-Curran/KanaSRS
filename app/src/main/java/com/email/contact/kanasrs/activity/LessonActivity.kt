@@ -112,9 +112,11 @@ class LessonActivity : AppCompatActivity() {
         //Otherwise, for example the lessons to do is 3, since we check in the menu activity if the unlearned kana is > 5 or not,
         //then we can just make the sublist size equal to the number of lessons left
         val subList = if (KanaSRSDatabase.getInstance(this).userDao().getUser().lessonsNumber!! >= 5) {
-            kanaList.subList(0, 5)
+            val tempSub = kanaList.subList(0, 5)
+            checkExceptions(tempSub)
         } else {
-            kanaList.subList(0, KanaSRSDatabase.getInstance(this).userDao().getUser().lessonsNumber!!)
+            val tempSub = kanaList.subList(0, KanaSRSDatabase.getInstance(this).userDao().getUser().lessonsNumber!!)
+            checkExceptions(tempSub)
         }
 
         Handler(Looper.getMainLooper()).post {
@@ -535,6 +537,26 @@ class LessonActivity : AppCompatActivity() {
         relativeLayout.addView(checkButton)
         relativeLayout.addView(clearButton)
         relativeLayout.addView(drawingView)
+    }
+
+    private fun checkExceptions(list: List<Kana>): List<Kana> {
+        //Check if the starting letter is や、わ、ヤ、ワ since ya, yu yo only have three, and wa,wo,n is three as well
+        //In other words, keep letters in correct sets
+        return when (list[0].letter) {
+            "や" -> {
+                list.subList(0, 3)
+            }
+            "わ" -> {
+                list.subList(0, 3)
+            }
+            "ヤ" -> {
+                list.subList(0, 3)
+            }
+            "ワ" -> {
+                list.subList(0, 3)
+            }
+            else -> {list}
+        }
     }
 
     private fun playAudio(letter: String) {
