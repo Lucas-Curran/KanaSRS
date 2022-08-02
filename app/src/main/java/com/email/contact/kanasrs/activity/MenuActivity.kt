@@ -207,8 +207,6 @@ class MenuActivity : AppCompatActivity() {
                 }
             }
 
-
-
             setLevelsFunction(false)
 
             val tabLayout = levelsLayout.findViewById<TabLayout>(R.id.levelsTabs)
@@ -397,10 +395,43 @@ class MenuActivity : AppCompatActivity() {
 
             if (sharedPref.getBoolean("kanasrsWritingEnabled", true)) {
                 writingReviewButton.setOnClickListener {
-                    if (numItemsToReview > 0) {
+                    if (numItemsToWrite > 0) {
+
                         val intent = Intent(this, WritingActivity::class.java)
-                        intent.putExtra("kanaWriting", kanaToWrite)
-                        startActivity(intent)
+                        val kanaChoiceView = layoutInflater.inflate(R.layout.pick_kana_layout, null)
+
+                        val dialog = AlertDialog.Builder(this, R.style.DialogTheme).setView(kanaChoiceView).create()
+                        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+                        val hiraganaKana = ArrayList(kanaToWrite.filter { it.isHiragana })
+                        val katakanaKana = ArrayList(kanaToWrite.filter { !it.isHiragana })
+
+                        val hiraganaButton = kanaChoiceView.findViewById<Button>(R.id.hiraganaButton)
+                        val katakanaButton = kanaChoiceView.findViewById<Button>(R.id.katakanaButton)
+
+                        if (hiraganaKana.isEmpty()) {
+                            hiraganaButton.disable()
+                        }
+
+                        if (katakanaKana.isEmpty()) {
+                            katakanaButton.disable()
+                        }
+
+                        hiraganaButton.setOnClickListener {
+                            intent.putExtra("kanaWriting", hiraganaKana)
+                            startActivity(intent)
+                        }
+
+                        katakanaButton.setOnClickListener {
+                            intent.putExtra("kanaWriting", katakanaKana)
+                            startActivity(intent)
+                        }
+
+                        kanaChoiceView.findViewById<TextView>(R.id.hiraganaNumberText).text = hiraganaKana.size.toString()
+                        kanaChoiceView.findViewById<TextView>(R.id.katakanaNumberText).text = katakanaKana.size.toString()
+
+                        dialog.show()
+
                     }
                 }
             } else {
