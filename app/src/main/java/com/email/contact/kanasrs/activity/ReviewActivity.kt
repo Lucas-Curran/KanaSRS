@@ -643,7 +643,7 @@ class ReviewActivity : AppCompatActivity() {
         val user = KanaSRSDatabase.getInstance(this).userDao().getUser()
         // Subtract remaining lessons for the day by the quiz size, and
         // then if the lesson refresh time isn't set, make it one day from now
-        user.lessonsNumber = user.lessonsNumber?.minus(correctReviewAnswers.size)
+        user.lessonsNumber = user.lessonsNumber?.minus(5)
         if (user.lessonRefreshTime == null) {
             val oneDay = 24 * 1000L * 60 * 60
             //val oneMinute = 1000 * 60
