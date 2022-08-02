@@ -14,6 +14,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.webkit.WebView
@@ -193,103 +194,8 @@ class KanaInfoView(val context: Context, val kana: Kana, private val showReviewT
             }
 
             view.findViewById<ImageView>(R.id.extraStatsImageView).setOnClickListener {
-                val view = LayoutInflater.from(context).inflate(R.layout.kana_stats_dialog, null)
-                val dialog = BottomSheetDialog(context, R.style.BottomDialogTheme)
-                dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
-
-                /*
-                    - Kana header
-                    - Accuracy progress bar and fraction
-                    - Streak
-                    - Level and writing level
-                    - Next review
-                 */
-
-                val kanaLetter = view.findViewById<TextView>(R.id.kanaLetterTextView)
-                kanaLetter.text = kana.letter
-                // TODO: Causes error when clicking stat view on lesson wrong
-                kanaLetter.background.setTint(ContextCompat.getColor(context, getLevelColor(kana.level!!)))
-                val progressBar = view.findViewById<ProgressBar>(R.id.accuracyProgressBar)
-                val progressText = view.findViewById<TextView>(R.id.accuracyText)
-                val correctText = view.findViewById<TextView>(R.id.accuracyCorrect)
-                val totalText = view.findViewById<TextView>(R.id.accuracyTotal)
-                val accuracyImage = view.findViewById<ImageView>(R.id.accuracyImageView)
-
-                val progressBackgroundId = context.resources.getIdentifier("${levelToTitle(kana.level!!).lowercase()}_gradient", "drawable", context.packageName)
-                progressBar.progressDrawable = ContextCompat.getDrawable(context, progressBackgroundId)
-
-                val totalAnswered = kana.totalAnswered ?: 0
-                val totalCorrect = kana.totalCorrect ?: 0
-                var percent = 0.0
-
-                progressBar.max = totalAnswered
-                progressBar.progress = totalCorrect
-//                    val df = DecimalFormat("##.##%")
-                if (totalAnswered != 0) {
-                    percent = totalCorrect / totalAnswered.toDouble()
-                }
-//                    val formattedPercent = df.format(percent)
-                val percentageFormat = NumberFormat.getPercentInstance()
-                percentageFormat.minimumFractionDigits = 2
-                progressText.text = percentageFormat.format(percent)
-
-                correctText.text = totalCorrect.toString()
-                totalText.text = totalAnswered.toString()
-
-                when {
-                    percent * 100 >= 70 -> {
-                        accuracyImage.setImageResource(R.drawable.ic_positive_face)
-                    }
-                    percent * 100 >= 40 -> {
-                        accuracyImage.setImageResource(R.drawable.ic_neutral_face)
-                    }
-                    percent * 100 >= 0 -> {
-                        accuracyImage.setImageResource(R.drawable.ic_negative_face)
-                    }
-                }
-
-                if (totalAnswered == 0) {
-                    progressBar.max = 0
-                    progressBar.progress = 0
-                    progressText.text = "---"
-                    correctText.text = "0"
-                    totalText.text = "0"
-                    accuracyImage.setImageResource(android.R.color.transparent)
-                }
-
-                view.findViewById<TextView>(R.id.streakTextView).text = kana.streak.toString()
-
-                val levelTextView = view.findViewById<TextView>(R.id.levelTextView)
-                levelTextView.setTextColor(ContextCompat.getColor(context, getLevelColor(kana.level!!)))
-                levelTextView.text = levelToTitle(kana.level!!)
-                val writingLevelTextView = view.findViewById<TextView>(R.id.writingLevelTextView)
-                writingLevelTextView.setTextColor(ContextCompat.getColor(context, getLevelColor(kana.level!!)))
-                writingLevelTextView.text = levelToTitle(kana.level!!)
-
-                val nextReview = view.findViewById<TextView>(R.id.reviewTextView)
-                if (kana.reviewTime != null) {
-                    if (kana.reviewTime!! > System.currentTimeMillis()) {
-                        val timeUntilReview = kana.reviewTime!! - System.currentTimeMillis()
-                        nextReview.text = "${Utilities.formatTime(timeUntilReview)}"
-                    } else {
-                        nextReview.text = "Now"
-                    }
-                } else {
-                    if (!kana.hasLearned) {
-                        nextReview.text = "Need to learn"
-                    } else {
-                        nextReview.setTextColor(ContextCompat.getColor(context, R.color.sensei_gold))
-                        nextReview.text = "Already mastered!"
-                    }
-                }
-                view.findViewById<ImageView>(R.id.closeButton).setOnClickListener {
-                    dialog.dismiss()
-                }
-
-                dialog.setContentView(view)
-                dialog.show()
+                showExtraStats()
             }
-
 
             val tabLayout = view.findViewById<TabLayout>(R.id.itemTabLayout)
             val viewAnimator = view.findViewById<ViewAnimator>(R.id.viewAnimator)
@@ -381,6 +287,152 @@ class KanaInfoView(val context: Context, val kana: Kana, private val showReviewT
             }
 
             dialog.setContentView(view)
+        }
+    }
+
+    private fun showExtraStats() {
+        val view = LayoutInflater.from(context).inflate(R.layout.kana_stats_dialog, null)
+        val dialog = BottomSheetDialog(context, R.style.BottomDialogTheme)
+        dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+        val modeTabs = view.findViewById<TabLayout>(R.id.modeTabs)
+
+        for (i in 0 until modeTabs.tabCount) {
+            val tab = (modeTabs.getChildAt(0) as ViewGroup).getChildAt(i)
+            val p = tab.layoutParams as ViewGroup.MarginLayoutParams
+            p.setMargins(15, 0, 15, 0)
+            tab.requestLayout()
+        }
+
+        statsHelper(view, false)
+
+        modeTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> statsHelper(view, false)
+                    1 -> statsHelper(view, true)
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+        })
+
+        view.findViewById<ImageView>(R.id.closeButton).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.setContentView(view)
+        dialog.show()
+    }
+
+    private fun statsHelper(view: View, isWriting: Boolean) {
+
+        val kanaLevel = if (isWriting) {
+            kana.writingLevel!!
+        } else {
+            kana.level
+        }
+
+        val reviewTime = if (isWriting) {
+            kana.writingReviewTime
+        } else {
+            kana.reviewTime
+        }
+
+        val totalAnswered = if (isWriting) {
+            kana.writingTotalAnswered ?: 0
+        } else {
+            kana.totalAnswered ?: 0
+        }
+
+        val totalCorrect = if (isWriting) {
+            kana.writingTotalCorrect ?: 0
+        } else {
+            kana.totalCorrect ?: 0
+        }
+
+        val streak = if (isWriting) {
+            kana.writingStreak
+        } else {
+            kana.streak
+        }
+
+        val kanaLetter = view.findViewById<TextView>(R.id.kanaLetterTextView)
+        kanaLetter.text = kana.letter
+        // TODO: Causes error when clicking stat view on lesson wrong
+        kanaLetter.background.setTint(ContextCompat.getColor(context, getLevelColor(kanaLevel!!)))
+        val progressBar = view.findViewById<ProgressBar>(R.id.accuracyProgressBar)
+        val progressText = view.findViewById<TextView>(R.id.accuracyText)
+        val correctText = view.findViewById<TextView>(R.id.accuracyCorrect)
+        val totalText = view.findViewById<TextView>(R.id.accuracyTotal)
+        val accuracyImage = view.findViewById<ImageView>(R.id.accuracyImageView)
+
+        val progressBackgroundId = context.resources.getIdentifier("${levelToTitle(kanaLevel).lowercase()}_gradient", "drawable", context.packageName)
+        progressBar.progressDrawable = ContextCompat.getDrawable(context, progressBackgroundId)
+
+        var percent = 0.0
+
+        progressBar.max = totalAnswered
+        progressBar.progress = totalCorrect
+
+        if (totalAnswered != 0) {
+            percent = totalCorrect / totalAnswered.toDouble()
+        }
+
+        val percentageFormat = NumberFormat.getPercentInstance()
+        percentageFormat.minimumFractionDigits = 2
+        progressText.text = percentageFormat.format(percent)
+
+        correctText.text = totalCorrect.toString()
+        totalText.text = totalAnswered.toString()
+
+        when {
+            percent * 100 >= 70 -> {
+                accuracyImage.setImageResource(R.drawable.ic_positive_face)
+            }
+            percent * 100 >= 40 -> {
+                accuracyImage.setImageResource(R.drawable.ic_neutral_face)
+            }
+            percent * 100 >= 0 -> {
+                accuracyImage.setImageResource(R.drawable.ic_negative_face)
+            }
+        }
+
+        if (totalAnswered == 0) {
+            progressBar.max = 0
+            progressBar.progress = 0
+            progressText.text = "---"
+            correctText.text = "0"
+            totalText.text = "0"
+            accuracyImage.setImageResource(android.R.color.transparent)
+        }
+
+        view.findViewById<TextView>(R.id.streakTextView).text = streak.toString()
+
+        val levelTextView = view.findViewById<TextView>(R.id.levelTextView)
+        levelTextView.setTextColor(ContextCompat.getColor(context, getLevelColor(kanaLevel)))
+        levelTextView.text = levelToTitle(kanaLevel)
+
+        val nextReview = view.findViewById<TextView>(R.id.reviewTextView)
+        if (reviewTime != null) {
+            if (reviewTime > System.currentTimeMillis()) {
+                val timeUntilReview = reviewTime - System.currentTimeMillis()
+                nextReview.text = "${Utilities.formatTime(timeUntilReview)}"
+            } else {
+                nextReview.text = "Now"
+            }
+        } else {
+            if (!kana.hasLearned) {
+                nextReview.text = "Need to learn"
+            } else {
+                nextReview.setTextColor(ContextCompat.getColor(context, R.color.sensei_gold))
+                nextReview.text = "Already mastered!"
+            }
         }
     }
 
