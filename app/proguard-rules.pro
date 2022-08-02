@@ -11,6 +11,9 @@
 -keepclassmembers class com.email.contact.kanasrs.activity.LessonActivity, com.email.contact.kanasrs.custom.KanaInfoView {
    public *;
 }
+-keepclassmembers,allowobfuscation class * {
+  @com.google.gson.annotations.SerializedName <fields>;
+}
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
