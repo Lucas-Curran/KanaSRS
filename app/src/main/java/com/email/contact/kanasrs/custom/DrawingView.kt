@@ -143,9 +143,6 @@ class DrawingView(var c: Context) : View(c) {
     @OptIn(InternalCoroutinesApi::class, ExperimentalCoroutinesApi::class)
     suspend fun isDrawingCorrect(kanaLetter: String, progressBar: ProgressBar): Boolean =
         suspendCancellableCoroutine { continuation ->
-
-            println("step 1")
-
             val newBitmap = Bitmap.createBitmap(
                 mBitmap?.width!!,
                 mBitmap?.height!!, mBitmap?.config!!
@@ -159,16 +156,12 @@ class DrawingView(var c: Context) : View(c) {
             }
             canvas.drawBitmap(mBitmap!!, 0f, 0f, null)
 
-            println("step 2")
-
             val baos = ByteArrayOutputStream()
             newBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
             val imagesBytes: ByteArray = baos.toByteArray()
             val encodedImage: String = Base64.encodeToString(imagesBytes, Base64.NO_WRAP)
             val jsonObject = JSONObject()
             val jsonArray = JSONArray()
-
-            println("step 3")
 
             jsonArray.put("data:image/png;base64,placeholdertext")
             jsonObject.put("data", jsonArray)
@@ -179,8 +172,6 @@ class DrawingView(var c: Context) : View(c) {
 
             val call = retrofitAPI.writingToKana(requestBody)
 
-            println("step 4")
-
             call.enqueue(object : Callback<WritingResponse> {
                 override fun onResponse(
                     call: Call<WritingResponse>,
@@ -190,12 +181,9 @@ class DrawingView(var c: Context) : View(c) {
                     //data[0] is the first word, or letter, in a sequence of words
                     progressBar.visibility = INVISIBLE
 
-                    println("step 5")
-
                     //For now, hiragana ki and katakana ki get mixed up
                     if (data[0].contains("キ") && kanaLetter == "き" || data[0].contains("き") && kanaLetter == "キ") {
                         clearWrongImages()
-                        println("step 6")
                         continuation.resume(true) {
                             Log.e("MLError", it.stackTraceToString())
                         }
