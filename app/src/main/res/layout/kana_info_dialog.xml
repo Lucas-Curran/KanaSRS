@@ -76,10 +76,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_below="@id/itemTabLayout"
-                android:contentDescription="@string/kana_stroke"
                 android:layout_margin="10dp"
-                android:visibility="gone"
-                android:src="@drawable/a_stroke" />
+                android:contentDescription="@string/kana_stroke"
+                android:src="@drawable/a_stroke"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -124,85 +124,103 @@
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/infoLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/lesson_box"
                 app:layout_constraintBottom_toBottomOf="@id/itemConstraintLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lessonLinearLayout">
 
-                <TextView
-                    android:id="@+id/mnemonicTextView"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/infoLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="@drawable/lesson_box">
+
+                    <TextView
+                        android:id="@+id/mnemonicTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:padding="10dp"
+                        android:text="To remember this letter, think of the center as forming an 'A'."
+                        android:textColor="@color/white"
+                        android:textSize="24sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/lessonDivider"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_margin="5dp"
+                        android:background="#AAAAAA"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/mnemonicTextView" />
+
+                    <ImageView
+                        android:id="@+id/kanaAudioImageView"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/circle_shape"
+                        android:contentDescription="@string/kana_audio"
+                        android:foreground="@drawable/audio_ripple"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_audio"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/lessonDivider" />
+
+                    <ImageView
+                        android:id="@+id/extraStatsImageView"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/stats_circle_background"
+                        android:contentDescription="@string/extra_stats"
+                        android:foreground="@drawable/audio_ripple"
+                        android:padding="20dp"
+                        android:src="@drawable/ic_graph2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/kanaAudioImageView"
+                        app:layout_constraintTop_toBottomOf="@id/lessonDivider"
+                        app:tint="@color/black" />
+
+                    <ImageView
+                        android:id="@+id/addMnemonicImageView"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:contentDescription="@string/add_mnemonic"
+                        android:foreground="?actionBarItemBackground"
+                        android:src="@drawable/ic_plus"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/lessonDivider"
+                        app:tint="@color/white" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <include
+                    android:id="@+id/kanaDrawingInfo"
+                    layout="@layout/kana_drawing_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:padding="10dp"
-                    android:text="To remember this letter, think of the center as forming an 'A'."
-                    android:textColor="@color/white"
-                    android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <View
-                    android:id="@+id/lessonDivider"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_margin="5dp"
-                    android:background="#AAAAAA"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/mnemonicTextView" />
-
-                <ImageView
-                    android:id="@+id/kanaAudioImageView"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/circle_shape"
-                    android:contentDescription="@string/kana_audio"
-                    android:foreground="@drawable/audio_ripple"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_audio"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/lessonDivider" />
-
-                <ImageView
-                    android:id="@+id/extraStatsImageView"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:contentDescription="@string/extra_stats"
-                    android:background="@drawable/stats_circle_background"
-                    android:foreground="@drawable/audio_ripple"
-                    android:padding="20dp"
-                    android:src="@drawable/ic_graph2"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/kanaAudioImageView"
-                    app:layout_constraintTop_toBottomOf="@id/lessonDivider"
-                    app:tint="@color/black" />
-
-
-                <ImageView
-                    android:id="@+id/addMnemonicImageView"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:foreground="?actionBarItemBackground"
-                    android:src="@drawable/ic_plus"
-                    android:contentDescription="@string/add_mnemonic"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/lessonDivider"
-                    app:tint="@color/white" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="invisible" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

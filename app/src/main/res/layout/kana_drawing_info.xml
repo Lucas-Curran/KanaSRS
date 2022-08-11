@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/lesson_box">
+
+    <ImageView
+        android:id="@+id/strokeImageView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:src="@drawable/a_stroke"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <LinearLayout
+        android:id="@+id/kanaButtonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/strokeImageView">
+
+        <Button
+            android:id="@+id/checkButton"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/transparent_button_backgrounds"
+            app:backgroundTint="@null"
+            android:layout_margin="10dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="Check"/>
+
+        <Button
+            android:id="@+id/kanaClearButton"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/transparent_button_backgrounds"
+            app:backgroundTint="@null"
+            android:layout_margin="10dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="Clear"/>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/kanaProgressBar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/kanaButtonsLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="invisible"
+        />
+
+    <ImageView
+        android:id="@+id/kanaResponseImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:padding="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/kanaButtonsLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="invisible"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

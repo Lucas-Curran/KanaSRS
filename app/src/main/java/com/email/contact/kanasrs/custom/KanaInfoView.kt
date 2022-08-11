@@ -20,6 +20,7 @@ import android.view.animation.AnimationUtils
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.setPadding
 import androidx.core.view.updateMargins
@@ -204,7 +205,9 @@ class KanaInfoView(val context: Context, val kana: Kana, private val showReviewT
 
             val relativeLayout = RelativeLayout(context)
 
-            setupDrawing(kana, kanaConverter, relativeLayout)
+            val kanaDrawingInfo = view.findViewById<ConstraintLayout>(R.id.kanaDrawingInfo)
+
+            setupDrawing(kanaDrawingInfo, kana, kanaConverter, relativeLayout)
 
             viewAnimator.addView(relativeLayout)
 
@@ -259,6 +262,11 @@ class KanaInfoView(val context: Context, val kana: Kana, private val showReviewT
                     return@setOnSingleClickListener
                 }
 
+                if (tabLayout.selectedTabPosition == 1) {
+                    view.findViewById<ConstraintLayout>(R.id.infoLayout).visibility = View.INVISIBLE
+                    kanaDrawingInfo.visibility = View.VISIBLE
+                }
+
                 setNextAnim(viewAnimator, animationIn, animationOut)
                 tabLayout.getTabAt(tabLayout.selectedTabPosition + 1)?.select()
                 if (tabLayout.selectedTabPosition == 2) {
@@ -275,9 +283,14 @@ class KanaInfoView(val context: Context, val kana: Kana, private val showReviewT
             }
 
             previousButton.setOnSingleClickListener {
+
                 setPrevAnim(viewAnimator, prevAnimIn, prevAnimOut)
                 tabLayout.getTabAt(tabLayout.selectedTabPosition - 1)?.select()
                 if (tabLayout.selectedTabPosition == 1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                    view.findViewById<ConstraintLayout>(R.id.infoLayout).visibility = View.VISIBLE
+                    kanaDrawingInfo.visibility = View.INVISIBLE
+
                     nextButton.setImageResource(R.drawable.ic_right_arrow)
                     nextButton.setBackgroundColor(
                         context.resources.getColor(
@@ -438,7 +451,7 @@ class KanaInfoView(val context: Context, val kana: Kana, private val showReviewT
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun setupDrawing(kana: Kana, kanaConverter: KanaConverter, relativeLayout: RelativeLayout) {
+    private fun setupDrawing(kanaDrawingInfo: ConstraintLayout, kana: Kana, kanaConverter: KanaConverter, relativeLayout: RelativeLayout) {
         relativeLayout.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
 
         val traceId = if (kana.isHiragana) {
@@ -454,12 +467,12 @@ class KanaInfoView(val context: Context, val kana: Kana, private val showReviewT
         }
 
         val drawingView = DrawingView(context)
-        drawingView.setStrokeWidth(14f)
         drawingView.id = View.generateViewId()
-        drawingView.layoutParams = RelativeLayout.LayoutParams(300, 300).apply {
+        drawingView.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT).apply {
             addRule(RelativeLayout.ALIGN_PARENT_TOP)
             addRule(RelativeLayout.ALIGN_PARENT_START)
         }
+
         drawingView.background = ContextCompat.getDrawable(context, traceId)
 
         drawingView.setOnTouchListener { v, event ->
@@ -471,82 +484,16 @@ class KanaInfoView(val context: Context, val kana: Kana, private val showReviewT
             false
         }
 
-        val strokeImageView =  ImageView(context)
-        strokeImageView.setImageResource(strokeId)
+        kanaDrawingInfo.findViewById<ImageView>(R.id.strokeImageView).setImageResource(strokeId)
 
-        val responseImageView = ImageView(context)
-        responseImageView.setImageResource(R.drawable.ic_checkmark)
-        responseImageView.elevation = 10f
-        responseImageView.visibility = View.INVISIBLE
-
-        val clearButton = Button(context)
-        clearButton.id = View.generateViewId()
-        clearButton.text = "Clear"
-        clearButton.textSize = 12f
-        clearButton.setPadding(10)
-        clearButton.background = ContextCompat.getDrawable(context, R.drawable.dialog_background)
-
-        val checkButton = Button(context)
-        checkButton.id = View.generateViewId()
-        checkButton.text = "Check writing"
-        checkButton.textSize = 12f
-        checkButton.setPadding(10)
-        checkButton.background = ContextCompat.getDrawable(context, R.drawable.dialog_background)
-
-        val progressBar = ProgressBar(context, null, android.R.attr.progressBarStyleSmall)
-        progressBar.isIndeterminate = true
-        progressBar.visibility = View.INVISIBLE
-        progressBar.elevation = 10f
-
-        val outValue = TypedValue()
-        context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            clearButton.setTextColor(context.resources.getColor(R.color.white, context.theme))
-            checkButton.setTextColor(context.resources.getColor(R.color.white, context.theme))
-            clearButton.foreground = ContextCompat.getDrawable(context, outValue.resourceId)
-            checkButton.foreground = ContextCompat.getDrawable(context, outValue.resourceId)
-        }
-
-        strokeImageView.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT).apply {
-            addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-            addRule(RelativeLayout.ALIGN_PARENT_END)
-            addRule(RelativeLayout.ALIGN_PARENT_START)
-            addRule(RelativeLayout.BELOW, drawingView.id)
-        }
-
-        clearButton.layoutParams =
-            RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT).apply {
-                addRule(RelativeLayout.ALIGN_PARENT_TOP)
-                addRule(RelativeLayout.ALIGN_PARENT_END)
-                addRule(RelativeLayout.RIGHT_OF, drawingView.id)
-            }
-
-        checkButton.layoutParams =
-            RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT).apply {
-                addRule(RelativeLayout.ALIGN_PARENT_END)
-                addRule(RelativeLayout.RIGHT_OF, drawingView.id)
-                addRule(RelativeLayout.ALIGN_BOTTOM, drawingView.id)
-                addRule(RelativeLayout.BELOW, clearButton.id)
-            }
-
-        progressBar.layoutParams = RelativeLayout.LayoutParams(50, 50).apply {
-            addRule(RelativeLayout.ALIGN_BOTTOM, checkButton.id)
-            addRule(RelativeLayout.ALIGN_START, checkButton.id)
-            setMargins(10, 0, 0, 10)
-        }
-
-        responseImageView.layoutParams = RelativeLayout.LayoutParams(50, 50).apply {
-            addRule(RelativeLayout.ALIGN_BOTTOM, checkButton.id)
-            addRule(RelativeLayout.ALIGN_START, checkButton.id)
-            setMargins(10, 0, 0, 10)
-        }
-
-        clearButton.setOnClickListener {
+        kanaDrawingInfo.findViewById<Button>(R.id.kanaClearButton).setOnClickListener {
             drawingView.clearDrawing()
         }
 
-        checkButton.setOnClickListener {
+        val responseImageView = kanaDrawingInfo.findViewById<ImageView>(R.id.kanaResponseImage)
+        val progressBar = kanaDrawingInfo.findViewById<ProgressBar>(R.id.kanaProgressBar)
+
+        kanaDrawingInfo.findViewById<Button>(R.id.checkButton).setOnClickListener {
             if (!drawingView.checkIfEmpty()) {
                 progressBar.visibility = View.VISIBLE
                 drawingView.disableDrawing()
@@ -592,11 +539,6 @@ class KanaInfoView(val context: Context, val kana: Kana, private val showReviewT
             }
         }
 
-        relativeLayout.addView(progressBar)
-        relativeLayout.addView(responseImageView)
-        relativeLayout.addView(strokeImageView)
-        relativeLayout.addView(checkButton)
-        relativeLayout.addView(clearButton)
         relativeLayout.addView(drawingView)
     }
 
