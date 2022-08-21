@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/dialog_background">
+
+    <TextView
+        android:id="@+id/topText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="All Hiragana Learned!"
+        android:textSize="40sp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:fontFamily="@font/vanilla"
+        android:shadowColor="#202020"
+        android:shadowDx="10"
+        android:shadowDy="10"
+        android:shadowRadius=".1"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/descriptionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="You've gone through all the hiragana lessons! Next up, katakana!"
+        app:layout_constraintTop_toBottomOf="@id/topText"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:padding="10dp"/>
+
+    <LinearLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/descriptionText">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/endLessonButton"
+            android:layout_width="0dp"
+            android:layout_height="90dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/square_outline"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="Not yet"
+            android:textSize="20sp"
+            app:backgroundTint="@null" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/moreLessonsButton"
+            android:layout_width="0dp"
+            android:layout_height="90dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_button"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="Begin Katakana"
+            android:textSize="20sp"
+            app:backgroundTint="@color/pink" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

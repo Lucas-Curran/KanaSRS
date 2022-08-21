@@ -9,7 +9,7 @@
         android:id="@+id/choiceDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hiragana and katakana must be in separate review sessions, choose which to write."
+        android:text="Choose which alphabet to write in"
         android:textSize="20sp"
         android:layout_margin="10dp"
         android:textColor="@color/white"
@@ -22,7 +22,6 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bottom_round_rect"
         app:layout_constraintStart_toStartOf="@id/choiceDescription"
         app:layout_constraintEnd_toEndOf="@id/choiceDescription"
         android:orientation="horizontal"

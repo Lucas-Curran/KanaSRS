@@ -276,6 +276,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <TextView
+        android:id="@+id/dontKnowTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintStart_toStartOf="@id/writingRelativeLayout"
+        app:layout_constraintTop_toBottomOf="@id/writingRelativeLayout"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:gravity="center"
+        android:text="Don't know"
+        android:textColor="@color/azure"
+        android:textSize="18sp" />
+
     <ProgressBar
         android:id="@+id/loadingResultBar"
         style="?android:attr/progressBarStyle"
