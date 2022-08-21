@@ -317,6 +317,15 @@ class LessonActivity : AppCompatActivity() {
                             val intent = Intent(this, ReviewActivity::class.java)
                             intent.putExtra("quiz", true)
                             intent.putExtra("kana", subList.toTypedArray())
+
+                            // Check if lesson list ends with ん　or ン, this indicates the end of hiragana/katakana
+                            if (subList.last().letter == "ん") {
+                                intent.putExtra("finishHiragana", true)
+                            }
+                            if (subList.last().letter == "ン") {
+                                intent.putExtra("finishKatakana", true)
+                            }
+
                             startActivity(intent)
                             finish()
                         }
