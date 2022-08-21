@@ -39,6 +39,9 @@ import com.email.contact.kanasrs.database.Kana
 import com.email.contact.kanasrs.database.KanaSRSDatabase
 import com.email.contact.kanasrs.util.KanaConverter
 import com.email.contact.kanasrs.util.Utilities
+import com.email.contact.kanasrs.util.Utilities.Companion.animateToLeft
+import com.email.contact.kanasrs.util.Utilities.Companion.animateToRight
+import com.email.contact.kanasrs.util.Utilities.Companion.animateUp
 import com.email.contact.kanasrs.util.Utilities.Companion.colorizeText
 import com.email.contact.kanasrs.util.Utilities.Companion.disable
 import com.email.contact.kanasrs.util.Utilities.Companion.dpToPx
@@ -77,6 +80,7 @@ class WritingActivity : AppCompatActivity() {
     private lateinit var loadResultBar: ProgressBar
     private lateinit var arrowIndicator: ImageView
     private lateinit var newLevelTextView: TextView
+    private lateinit var dontKnowTextView: TextView
     private lateinit var newLevelLayout: LinearLayout
     private val imagesAnimatedList = mutableListOf(false, false, false)
     private lateinit var kanaConverter: KanaConverter
@@ -108,6 +112,7 @@ class WritingActivity : AppCompatActivity() {
         arrowIndicator = findViewById(R.id.arrowIndicator)
         newLevelTextView = findViewById(R.id.newLevelTextView)
         newLevelLayout = findViewById(R.id.newLevelLayout)
+        dontKnowTextView = findViewById(R.id.dontKnowTextView)
 
         findViewById<TextView>(R.id.kanaTypeTextView).text =
             if (intent.getBooleanExtra("hiraganaWriting", true)) {
@@ -216,7 +221,7 @@ class WritingActivity : AppCompatActivity() {
                                     drawingView.clearDrawing()
                                 }
                                 3 -> {
-                                    showIncorrectDialog(kana)
+                                    showIncorrectDialog(kana, false)
                                     wrongImageThree.playAnimation()
                                     imagesAnimatedList[2] = true
                                 }
@@ -225,6 +230,17 @@ class WritingActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+
+        dontKnowTextView.setOnClickListener {
+            wrongImageOne.playAnimation()
+            imagesAnimatedList[0] = true
+            wrongImageTwo.playAnimation()
+            imagesAnimatedList[1] = true
+            wrongImageThree.playAnimation()
+            imagesAnimatedList[2] = true
+            showIncorrectDialog(kanaList[0], true)
+            drawingView.clearDrawing()
         }
 
         writingLayout.addView(drawingView)
@@ -347,15 +363,17 @@ class WritingActivity : AppCompatActivity() {
 
     private fun endSession() {
         transitioning = true
-        Utilities.animateUp(writingProgress, 100)
-        Utilities.animateUp(findViewById(R.id.correctImageView), 100)
-        Utilities.animateUp(findViewById(R.id.incorrectImageView), 100)
-        Utilities.animateUp(correctTextView, 100)
-        Utilities.animateUp(incorrectTextView, 100)
-        Utilities.animateUp(newLevelLayout, 100)
-        Utilities.animateUp(findViewById(R.id.wrongAnswersLayout), 100)
-        Utilities.animateToLeft(writingLayout, 100)
-        Utilities.animateToRight(submitWriting, 100) {
+
+        dontKnowTextView.animate().alpha(0f).duration = 200
+        animateUp(writingProgress, 100)
+        animateUp(findViewById(R.id.correctImageView), 100)
+        animateUp(findViewById(R.id.incorrectImageView), 100)
+        animateUp(correctTextView, 100)
+        animateUp(incorrectTextView, 100)
+        animateUp(newLevelLayout, 100)
+        animateUp(findViewById(R.id.wrongAnswersLayout), 100)
+        animateToLeft(writingLayout, 100)
+        animateToRight(submitWriting, 100) {
 
             finishLayout.visibility = View.VISIBLE
 
@@ -529,7 +547,7 @@ class WritingActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun showIncorrectDialog(kana: Kana) {
+    private fun showIncorrectDialog(kana: Kana, forced: Boolean) {
 
         val view = LayoutInflater.from(this).inflate(R.layout.wrong_writing_dialog, null)
         val dialog = BottomSheetDialog(this, R.style.BottomDialogTheme)
@@ -565,9 +583,14 @@ class WritingActivity : AppCompatActivity() {
             roundedImages.add(roundedBitmapDrawable)
         }
 
-        view.findViewById<ImageView>(R.id.wrongImageOne).setImageDrawable(roundedImages[0])
-        view.findViewById<ImageView>(R.id.wrongImageTwo).setImageDrawable(roundedImages[1])
-        view.findViewById<ImageView>(R.id.wrongImageThree).setImageDrawable(roundedImages[2])
+
+        if (!forced) {
+            view.findViewById<ImageView>(R.id.wrongImageOne).setImageDrawable(roundedImages[0])
+            view.findViewById<ImageView>(R.id.wrongImageTwo).setImageDrawable(roundedImages[1])
+            view.findViewById<ImageView>(R.id.wrongImageThree).setImageDrawable(roundedImages[2])
+        } else {
+            view.findViewById<LinearLayout>(R.id.wrongWritingsLayout).visibility = View.INVISIBLE
+        }
 
         drawingView.clearWrongImages()
 
@@ -606,11 +629,11 @@ class WritingActivity : AppCompatActivity() {
         }
 
         view.findViewById<TextView>(R.id.moveOnButton).setOnClickListener {
-            incorrectAnswer(kana)
             dialog.dismiss()
         }
 
         dialog.setOnDismissListener {
+            incorrectAnswer(kana)
             nextKana()
         }
     }
