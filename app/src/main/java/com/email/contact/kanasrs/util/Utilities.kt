@@ -241,19 +241,6 @@ class Utilities {
             return (px / resources.displayMetrics.density).toInt()
         }
 
-        fun reviewApp(context: Context, fromActivity: Activity) {
-            val manager = FakeReviewManager(context)
-            val request = manager.requestReviewFlow()
-            request.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val reviewInfo = task.result
-                    manager.launchReviewFlow(fromActivity, reviewInfo!!)
-                } else {
-                    Toast.makeText(context, "There was an issue handling the request, check your internet connection.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
         fun setAlarm(context: Context) {
 
             val sharedPref = context.getSharedPreferences(context.getString(R.string.pref_key), Context.MODE_PRIVATE)
