@@ -30,10 +30,12 @@ import com.email.contact.kanasrs.database.KanaSRSDatabase
 import com.email.contact.kanasrs.util.KanaConverter
 import com.email.contact.kanasrs.util.Utilities
 import com.email.contact.kanasrs.util.Utilities.Companion.colorizeText
-import com.email.contact.kanasrs.util.Utilities.Companion.reviewApp
 import com.email.contact.kanasrs.util.Utilities.Companion.showKeyboard
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
+import com.google.android.play.core.review.ReviewManager
+import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.android.play.core.review.testing.FakeReviewManager
 import java.util.*
 import kotlin.random.Random
 
@@ -80,6 +82,8 @@ class ReviewActivity : AppCompatActivity() {
     private var review = false
     private var transitioning = false
     private var reviewOver = false
+    private var finishHiragana = false
+    private var finishKatakana = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,8 +93,12 @@ class ReviewActivity : AppCompatActivity() {
         if (intent.getBooleanExtra("quiz", false)) {
             val parcelableList = intent.getParcelableArrayExtra("kana")
             kanaList = (parcelableList?.asList() as List<Kana>).shuffled().toMutableList()
+            finishHiragana = intent.getBooleanExtra("finishHiragana", false)
+            finishKatakana = intent.getBooleanExtra("finishKatakana", false)
             intent.removeExtra("quiz")
             intent.removeExtra("kana")
+            intent.removeExtra("finishHiragana")
+            intent.removeExtra("finishKatakana")
             quiz = true
         } else if (intent.getBooleanExtra("review", false)){
             val parcelableList = intent.getParcelableArrayListExtra<Kana>("kana")
@@ -194,6 +202,7 @@ class ReviewActivity : AppCompatActivity() {
             learnQuizKana()
             submitButton.isEnabled = false
             userResponseEditText.isEnabled = false
+
             val view = layoutInflater.inflate(R.layout.end_quiz_dialog, null)
             val dialog = AlertDialog.Builder(this, R.style.DialogTheme).setView(view).create()
 
@@ -203,8 +212,20 @@ class ReviewActivity : AppCompatActivity() {
 
             val moreLessonsButton = view.findViewById<MaterialButton>(R.id.moreLessonsButton)
             val endLessonButton = view.findViewById<MaterialButton>(R.id.endLessonButton)
+            val descriptionText = view.findViewById<TextView>(R.id.descriptionText)
+            val titleText = view.findViewById<TextView>(R.id.titleTextView)
 
-            reviewApp(this, this)
+            val manager = ReviewManagerFactory.create(this)
+            val request = manager.requestReviewFlow()
+            request.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val reviewInfo = task.result
+                    manager.launchReviewFlow(this, reviewInfo!!)
+                } else {
+                    Toast.makeText(this, "There was an issue handling the request, " +
+                            "check your internet connection.", Toast.LENGTH_SHORT).show()
+                }
+            }
 
             if (KanaSRSDatabase.getInstance(this).userDao().getUser().lessonsNumber!! > 0) {
                 moreLessonsButton.setOnClickListener {
@@ -213,8 +234,18 @@ class ReviewActivity : AppCompatActivity() {
                 }
             } else {
                 moreLessonsButton.visibility = View.GONE
-                view.findViewById<TextView>(R.id.descriptionText).text = "No more lessons are available for now. Good work!"
+                descriptionText.text = "No more lessons are available for now. Good work!"
                 endLessonButton.text = "Back to menu"
+            }
+
+            if (finishHiragana) {
+                descriptionText.text = "You've gone through all the hiragana lessons! Next up, katakana!"
+                titleText.text = "Hiragana\n\tLearned!"
+            }
+
+            if (finishKatakana) {
+                descriptionText.text = "You've gone through all the katakana lessons! All kana have been learned, congratulations!"
+                titleText.text = "Katakana\n\tLearned!"
             }
 
             endLessonButton.setOnClickListener {
