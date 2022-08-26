@@ -63,27 +63,27 @@ class FaqActivity : AppCompatActivity() {
                 var open = false
                 var moving = false
 
-                if (index == 4) {
-                    catAnimation.setAnimation(R.raw.cat)
-                    catAnimation.repeatCount = LottieValueAnimator.INFINITE
-                    val layoutParams = LinearLayout.LayoutParams(120, 120)
-                    layoutParams.setMargins(0, 20, 50, 0)
-                    catAnimation.layoutParams = layoutParams
-                    catAnimation.scaleX = 3f
-                    catAnimation.scaleY = 3f
-                    linearLayout.addView(catAnimation)
-                }
-
-                if (index == 9) {
-                    dogAnimation.setAnimation(R.raw.dog)
-                    dogAnimation.repeatCount = LottieValueAnimator.INFINITE
-                    val layoutParams = LinearLayout.LayoutParams(120, 120)
-                    layoutParams.setMargins(200, 20, 0, 0)
-                    dogAnimation.layoutParams = layoutParams
-                    dogAnimation.scaleX = 3f
-                    dogAnimation.scaleY = 3f
-                    linearLayout.addView(dogAnimation)
-                }
+//                if (index == 4) {
+//                    catAnimation.setAnimation(R.raw.cat)
+//                    catAnimation.repeatCount = LottieValueAnimator.INFINITE
+//                    val layoutParams = LinearLayout.LayoutParams(120, 120)
+//                    layoutParams.setMargins(0, 20, 50, 0)
+//                    catAnimation.layoutParams = layoutParams
+//                    catAnimation.scaleX = 3f
+//                    catAnimation.scaleY = 3f
+//                    linearLayout.addView(catAnimation)
+//                }
+//
+//                if (index == 9) {
+//                    dogAnimation.setAnimation(R.raw.dog)
+//                    dogAnimation.repeatCount = LottieValueAnimator.INFINITE
+//                    val layoutParams = LinearLayout.LayoutParams(120, 120)
+//                    layoutParams.setMargins(200, 20, 0, 0)
+//                    dogAnimation.layoutParams = layoutParams
+//                    dogAnimation.scaleX = 3f
+//                    dogAnimation.scaleY = 3f
+//                    linearLayout.addView(dogAnimation)
+//                }
 
                 //First index is kanji number, second index is question, third index is answer
 
