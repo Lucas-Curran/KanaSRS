@@ -1,14 +1,5 @@
 一* How does the review system work?* Spaced Repetition System (SRS) is how review times are calculated.
-二* Does KanaSRS require internet to learn and review kana?* For the most part, no! Internet is only required for the writing review sessions. Requests are made over the web to check your handwriting, which can not be done offline. Everything else is all good.
-三* Third item* Third answer
-四* Fourth item* Fourth answer
-五* Fifth item* Fifth answer
-六* Sixth item* Sixth answer
-七* Seventh item* Seventh answer
-八* Eighth item* Eighth answer
-九* Ninth item* Ninth answer
-十* Tenth item* Tenth answer
-十一* Eleventh item* Eleventh answer
-十二* Twelfth item* Twelfth answer
-十三* Thirteenth item* Thirteenth answer
-十四* Fourteenth item* Fourteenth answer
+二* Does KanaSRS require internet to learn and review kana?* Internet is required to see stroke gifs for writing, and to check your handwriting. Otherwise, lessons and normal reviews can be done offline!
+三* What are the exact review intervals?* Rookie 1 -> 8 hours, Rookie 2 -> 1 day, Amateur -> 3 days, Expert -> 1 week, Master -> 2 weeks, Sensei -> 1 month.
+四* Writing doesn't always work?* The AI for writing is experimental, it works most of the time if you are close to the kana, but sometimes it is looking for specific handwritings. Hopefully it can be improved in the future.
+五* Where to contact for questions and feedback?* Contact with feedback or concerns at contact.kanasrs@gmail.com
